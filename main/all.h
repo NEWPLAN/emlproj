@@ -9,13 +9,13 @@
 #define EML_ALL_H
 
 /*添加gmime的接口头文件*/
-#include "../gmime/src/all.h"
+#include "../gmime/all.h"
 
 /*分词库接口*/
 #include "../spliter/allhead.h"
 
 /*添加正则规则，关键字类接口*/
-#include "../regex/src/all.h"
+#include "../regex/all.h"
 
 /*添加附件接口*/
 #include "../appendix/all.h"

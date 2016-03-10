@@ -14,10 +14,10 @@ $(PART2):
 	cd appendix/pdf; make
 
 $(PART3):
-	cd gmime/src; make
+	cd gmime; make
 
 $(PART4):
-	cd regex/src; make
+	cd regex; make
 
 $(PART5):
 	cd spliter; make
@@ -33,9 +33,9 @@ test:
 	@echo '@test for pdf analyse';
 	cd appendix/pdf; make run ;
 	@echo '@test for GMIME analyse';
-	cd gmime/src; make run;
+	cd gmime; make run;
 	@echo '@test for regex analyse';
-	cd regex/src; make run ;
+	cd regex; make run ;
 	@echo '@test for spliter analyse';
 	cd spliter ; make run ;
 	@echo '@test for zips analyse';
@@ -48,8 +48,8 @@ test:
 clean:
 	cd appendix/jpeg ; make clean; cd ../.;
 	cd appendix/pdf ; make clean; cd ../..;
-	cd gmime/src ; make clean; cd ../..;
-	cd regex/src ; make clean; cd ../..;
+	cd gmime ; make clean; cd ../..;
+	cd regex ; make clean; cd ../..;
 	cd spliter ; make clean; cd ..;
 	cd appendix/zips ; make clean; cd ..;
 	clear ;
