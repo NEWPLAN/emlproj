@@ -26,14 +26,14 @@ $(TARGET):$(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
 		./$(PDFLibs) ./$(SPAMLibs) ./$(VIRUSLibs) -ldl
 
 $(GMIMELibs):
-	cd ../gmime; 		make;
-	cp ../gmime/$(GMIMELibs) 		./
+	cd ../gmime; 			make;
+	cp ../gmime/$(GMIMELibs)	 		./
 
 $(NLPIRLibs):
 
 $(REGEXLibs):
-	cd ../regex; 		make;
-	cp ../regex/$(REGEXLibs) 		./
+	cd ../regex; 			make;
+	cp ../regex/$(REGEXLibs)	 		./
 
 $(SPLITERLibs):
 	cd ../spliter; 			make;
@@ -72,8 +72,8 @@ clean:
 	-rm $(GMIMELibs) $(REGEXLibs) $(SPLITERLibs)\
 		$(APPENDIXLibs) $(UNZIPSLibs) $(JPEGLibs)\
 		$(PDFLibs) $(SPAMLibs) $(VIRUSLibs);
-	cd ../gmime; 		make clean;
-	cd ../regex; 		make clean;
+	cd ../gmime; 			make clean;
+	cd ../regex; 			make clean;
 	cd ../spliter;	 		make clean;
 	cd ../appendix;	 		make clean;
 	cd ../appendix/zips; 	make clean;

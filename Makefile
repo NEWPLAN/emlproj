@@ -48,10 +48,10 @@ test:
 clean:
 	cd appendix/jpeg ; make clean; cd ../.;
 	cd appendix/pdf ; make clean; cd ../..;
-	cd gmime ; make clean; cd ../..;
-	cd regex ; make clean; cd ../..;
-	cd spliter ; make clean; cd ..;
-	cd appendix/zips ; make clean; cd ..;
+	cd gmime ; 		  make clean; cd ../..;
+	cd regex ; 		  make clean; cd ../..;
+	cd spliter ; 		 make clean; cd ..;
+	cd appendix/zips ; 	 make clean; cd ..;
 	clear ;
 	@echo "clean done"
 
