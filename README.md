@@ -24,4 +24,4 @@
 >spliter 中文分词模块，处理关键字，依赖ICTCLAS3.0
 
 
-<p align="right">NEWPLAN </br>2016.3.11</p>
+<p align="right">NEWPLAN </br>2016.03.11</p>
