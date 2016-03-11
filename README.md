@@ -3,7 +3,7 @@
 文件结构：
 >antivirus
 >>spam </br> virus
->appendix
+> appendix
 >>jpeg
 >>pdf
 >>zips
