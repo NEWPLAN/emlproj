@@ -1,2 +1,19 @@
 # 												EMLPROJ 
-邮件解析项目文档，源码
+个人文档
+文件结构：
+>antivirus
+>>spam
+>>virus
+>appendix
+>>jpeg
+>>pdf
+>>zips
+>gmime
+>main
+>>bc
+>>Data
+>>temps
+>>testdata
+>>testfile
+>regex
+>spliter
