@@ -1,5 +1,4 @@
 # 												EMLPROJ 
-个人文档
 文件结构：
 >antivirus 【反病毒和反垃圾模块】
 >>spam 反垃圾模块，调用垃圾库</br> 
@@ -22,3 +21,5 @@
 >regex 正则解析模块，提取关键字类，依赖pcre系统库
 >
 >spliter 中文分词模块，处理关键字，依赖ICTCLAS3.0
+>
+NEWPLAN 2016.3.11
