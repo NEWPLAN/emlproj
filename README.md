@@ -2,8 +2,8 @@
 个人文档
 文件结构：
 >antivirus
->>spam
->>virus
+>>  spam
+>>  virus
 >appendix
 >>jpeg
 >>pdf
