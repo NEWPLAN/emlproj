@@ -8,12 +8,16 @@
 >>jpeg
 >>pdf
 >>zips
+>
 >gmime
+>
 >main
 >>bc
 >>Data
 >>temps
 >>testdata
 >>testfile
+>
 >regex
+>
 >spliter
