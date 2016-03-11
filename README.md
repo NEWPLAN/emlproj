@@ -2,21 +2,22 @@
 个人文档
 文件结构：
 >antivirus
->>spam </br> virus
+>>spam </br> 
+>>virus
 >
 >appendix
->>jpeg
->>pdf
->>zips
+>>jpeg </br> 
+>>pdf </br> 
+>>zips </br> 
 >
 >gmime
 >
 >main
->>bc
->>Data
->>temps
->>testdata
->>testfile
+>>bc </br> 
+>>Data </br> 
+>>temps </br>
+>>testdata </br>
+>>testfile </br>
 >
 >regex
 >
