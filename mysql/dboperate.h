@@ -6,8 +6,8 @@
 //  Copyright © 2016年 tsinghua476. All rights reserved.
 //
 
-#ifndef mysql_h
-#define mysql_h
+#ifndef DB__mysql_h
+#define DB__mysql_h
 
 #include <stdio.h>
 #include <stdlib.h>
