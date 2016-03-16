@@ -334,3 +334,21 @@ int database_connect_local(const char *password)
     return database_connect("localhost",password);
 }
 
+void free_memory(FetchRtePtr memptr)
+{
+	int rowindex,colindex;
+	for(rowindex=0;rowindex<memptr->row;rowindex++)
+	{
+		for(colindex=0;colindex<memptr->col;colindex++)
+		{
+			free(memptr->dataPtr[rowindex][colindex]);
+			memptr->dataPtr[rowindex][colindex]=NULL;
+		}
+		free(memptr->dataPtr[rowindex]);
+		memptr->dataPtr[rowindex]=NULL;
+	}
+	free(memptr->dataPtr);
+	memptr->dataPtr=NULL;
+	free(memptr);
+}
+

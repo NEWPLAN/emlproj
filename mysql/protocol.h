@@ -17,4 +17,5 @@ typedef struct PROTOCOL
 
 protocolPtr load_protocolSitch(void* A, void* B);
 void printProtocolSwitch(void);
+void protocolRelase(protocolPtr* tables);
 #endif

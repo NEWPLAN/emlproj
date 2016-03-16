@@ -1,7 +1,7 @@
 /*************************************************************************
 	> File Name: protocol.c
-	> Author: 
-	> Mail: 
+	> Author:
+	> Mail:
 	> Created Time: 2016年03月15日 星期二 16时04分53秒
  ************************************************************************/
 
@@ -15,7 +15,7 @@ static int rowNum=0;
 
 protocolPtr load_protocolSwitch(void* A, void* B)
 {
-    
+
     FetchRtePtr val=NULL;
     protocolPtr prolist=NULL;
     int index=0;
@@ -32,12 +32,14 @@ protocolPtr load_protocolSwitch(void* A, void* B)
         return NULL;
     }
     memset(prolist,0,sizeof(protocol)*(val->row+1));
-    for(index=0;index<val->row;index++)
+    for(index=0; index<val->row; index++)
     {
-    	memcpy(prolist[index].protocol,val->dataPtr[index][0],sizeof(prolist[index].protocol)-1);
-    	memcpy(prolist[index].direction,val->dataPtr[index][1],sizeof(prolist[index].direction)-1);
-    	memcpy(prolist[index].switchs,val->dataPtr[index][2],sizeof(prolist[index].switchs)-1);
+        memcpy(prolist[index].protocol,val->dataPtr[index][0],sizeof(prolist[index].protocol)-1);
+        memcpy(prolist[index].direction,val->dataPtr[index][1],sizeof(prolist[index].direction)-1);
+        memcpy(prolist[index].switchs,val->dataPtr[index][2],sizeof(prolist[index].switchs)-1);
     }
+    free_memory(val);
+    val=NULL;
     return prolist;
 }
 
@@ -48,7 +50,14 @@ void printProtocolSwitch(void)
     printf("test in printProtocolSwitch\n");
     while(rowindex<totalnum)
     {
-    	printf("%s\t%s\t%s\n",var[rowindex].protocol,var[rowindex].direction,var[rowindex].switchs);
-    	rowindex++;
+        printf("%-12s\t%s\t%12s\n",var[rowindex].protocol,var[rowindex].direction,var[rowindex].switchs);
+        rowindex++;
     }
+    protocolRelase(&var);
+}
+void protocolRelase(protocolPtr* tables)
+{
+	if(*tables)
+		free(*tables);
+	*tables=NULL;
 }

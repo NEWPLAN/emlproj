@@ -39,6 +39,7 @@ int database_delete(const char *tableName,char *parameter);
 int database_update(const char *tableName,char *parameter);
 void* database_query_withConditions(const char *tableName,char *condition);
 void* database_query (const char *tableName);
+void free_memory(FetchRtePtr memptr);
 
 #endif /* mysql_h */
 

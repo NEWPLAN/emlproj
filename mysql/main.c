@@ -8,7 +8,7 @@
 ************************************************/
 int main(int argc, char* argv[])
 {
-	char*** results=NULL,***tptr=NULL;
+	char*** results=NULL/*,***tptr=NULL*/;
     FetchRtePtr retval=NULL;
 #if 1
     database_connect_local("root");
