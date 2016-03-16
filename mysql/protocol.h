@@ -13,8 +13,8 @@ typedef struct PROTOCOL
     char protocol[255+1];
     char direction[255+1];
     char switchs[10+1];
-} ptotocol, *protocolPtr;
+} protocol, *protocolPtr;
 
-int load_protocolSitch(void* A, void* B);
-
+protocolPtr load_protocolSitch(void* A, void* B);
+void printProtocolSwitch(void);
 #endif

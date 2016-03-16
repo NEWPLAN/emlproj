@@ -17,6 +17,20 @@
 #define EXIT_SUCCESS 0
 #define EXIT_FAILURE 1
 
+
+/*****************************************************************
+ *从数据库读取的二维表格
+ *dataPtr char**:二维表格指针
+ *row int 行数
+ *col int 列数
+*****************************************************************/
+typedef struct mysqlRte
+{
+    char*** dataPtr;
+    int row,col;/*row 行数, col 列数*/
+} FetchRte,*FetchRtePtr;
+
+
 int database_connect_local(const char *password);
 int database_connect(const char *IPAddr,const char *password);
 

@@ -8,7 +8,7 @@ INCLUDE +=	-I/usr/include/mysql
 
 LINKS	+=	-lmysqlclient -L/usr/lib/mysql
 
-Heads	+=		   dboperate.h strategywords.h behaviorLog.h strategyclass.h keywords.h keyclass.h \
+Heads	+=	all.h  dboperate.h strategywords.h behaviorLog.h strategyclass.h keywords.h keyclass.h \
 				   protocol.h spamlist.h statistic_DLP_keywords.h statistic_DLP_url.h syslog.h \
 				   statistic_eml_info_basic.h statistic_keyclass_basic.h statistic_spam.h url_list.h \
 				   statistic_virus.h user_info.h virus_list.h

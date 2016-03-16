@@ -13,21 +13,6 @@ char defaultAddr[20] = "localhost";
 char defaultPassWord[20] = "root";
 
 
-
-
-/*****************************************************************
- *从数据库读取的二维表格
- *dataPtr char**:二维表格指针
- *row int 行数
- *col int 列数
-*****************************************************************/
-typedef struct mysqlRte
-{
-    char** dataPtr;
-    int row,col;/*row means line number, col means vertical*/
-} FetchRteType;
-
-
 /*****************************************************************
  *
  * 有选择的操作数据库
@@ -138,18 +123,28 @@ static void* mysql_get(const char *sql)
     MYSQL_RES *res_ptr;
     MYSQL_ROW sqlrow;
     //MYSQL_FIELD *fd;
-    int res=0, i=0, j=0, row=0,index=0;
+    int res=0, col=0, row=0,index=0;
     int rowindex=0,colindex=0;
     char ***tables=NULL;
-
+    FetchRtePtr RteVal=(FetchRtePtr)malloc(sizeof(FetchRte)); 
+    
+    if(!RteVal)
+    {
+        printf("error in malloc for rteval\n");
+        return 0;
+    }
+    else
+    {
+        RteVal->col=RteVal->row=0;
+        RteVal->dataPtr=NULL;
+    }
     /************初始化数据库*************/
     conn_ptr = mysql_init(NULL);
     if (!conn_ptr)
     {
+    	printf("error in init msyql\n");
         return NULL;
-        //return EXIT_FAILURE;
     }
-
 
     conn_ptr = mysql_real_connect(conn_ptr, defaultAddr, "root", "root", defaultDB, 0, NULL, 0);
     if (conn_ptr)
@@ -168,7 +163,7 @@ static void* mysql_get(const char *sql)
                 /********************malloc for fetch result************************/
                 row=(int)mysql_num_rows(res_ptr);/*get行数*/
                 printf("%lu Rows\n",(unsigned long)row);
-                j = mysql_num_fields(res_ptr);/*数据库列数*/
+                col = mysql_num_fields(res_ptr);/*数据库列数*/
 
                 /**********分配行数***********/
                 tables=(char***)malloc(sizeof(char**)*(row+1));
@@ -182,28 +177,29 @@ static void* mysql_get(const char *sql)
                 /*********分配列数*************/
                 for(index=0; index<row; index++)
                 {
-                    tables[index]=(char**)malloc(sizeof(char*)*j);
+                    tables[index]=(char**)malloc(sizeof(char*)*col);
                     if(NULL==tables[index])
                     {
                         printf("error in malloc memory\n");
                         return NULL;
                     }
-                    memset(tables[index],0,sizeof(char*)*j);
+                    memset(tables[index],0,sizeof(char*)*col);
                 }
                 while((sqlrow = mysql_fetch_row(res_ptr)))      //依次取出记录
                 {
-                    for(i = 0; i < j; i++)
+                    for(index = 0; index < col; index++)
                     {
-                        printf("%s\t", sqlrow[i]);              //输出
-                        /***************分配字符串******************/
-                        tables[rowindex][colindex]=(char*)malloc(sizeof(char)*strlen(sqlrow[i])+1);
-                        memset(tables[rowindex][colindex],0,sizeof(char)*strlen(sqlrow[i])+1);
-                        if(sqlrow[i])
-                            memcpy(tables[rowindex][colindex],sqlrow[i],strlen(sqlrow[i]));
+                        //printf("%s\t", sqlrow[i]);              //输出
+                        /***************处理字符串******************/
+                        tables[rowindex][colindex]=(char*)malloc(sizeof(char)*strlen(sqlrow[index])+1);
+                        memset(tables[rowindex][colindex],0,sizeof(char)*strlen(sqlrow[index])+1);
+                        if(sqlrow[index])//拷贝到内存空间中去
+                            memcpy(tables[rowindex][colindex],sqlrow[index],strlen(sqlrow[index]));
                         colindex++;
                     }
+                    colindex=0;
                     rowindex++;
-                    printf("\n");
+                   // printf("\n");
                 }
                 if (mysql_errno(conn_ptr))
                 {
@@ -218,7 +214,13 @@ static void* mysql_get(const char *sql)
         printf("Connection failed\n");
     }
     mysql_close(conn_ptr);
-    return (void*)tables;
+    {
+        
+    RteVal->col=col;
+    RteVal->row=row;
+    RteVal->dataPtr=tables;
+    }
+    return (void*)RteVal;
     //return EXIT_SUCCESS;
 }
 
