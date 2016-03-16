@@ -1,7 +1,7 @@
 /*************************************************************************
 	> File Name: spamlist.h
-	> Author: 
-	> Mail: 
+	> Author:
+	> Mail:
 	> Created Time: 2016年03月15日 星期二 16时09分41秒
  ************************************************************************/
 
@@ -15,7 +15,7 @@ typedef struct SPAMLIST
     char strategy_info[255+1];
     char strategy_terminal[5+1];
     char strategy_target[255+1];
-}spamlist, *spanlistPtr;
+} spamlist, *spanlistPtr;
 
 int load_spamlist(void* A, void* B);
 #endif

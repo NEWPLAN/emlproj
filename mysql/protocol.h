@@ -1,7 +1,7 @@
 /*************************************************************************
 	> File Name: protocol.h
-	> Author: 
-	> Mail: 
+	> Author:
+	> Mail:
 	> Created Time: 2016年03月15日 星期二 16时05分02秒
  ************************************************************************/
 
@@ -13,7 +13,7 @@ typedef struct PROTOCOL
     char protocol[255+1];
     char direction[255+1];
     char switchs[10+1];
-}ptotocol, *protocolPtr;
+} ptotocol, *protocolPtr;
 
 int load_protocolSitch(void* A, void* B);
 

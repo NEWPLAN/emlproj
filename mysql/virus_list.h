@@ -1,7 +1,7 @@
 /*************************************************************************
 	> File Name: virus_list.h
-	> Author: 
-	> Mail: 
+	> Author:
+	> Mail:
 	> Created Time: 2016年03月15日 星期二 18时39分34秒
  ************************************************************************/
 
@@ -16,7 +16,7 @@ typedef struct VIRUSLIST
     char strategy_info[255+1];
     char strategy_terminal[5+1];
     char strategy_target[255+1];
-}viruslist,*viurlistPtr;
+} viruslist,*viurlistPtr;
 
 int load_virus_list(void* A, void* B);
 

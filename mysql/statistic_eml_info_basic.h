@@ -1,7 +1,7 @@
 /*************************************************************************
 	> File Name: statistic_eml_info_basic.h
-	> Author: 
-	> Mail: 
+	> Author:
+	> Mail:
 	> Created Time: 2016年03月15日 星期二 16时28分15秒
  ************************************************************************/
 
@@ -20,7 +20,7 @@ typedef struct STATISTICEMLINFO
     char eml_dlp_wordhit[11+1];
     char eml_dlp_classhit[11+1];
     char eml_urlhit[11+1];
-}emlinfo,*emlinfoPtr;
+} emlinfo,*emlinfoPtr;
 
 int load_emlinfo(void* A, void* B);
 

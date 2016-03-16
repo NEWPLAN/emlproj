@@ -1,7 +1,7 @@
 /*************************************************************************
 	> File Name: statistic_protocol.h
-	> Author: 
-	> Mail: 
+	> Author:
+	> Mail:
 	> Created Time: 2016年03月15日 星期二 16时51分35秒
  ************************************************************************/
 
@@ -16,7 +16,7 @@ typedef struct STATISTICPROTOCOL
     char open_time[255+1];
     char close_time[255+1];
     char filepath[255+1];
-}staprotocol, *staprotocolPtr;
+} staprotocol, *staprotocolPtr;
 
 int load_statisticProtocol(void* A, void* B);
 

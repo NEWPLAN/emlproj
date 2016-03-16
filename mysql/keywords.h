@@ -1,7 +1,7 @@
 /*************************************************************************
 	> File Name: keywords.h
-	> Author: 
-	> Mail: 
+	> Author:
+	> Mail:
 	> Created Time: 2016年03月15日 星期二 15时33分00秒
  ************************************************************************/
 
@@ -10,7 +10,7 @@
 typedef struct KEYWORDS
 {
     char keyword[255+1];
-}keywords, *keywordsPtr;
+} keywords, *keywordsPtr;
 
 int load_keywords(void* A, void* B);
 #endif

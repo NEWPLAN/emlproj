@@ -1,7 +1,7 @@
 /*************************************************************************
 	> File Name: user_info.h
-	> Author: 
-	> Mail: 
+	> Author:
+	> Mail:
 	> Created Time: 2016年03月15日 星期二 17时12分02秒
  ************************************************************************/
 
@@ -17,7 +17,7 @@ typedef struct USERINFO
     char user_tel[255+1];
     char user_passwd[255+1];
     char user_mailbox[255+1];
-}userinfo, *userinfoPtr;
+} userinfo, *userinfoPtr;
 
 int load_user_info(void* A, void* B);
 #endif

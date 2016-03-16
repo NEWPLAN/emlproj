@@ -1,7 +1,7 @@
 /*************************************************************************
 	> File Name: syslog.h
-	> Author: 
-	> Mail: 
+	> Author:
+	> Mail:
 	> Created Time: 2016年03月15日 星期二 17时04分26秒
  ************************************************************************/
 
@@ -14,7 +14,7 @@ typedef struct SYSLOG
     char time[255+1];
     char level[255+1];
     char content[255+1];
-}syslog, *syslogPtr;
+} syslog, *syslogPtr;
 
 int load_syslog(void* A, void* B);
 

@@ -1,7 +1,7 @@
 /*************************************************************************
 	> File Name: keywords.h
-	> Author: 
-	> Mail: 
+	> Author:
+	> Mail:
 	> Created Time: 2016年03月15日 星期二 14时14分30秒
  ************************************************************************/
 
@@ -16,7 +16,7 @@ typedef struct STRATEGYCLASS
     char strategy_terminal[5+1];
     char strategy_target[255+1];
     char strategy_content[255+1];
-}strategyclass,*strategyclassPtr;
+} strategyclass,*strategyclassPtr;
 
 int load_strategyclass(void *A, void* B);
 #endif
