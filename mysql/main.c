@@ -41,12 +41,12 @@ int main(int argc, char* argv[])
 #endif
 #if 1
     if(argc>=2)
-        database_delete("Protocol_switch","switch=456");
+        database_delete("Protocol_switch","protocol=789");
 #endif
 	printProtocolSwitch();
+	printStatistic_DLP_keywords();
 //    int ret = database_delete("Protocol_switch","switch=456");
 //    database_query("Protocol_switch");
 //    printf("%d\n",ret);
     return 0;
 }
-

@@ -2,7 +2,7 @@
 	> File Name: statics_DLP_keywords.h
 	> Author:
 	> Mail:
-	> Created Time: 2016Äê03ÔÂ15ÈÕ ÐÇÆÚ¶þ 16Ê±15·Ö07Ãë
+	> Created Time: 2016ï¿½ï¿½03ï¿½ï¿½15ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¶ï¿½ 16Ê±15ï¿½ï¿½07ï¿½ï¿½
  ************************************************************************/
 
 #ifndef DB__STATICS_DLP_KEYWORDS_H
@@ -15,6 +15,8 @@ typedef struct STATISTICKEYWORDS
     char dlp_keywords_hitlist[255+1];
 } statisticwords,*statisticwordsPtr;
 
-int load_statistic_DLP_keywords(void* A, void* B);
+statisticwordsPtr load_statistic_DLP_keywords(void* A, void* B);
+void printStatistic_DLP_keywords(void);
+void Statistic_DLP_keywordsRelase(statisticwordsPtr* tables);
 
 #endif

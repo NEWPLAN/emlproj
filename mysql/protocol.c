@@ -1,11 +1,11 @@
 /*************************************************************************
 	> File Name: protocol.c
-	> Author:
-	> Mail:
-	> Created Time: 2016Äê03ÔÂ15ÈÕ ÐÇÆÚ¶þ 16Ê±04·Ö53Ãë
+	> Author: 
+	> Mail: 
+	> Created Time: 2016å¹´03æœˆ16æ—¥ æ˜ŸæœŸä¸‰ 18æ—¶44åˆ†02ç§’
  ************************************************************************/
 
-#include<stdio.h>
+#include <stdio.h>
 #include "protocol.h"
 #include "dboperate.h"
 #include <string.h>
@@ -61,3 +61,4 @@ void protocolRelase(protocolPtr* tables)
 		free(*tables);
 	*tables=NULL;
 }
+
