@@ -1,5 +1,7 @@
 #!/bin/bash
-
+#
+#统计行数
+#
 cat /dev/null > info          #清空info
 
 types=("*.asm" "*.s" "*.c" "*.cpp" "*.h" "*.cs" "*.java" "Makefile")    #所有要统计的文件类型
