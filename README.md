@@ -22,6 +22,7 @@
 >regex 【正则解析模块】提取关键字类，依赖pcre系统库
 >
 >spliter 【中文分词模块】处理关键字，依赖ICTCLAS3.0
+>mysql  [数据库模块] 数据存储与mysql数据库中，运行是加载数据库，实现不同规则的过滤
 
 
 <p align="right">NEWPLAN </br>2016.03.11</p>
