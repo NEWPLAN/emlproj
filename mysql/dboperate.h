@@ -23,8 +23,8 @@ int database_connect(const char *IPAddr,const char *password);
 int database_insert(const char *tableName,char *parameter);
 int database_delete(const char *tableName,char *parameter);
 int database_update(const char *tableName,char *parameter);
-int database_query_withConditions(const char *tableName,char *condition);
-int database_query (const char *tableName);
+void* database_query_withConditions(const char *tableName,char *condition);
+void* database_query (const char *tableName);
 
 #endif /* mysql_h */
 

@@ -1,5 +1,7 @@
 TARGET=test
 
+WARINING=-Wall
+
 #ADDITIONS=-lmysqlclient -I/usr/include/mysql -L/usr/lib/mysql
 
 INCLUDE +=	-I/usr/include/mysql
@@ -25,10 +27,10 @@ CC		=	gcc
 DEBUGS	=	-g
 
 all:$(OBJS)
-	$(CC) $(DEBUGS) $(OBJS) -o $(TARGET) $(LINKS)
+	$(CC) $(WARINING) $(OBJS) -o $(TARGET) $(LINKS)
 
 %.o:%.c $(Heads)
-	$(CC) $(DEBUGS) -c $(INCLUDE)  $< -o $@ 
+	$(CC) $(WARINING) $(DEBUGS) -c $(INCLUDE)  $< -o $@ 
 
 run:
 	./$(TARGET)
