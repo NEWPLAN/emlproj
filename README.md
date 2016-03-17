@@ -1,9 +1,9 @@
 # <p align="center">EMLPROJ</p>
 ================================
 ### 文件结构：
->antivirus 【反病毒和反垃圾模块】
->>spam 反垃圾模块，调用垃圾库</br> 
->>virus 反病毒模块，调用病毒库
+>---antivirus 【反病毒和反垃圾模块】
+>>---spam 反垃圾模块，调用垃圾库</br> 
+>>---virus 反病毒模块，调用病毒库
 >
 >appendix 【附件处理模块】
 >>jpeg jpeg图像文件处理，主要提取图片extra信息，调用exif库实现</br> 
