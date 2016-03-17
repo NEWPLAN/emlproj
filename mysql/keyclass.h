@@ -1,8 +1,8 @@
 /*************************************************************************
 	> File Name: keyclass.h
-	> Author:
-	> Mail:
-	> Created Time: 2016Äê03ÔÂ15ÈÕ ÐÇÆÚ¶þ 15Ê±38·Ö58Ãë
+	> Author: 
+	> Mail: 
+	> Created Time: 2016å¹´03æœˆ17æ—¥ æ˜ŸæœŸå›› 12æ—¶53åˆ†04ç§’
  ************************************************************************/
 
 #ifndef DB__KEYCLASS_H
@@ -15,5 +15,7 @@ typedef struct KEYCLASS
     char class_regex[255+1];
 } keyclass, *keyclassPtr;
 
-int load_keyclass(void* A, void* B);
+keyclassPtr load_keyclass(void* A, void* B);
+void printkeyclass(void);
+void keyclassRelase(keyclassPtr* tables);
 #endif

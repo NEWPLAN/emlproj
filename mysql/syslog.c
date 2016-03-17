@@ -2,13 +2,64 @@
 	> File Name: syslog.c
 	> Author: 
 	> Mail: 
-	> Created Time: 2016Äê03ÔÂ15ÈÕ ÐÇÆÚ¶þ 17Ê±06·Ö13Ãë
+	> Created Time: 2016å¹´03æœˆ17æ—¥ æ˜ŸæœŸå›› 12æ—¶57åˆ†34ç§’
  ************************************************************************/
 
 #include<stdio.h>
 #include "syslog.h"
+#include "dboperate.h"
+#include <string.h>
 
-int load_syslog(void* A, void* B)
+static const char * const tableName="Syslog";
+static int rowNum=0;
+
+syslogPtr load_syslog(void* A, void* B)
 {
-    return 0;
+
+    FetchRtePtr val=NULL;
+    syslogPtr prolist=NULL;
+    int index=0;
+    if((val=database_query(tableName))==NULL)
+    {
+        printf("error in loading table sys log\n");
+        return NULL;
+    }
+    rowNum=val->row;
+    prolist=(syslogPtr)malloc(sizeof(syslog)*(val->row+1));
+    if(!prolist)
+    {
+        printf("error in malloc for sys log\n");
+        return NULL;
+    }
+    memset(prolist,0,sizeof(syslog)*(val->row+1));
+    for(index=0; index<val->row; index++)
+    {
+        memcpy(prolist[index].modular,val->dataPtr[index][0],sizeof(prolist[index].modular)-1);
+        memcpy(prolist[index].time,val->dataPtr[index][1],sizeof(prolist[index].time)-1);
+        memcpy(prolist[index].level,val->dataPtr[index][2],sizeof(prolist[index].level)-1);
+        memcpy(prolist[index].content,val->dataPtr[index][2],sizeof(prolist[index].content)-1);
+    }
+    free_memory(val);
+    val=NULL;
+    return prolist;
 }
+
+void print_syslog(void)
+{
+    syslogPtr var=load_syslog(NULL,NULL);
+    int rowindex=0,totalnum=rowNum;
+    printf("test in printsyslog\n");
+    while(rowindex<totalnum)
+    {
+        printf("%-12s\t%-12s\t%-12s\t%-12s\n",var[rowindex].modular,var[rowindex].time,var[rowindex].level,var[rowindex].content);
+        rowindex++;
+    }
+    syslogRelase(&var);
+}
+void syslogRelase(syslogPtr* tables)
+{
+    if(*tables)
+        free(*tables);
+    *tables=NULL;
+}
+

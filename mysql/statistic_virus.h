@@ -1,8 +1,8 @@
 /*************************************************************************
 	> File Name: statistic_virus.h
-	> Author:
-	> Mail:
-	> Created Time: 2016Äê03ÔÂ15ÈÕ ÐÇÆÚ¶þ 16Ê±59·Ö58Ãë
+	> Author: 
+	> Mail: 
+	> Created Time: 2016å¹´03æœˆ17æ—¥ æ˜ŸæœŸå›› 13æ—¶12åˆ†46ç§’
  ************************************************************************/
 
 #ifndef DB__STATISTIC_VIRUS_H
@@ -16,6 +16,9 @@ typedef struct STATISTICVIRUS
     char virus_info[255+1];
 } statvirus, *statvirusPtr;
 
-int load_statistic_virus(void* A, void* B);
+statvirusPtr load_statistic_virus(void* A, void* B);
+void print_statvirus(void);
+void statvirusRelase(statvirusPtr* tables);
 
 #endif
+

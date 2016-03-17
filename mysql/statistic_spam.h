@@ -1,8 +1,8 @@
 /*************************************************************************
 	> File Name: statistic_spam.h
-	> Author:
-	> Mail:
-	> Created Time: 2016Äê03ÔÂ15ÈÕ ÐÇÆÚ¶þ 16Ê±55·Ö38Ãë
+	> Author: 
+	> Mail: 
+	> Created Time: 2016å¹´03æœˆ17æ—¥ æ˜ŸæœŸå›› 13æ—¶14åˆ†35ç§’
  ************************************************************************/
 
 #ifndef DB__STATISTIC_SPAM_H
@@ -17,6 +17,8 @@ typedef struct STATISTICSPAM
     char eml_eml_id[11+1];
 } statspam, *statspamPtr;
 
-int load_statistic_spam(void* A, void* B);
-
+statspamPtr load_statistic_spam(void* A, void* B);
+void print_statspam(void);
+void statspamRelase(statspamPtr* tables);
 #endif
+

@@ -1,8 +1,8 @@
 /*************************************************************************
 	> File Name: user_info.h
-	> Author:
-	> Mail:
-	> Created Time: 2016Äê03ÔÂ15ÈÕ ÐÇÆÚ¶þ 17Ê±12·Ö02Ãë
+	> Author: 
+	> Mail: 
+	> Created Time: 2016å¹´03æœˆ17æ—¥ æ˜ŸæœŸå›› 13æ—¶08åˆ†22ç§’
  ************************************************************************/
 
 #ifndef DB__USER_INFO_H
@@ -19,5 +19,8 @@ typedef struct USERINFO
     char user_mailbox[255+1];
 } userinfo, *userinfoPtr;
 
-int load_user_info(void* A, void* B);
+userinfoPtr load_user_info(void* A, void* B);
+void print_userinfo(void);
+void userinfoRelase(userinfoPtr* tables);
 #endif
+

@@ -1,8 +1,8 @@
 /*************************************************************************
 	> File Name: statistic_DLP_url.h
-	> Author:
-	> Mail:
-	> Created Time: 2016Äê03ÔÂ15ÈÕ ÐÇÆÚ¶þ 16Ê±21·Ö17Ãë
+	> Author: 
+	> Mail: 
+	> Created Time: 2016å¹´03æœˆ17æ—¥ æ˜ŸæœŸå›› 13æ—¶21åˆ†28ç§’
  ************************************************************************/
 
 #ifndef DB__STATISTIC_DLP_URL_H
@@ -15,6 +15,9 @@ typedef struct STATISTICURL
     char dlp_url_hitlist[255+1];
 } statisticurl,*statisticurlPtr;
 
-int load_statisticURL(void* A, void* B);
+statisticurlPtr load_statisticURL(void* A, void* B);
+void print_statisticurl(void);
+void statisticurlRelase(statisticurlPtr* tables);
 
 #endif
+

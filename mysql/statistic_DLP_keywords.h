@@ -1,8 +1,8 @@
 /*************************************************************************
-	> File Name: statics_DLP_keywords.h
-	> Author:
-	> Mail:
-	> Created Time: 2016��03��15�� ���ڶ� 16ʱ15��07��
+	> File Name: statistic_DLP_keywords.h
+	> Author: 
+	> Mail: 
+	> Created Time: 2016年03月17日 星期四 13时22分45秒
  ************************************************************************/
 
 #ifndef DB__STATICS_DLP_KEYWORDS_H
@@ -19,4 +19,6 @@ statisticwordsPtr load_statistic_DLP_keywords(void* A, void* B);
 void printStatistic_DLP_keywords(void);
 void Statistic_DLP_keywordsRelase(statisticwordsPtr* tables);
 
+
 #endif
+

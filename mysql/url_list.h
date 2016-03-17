@@ -1,8 +1,8 @@
 /*************************************************************************
 	> File Name: url_list.h
-	> Author:
-	> Mail:
-	> Created Time: 2016Äê03ÔÂ15ÈÕ ÐÇÆÚ¶þ 17Ê±07·Ö39Ãë
+	> Author: 
+	> Mail: 
+	> Created Time: 2016å¹´03æœˆ17æ—¥ æ˜ŸæœŸå›› 13æ—¶09åˆ†40ç§’
  ************************************************************************/
 
 #ifndef DB__URL_LIST_H
@@ -18,5 +18,8 @@ typedef struct URLLIST
 } urllist,*urllistPtr;
 
 
-int load_url_list(void* A, void* B);
+urllistPtr load_url_list(void* A, void* B);
+void print_urllist(void);
+void urllistRelase(urllistPtr* tables);
 #endif
+

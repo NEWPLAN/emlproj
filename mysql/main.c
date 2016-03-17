@@ -8,7 +8,7 @@
 ************************************************/
 int main(int argc, char* argv[])
 {
-	char*** results=NULL/*,***tptr=NULL*/;
+    char*** results=NULL/*,***tptr=NULL*/;
     FetchRtePtr retval=NULL;
 #if 1
     database_connect_local("root");
@@ -20,18 +20,18 @@ int main(int argc, char* argv[])
     //database_update("Protocol_switch","set protocol='456',direction='456' where switch=456");
 #endif
     retval=(FetchRtePtr)database_query("Protocol_switch");
-   // results=(char***)database_query("Protocol_switch");
-   results=retval->dataPtr;
+    // results=(char***)database_query("Protocol_switch");
+    results=retval->dataPtr;
     if(results==NULL)
-    	return 0;
+        return 0;
     printf("========================\n");
 #if 0
-	tptr=results;
+    tptr=results;
     printf("row=%d\tcol=%d\n",retval->row,retval->col);
     while(*results)
     {
-    	printf("%-12s\t%s\t%s\n",(*results)[0],(*results)[1],(*results)[2]);
-    	free((*results)[0]);
+        printf("%-12s\t%s\t%s\n",(*results)[0],(*results)[1],(*results)[2]);
+        free((*results)[0]);
         free((*results)[1]);
         free((*results)[2]);
         free(*results);
@@ -43,8 +43,8 @@ int main(int argc, char* argv[])
     if(argc>=2)
         database_delete("Protocol_switch","protocol=789");
 #endif
-	printProtocolSwitch();
-	printStatistic_DLP_keywords();
+    printProtocolSwitch();
+    printStatistic_DLP_keywords();
 //    int ret = database_delete("Protocol_switch","switch=456");
 //    database_query("Protocol_switch");
 //    printf("%d\n",ret);

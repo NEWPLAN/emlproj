@@ -1,8 +1,8 @@
 /*************************************************************************
 	> File Name: virus_list.h
-	> Author:
-	> Mail:
-	> Created Time: 2016Äê03ÔÂ15ÈÕ ÐÇÆÚ¶þ 18Ê±39·Ö34Ãë
+	> Author: 
+	> Mail: 
+	> Created Time: 2016å¹´03æœˆ17æ—¥ æ˜ŸæœŸå›› 13æ—¶06åˆ†08ç§’
  ************************************************************************/
 
 #ifndef DB__VIRUS_LIST_H
@@ -18,6 +18,9 @@ typedef struct VIRUSLIST
     char strategy_target[255+1];
 } viruslist,*viurlistPtr;
 
-int load_virus_list(void* A, void* B);
+viurlistPtr load_virus_list(void* A, void* B);
+void printvirus_list(void);
+void virus_listRelase(viurlistPtr* tables);
 
 #endif
+

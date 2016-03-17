@@ -1,7 +1,7 @@
 /*************************************************************************
 	> File Name: protocol.c
-	> Author: 
-	> Mail: 
+	> Author:
+	> Mail:
 	> Created Time: 2016年03月16日 星期三 18时44分02秒
  ************************************************************************/
 
@@ -57,8 +57,8 @@ void printProtocolSwitch(void)
 }
 void protocolRelase(protocolPtr* tables)
 {
-	if(*tables)
-		free(*tables);
-	*tables=NULL;
+    if(*tables)
+        free(*tables);
+    *tables=NULL;
 }
 

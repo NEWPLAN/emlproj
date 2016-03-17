@@ -1,8 +1,8 @@
 /*************************************************************************
 	> File Name: keywords.h
-	> Author:
-	> Mail:
-	> Created Time: 2016Äê03ÔÂ15ÈÕ ÐÇÆÚ¶þ 15Ê±33·Ö00Ãë
+	> Author: 
+	> Mail: 
+	> Created Time: 2016å¹´03æœˆ17æ—¥ æ˜ŸæœŸå›› 12æ—¶55åˆ†53ç§’
  ************************************************************************/
 
 #ifndef DB__KEYWORDS_H
@@ -12,5 +12,8 @@ typedef struct KEYWORDS
     char keyword[255+1];
 } keywords, *keywordsPtr;
 
-int load_keywords(void* A, void* B);
+keywordsPtr load_keywords(void* A, void* B);
+void print_keywords(void);
+void keywordsRelase(keywordsPtr* tables);
 #endif
+

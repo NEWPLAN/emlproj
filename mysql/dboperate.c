@@ -126,8 +126,8 @@ static void* mysql_get(const char *sql)
     int res=0, col=0, row=0,index=0;
     int rowindex=0,colindex=0;
     char ***tables=NULL;
-    FetchRtePtr RteVal=(FetchRtePtr)malloc(sizeof(FetchRte)); 
-    
+    FetchRtePtr RteVal=(FetchRtePtr)malloc(sizeof(FetchRte));
+
     if(!RteVal)
     {
         printf("error in malloc for rteval\n");
@@ -142,7 +142,7 @@ static void* mysql_get(const char *sql)
     conn_ptr = mysql_init(NULL);
     if (!conn_ptr)
     {
-    	printf("error in init msyql\n");
+        printf("error in init msyql\n");
         return NULL;
     }
 
@@ -199,7 +199,7 @@ static void* mysql_get(const char *sql)
                     }
                     colindex=0;
                     rowindex++;
-                   // printf("\n");
+                    // printf("\n");
                 }
                 if (mysql_errno(conn_ptr))
                 {
@@ -215,10 +215,10 @@ static void* mysql_get(const char *sql)
     }
     mysql_close(conn_ptr);
     {
-        
-    RteVal->col=col;
-    RteVal->row=row;
-    RteVal->dataPtr=tables;
+
+        RteVal->col=col;
+        RteVal->row=row;
+        RteVal->dataPtr=tables;
     }
     return (void*)RteVal;
     //return EXIT_SUCCESS;
@@ -336,19 +336,19 @@ int database_connect_local(const char *password)
 
 void free_memory(FetchRtePtr memptr)
 {
-	int rowindex,colindex;
-	for(rowindex=0;rowindex<memptr->row;rowindex++)
-	{
-		for(colindex=0;colindex<memptr->col;colindex++)
-		{
-			free(memptr->dataPtr[rowindex][colindex]);
-			memptr->dataPtr[rowindex][colindex]=NULL;
-		}
-		free(memptr->dataPtr[rowindex]);
-		memptr->dataPtr[rowindex]=NULL;
-	}
-	free(memptr->dataPtr);
-	memptr->dataPtr=NULL;
-	free(memptr);
+    int rowindex,colindex;
+    for(rowindex=0; rowindex<memptr->row; rowindex++)
+    {
+        for(colindex=0; colindex<memptr->col; colindex++)
+        {
+            free(memptr->dataPtr[rowindex][colindex]);
+            memptr->dataPtr[rowindex][colindex]=NULL;
+        }
+        free(memptr->dataPtr[rowindex]);
+        memptr->dataPtr[rowindex]=NULL;
+    }
+    free(memptr->dataPtr);
+    memptr->dataPtr=NULL;
+    free(memptr);
 }
 

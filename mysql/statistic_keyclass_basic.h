@@ -1,8 +1,8 @@
 /*************************************************************************
 	> File Name: statistic_keyclass_basic.h
-	> Author:
-	> Mail:
-	> Created Time: 2016Äê03ÔÂ15ÈÕ ÐÇÆÚ¶þ 16Ê±44·Ö31Ãë
+	> Author: 
+	> Mail: 
+	> Created Time: 2016å¹´03æœˆ17æ—¥ æ˜ŸæœŸå›› 13æ—¶18åˆ†28ç§’
  ************************************************************************/
 
 #ifndef DB__STATISTIC_KEYCLASS_BASIC_H
@@ -15,6 +15,8 @@ typedef struct STATISTICKEYCLASS
     char dlp_keyclass_hitlist[255+1];
 } dlpkeyclass,*dlpkeyclassPtr;
 
-int load_dlpkeyclass(void* A, void* B);
-
+dlpkeyclassPtr load_dlpkeyclass(void* A, void* B);
+void print_dlpkeyclass(void);
+void dlpkeyclassRelase(dlpkeyclassPtr* tables);
 #endif
+

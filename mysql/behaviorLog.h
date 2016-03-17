@@ -1,8 +1,8 @@
 /*************************************************************************
 	> File Name: behaviorLog.h
-	> Author:
-	> Mail:
-	> Created Time: 2016Äê03ÔÂ15ÈÕ ÐÇÆÚ¶þ 15Ê±01·Ö15Ãë
+	> Author: 
+	> Mail: 
+	> Created Time: 2016å¹´03æœˆ17æ—¥ æ˜ŸæœŸå›› 12æ—¶50åˆ†47ç§’
  ************************************************************************/
 
 #ifndef DB__BEHAVIORLOG_H
@@ -17,6 +17,7 @@ typedef struct behavoirStruct
     char behavior[255+1];
 } behaviorlog,*behaviorlogPtr;
 
-int loadbehavoirLog(void* A,void *B);
-
+behaviorlogPtr loadbehavoirLog(void* A, void* B);
+void print_behaviorlog(void);
+void behaviorlogRelase(behaviorlogPtr* tables);
 #endif

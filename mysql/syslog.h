@@ -1,8 +1,8 @@
 /*************************************************************************
 	> File Name: syslog.h
-	> Author:
-	> Mail:
-	> Created Time: 2016Äê03ÔÂ15ÈÕ ÐÇÆÚ¶þ 17Ê±04·Ö26Ãë
+	> Author: 
+	> Mail: 
+	> Created Time: 2016å¹´03æœˆ17æ—¥ æ˜ŸæœŸå›› 12æ—¶58åˆ†24ç§’
  ************************************************************************/
 
 #ifndef DB__SYSLOG_H
@@ -16,6 +16,8 @@ typedef struct SYSLOG
     char content[255+1];
 } syslog, *syslogPtr;
 
-int load_syslog(void* A, void* B);
-
+syslogPtr load_syslog(void* A, void* B);
+void print_syslog(void);
+void syslogRelase(syslogPtr* tables);
 #endif
+

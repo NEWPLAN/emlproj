@@ -1,8 +1,8 @@
 /*************************************************************************
 	> File Name: statistic_eml_info_basic.h
-	> Author:
-	> Mail:
-	> Created Time: 2016Äê03ÔÂ15ÈÕ ÐÇÆÚ¶þ 16Ê±28·Ö15Ãë
+	> Author: 
+	> Mail: 
+	> Created Time: 2016å¹´03æœˆ17æ—¥ æ˜ŸæœŸå›› 13æ—¶20åˆ†09ç§’
  ************************************************************************/
 
 #ifndef DB__STATISTIC_EML_INFO_BASIC_H
@@ -22,6 +22,8 @@ typedef struct STATISTICEMLINFO
     char eml_urlhit[11+1];
 } emlinfo,*emlinfoPtr;
 
-int load_emlinfo(void* A, void* B);
-
+emlinfoPtr load_emlinfo(void* A, void* B);
+void emlinfoRelase(emlinfoPtr* tables);
+void print_emlinfo(void);
 #endif
+

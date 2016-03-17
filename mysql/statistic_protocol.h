@@ -1,8 +1,8 @@
 /*************************************************************************
 	> File Name: statistic_protocol.h
-	> Author:
-	> Mail:
-	> Created Time: 2016Äê03ÔÂ15ÈÕ ÐÇÆÚ¶þ 16Ê±51·Ö35Ãë
+	> Author: 
+	> Mail: 
+	> Created Time: 2016å¹´03æœˆ17æ—¥ æ˜ŸæœŸå›› 13æ—¶17åˆ†12ç§’
  ************************************************************************/
 
 #ifndef DB__STATISTIC_PROTOCOL_H
@@ -18,6 +18,9 @@ typedef struct STATISTICPROTOCOL
     char filepath[255+1];
 } staprotocol, *staprotocolPtr;
 
-int load_statisticProtocol(void* A, void* B);
+staprotocolPtr load_statisticProtocol(void* A, void* B);
+void print_staprotocol(void);
+void staprotocolRelase(staprotocolPtr* tables);
 
 #endif
+

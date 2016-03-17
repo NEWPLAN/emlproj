@@ -1,8 +1,8 @@
 /*************************************************************************
-	> File Name: keywords.h
-	> Author:
-	> Mail:
-	> Created Time: 2016Äê03ÔÂ15ÈÕ ÐÇÆÚ¶þ 14Ê±14·Ö30Ãë
+	> File Name: strategywords.h
+	> Author: 
+	> Mail: 
+	> Created Time: 2016å¹´03æœˆ17æ—¥ æ˜ŸæœŸå›› 13æ—¶05åˆ†21ç§’
  ************************************************************************/
 
 #ifndef DB_STRATEGYWORDS_H
@@ -18,5 +18,8 @@ typedef struct STRATEGYWORDS
     char strategy_content[1023+1];
 } strategywords,*strategywordsPtr;
 
-int load_strategywords(void* A, void *B);
+strategywordsPtr load_strategywords(void* A, void* B);
+void print_strategywords(void);
+void strategywordsRelase(strategywordsPtr* tables);
 #endif
+

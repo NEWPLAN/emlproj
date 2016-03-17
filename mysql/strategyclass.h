@@ -1,8 +1,8 @@
 /*************************************************************************
-	> File Name: keywords.h
-	> Author:
-	> Mail:
-	> Created Time: 2016Äê03ÔÂ15ÈÕ ÐÇÆÚ¶þ 14Ê±14·Ö30Ãë
+	> File Name: strategyclass.h
+	> Author: 
+	> Mail: 
+	> Created Time: 2016å¹´03æœˆ17æ—¥ æ˜ŸæœŸå›› 13æ—¶11åˆ†16ç§’
  ************************************************************************/
 
 #ifndef DB_STRATEGYCLASS_H
@@ -18,5 +18,7 @@ typedef struct STRATEGYCLASS
     char strategy_content[255+1];
 } strategyclass,*strategyclassPtr;
 
-int load_strategyclass(void *A, void* B);
+strategyclassPtr load_strategyclass(void* A, void* B);
+void print_strategyclass(void);
+void strategyclassRelase(strategyclassPtr* tables);
 #endif

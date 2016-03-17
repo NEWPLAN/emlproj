@@ -1,8 +1,8 @@
 /*************************************************************************
 	> File Name: protocol.h
-	> Author:
-	> Mail:
-	> Created Time: 2016Äê03ÔÂ15ÈÕ ÐÇÆÚ¶þ 16Ê±05·Ö02Ãë
+	> Author: 
+	> Mail: 
+	> Created Time: 2016å¹´03æœˆ17æ—¥ æ˜ŸæœŸå›› 13æ—¶00åˆ†03ç§’
  ************************************************************************/
 
 #ifndef DB__PROTOCOL_H
@@ -19,3 +19,4 @@ protocolPtr load_protocolSitch(void* A, void* B);
 void printProtocolSwitch(void);
 void protocolRelase(protocolPtr* tables);
 #endif
+

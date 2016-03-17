@@ -1,8 +1,8 @@
 /*************************************************************************
 	> File Name: spamlist.h
-	> Author:
-	> Mail:
-	> Created Time: 2016Äê03ÔÂ15ÈÕ ÐÇÆÚ¶þ 16Ê±09·Ö41Ãë
+	> Author: 
+	> Mail: 
+	> Created Time: 2016å¹´03æœˆ17æ—¥ æ˜ŸæœŸå›› 13æ—¶01åˆ†57ç§’
  ************************************************************************/
 
 #ifndef DB__SPAMLIST_H
@@ -15,7 +15,10 @@ typedef struct SPAMLIST
     char strategy_info[255+1];
     char strategy_terminal[5+1];
     char strategy_target[255+1];
-} spamlist, *spanlistPtr;
+} spamlist, *spamlistPtr;
 
-int load_spamlist(void* A, void* B);
+spamlistPtr load_spamlist(void* A, void* B);
+void print_spamlist(void);
+void spamlistRelase(spamlistPtr* tables);
 #endif
+
