@@ -1,7 +1,7 @@
 # <p align="center">EMLPROJ</p>
 ================================
 ### 文件结构：
-><font size="1">antivirus</font> 【反病毒和反垃圾模块】
+>antivirus 【反病毒和反垃圾模块】
 >>spam 反垃圾模块，调用垃圾库</br> 
 >>virus 反病毒模块，调用病毒库
 >
@@ -13,7 +13,8 @@
 >gmime 【邮件格式解析和附件提取】依赖gmime2.6.11实现
 >
 >main 【主函数入口部分】
->>bc 临时文件</br> 
+>>bc 临时文件
+>
 >>Data 系统测试依赖文件</br> 
 >>temps 程序运行临时文件夹</br>
 >>testdata 测试输入文件集</br>
