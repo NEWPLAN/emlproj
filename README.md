@@ -1,7 +1,7 @@
 # <p align="center">EMLPROJ</p>
 ================================
 ### 文件结构：
-><font color="#666600">antivirus</font> 【反病毒和反垃圾模块】
+><font size="1">antivirus</font> 【反病毒和反垃圾模块】
 >>spam 反垃圾模块，调用垃圾库</br> 
 >>virus 反病毒模块，调用病毒库
 >
