@@ -162,7 +162,7 @@ static void* mysql_get(const char *sql)
 
                 /********************malloc for fetch result************************/
                 row=(int)mysql_num_rows(res_ptr);/*get行数*/
-                printf("%lu Rows\n",(unsigned long)row);
+                //printf("%lu Rows\n",(unsigned long)row);
                 col = mysql_num_fields(res_ptr);/*数据库列数*/
 
                 /**********分配行数***********/
