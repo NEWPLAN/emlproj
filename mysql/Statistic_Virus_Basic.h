@@ -1,7 +1,7 @@
 /*************************************************************************
 	> File Name: statistic_virus.h
-	> Author: 
-	> Mail: 
+	> Author:
+	> Mail:
 	> Created Time: 2016年03月17日 星期四 13时12分46秒
  ************************************************************************/
 
@@ -19,6 +19,5 @@ typedef struct STATISTICVIRUS
 statvirusPtr load_statistic_virus(void* A, void* B);
 void print_statvirus(void);
 void statvirusRelase(statvirusPtr* tables);
-
+int StatisticVirusTest(int flags);
 #endif
-

@@ -1,65 +1,64 @@
 /*************************************************************************
-	> File Name: virus_list.c
+	> File Name: spamlist.c
 	> Author:
 	> Mail:
-	> Created Time: 2016年03月17日 星期四 13时06分58秒
+	> Created Time: 2016年03月17日 星期四 13时01分05秒
  ************************************************************************/
 
 #include<stdio.h>
-#include"virus_list.h"
+#include"spam_list.h"
 #include "dboperate.h"
 #include <string.h>
 
-static const char * const tableName="virus_list";
+static const char * const tableName="spam_list";
 static int rowNum=0;
 
-viurlistPtr load_virus_list(void* A, void* B)
+spamlistPtr load_spamlist(void* A, void* B)
 {
+
     FetchRtePtr val=NULL;
-    viurlistPtr prolist=NULL;
+    spamlistPtr spam_list=NULL;
     int index=0;
     if((val=database_query(tableName))==NULL)
     {
-        printf("error in loading table virus list\n");
+        printf("error in loading table spamlist \n");
         return NULL;
     }
     rowNum=val->row;
-    prolist=(viurlistPtr)malloc(sizeof(viruslist)*(val->row+1));
-    if(!prolist)
+    spam_list=(spamlistPtr)malloc(sizeof(spamlist)*(val->row+1));
+    if(!spam_list)
     {
-        printf("error in malloc for virus list\n");
+        printf("error in malloc for spamlist \n");
         return NULL;
     }
-    memset(prolist,0,sizeof(viruslist)*(val->row+1));
+    memset(spam_list,0,sizeof(spamlist)*(val->row+1));
     for(index=0; index<val->row; index++)
     {
-        memcpy(prolist[index].strategy_id,val->dataPtr[index][0],sizeof(prolist[index].strategy_id)-1);
-        memcpy(prolist[index].strategy_type,val->dataPtr[index][1],sizeof(prolist[index].strategy_type)-1);
-        memcpy(prolist[index].strategy_level,val->dataPtr[index][2],sizeof(prolist[index].strategy_level)-1);
-        memcpy(prolist[index].strategy_info,val->dataPtr[index][3],sizeof(prolist[index].strategy_info)-1);
-        memcpy(prolist[index].strategy_terminal,val->dataPtr[index][4],sizeof(prolist[index].strategy_terminal)-1);
-        memcpy(prolist[index].strategy_target,val->dataPtr[index][5],sizeof(prolist[index].strategy_target)-1);
+        memcpy(spam_list[index].strategy_id,val->dataPtr[index][0],sizeof(spam_list[index].strategy_id)-1);
+        memcpy(spam_list[index].strategy_type,val->dataPtr[index][1],sizeof(spam_list[index].strategy_type)-1);
+        memcpy(spam_list[index].strategy_level,val->dataPtr[index][2],sizeof(spam_list[index].strategy_level)-1);
+        memcpy(spam_list[index].strategy_info,val->dataPtr[index][3],sizeof(spam_list[index].strategy_info)-1);
+        memcpy(spam_list[index].strategy_terminal,val->dataPtr[index][4],sizeof(spam_list[index].strategy_terminal)-1);
+        memcpy(spam_list[index].strategy_target,val->dataPtr[index][5],sizeof(spam_list[index].strategy_target)-1);
     }
     free_memory(val);
     val=NULL;
-    return prolist;
+    return spam_list;
 }
 
-void printvirus_list(void)
+void print_spamlist(void)
 {
-    viurlistPtr var=load_virus_list(NULL,NULL);
+    spamlistPtr var=load_spamlist(NULL,NULL);
     int rowindex=0,totalnum=rowNum;
-    printf("test in print_virus_list\n");
+    printf("test in print_spamlist\n");
     while(rowindex<totalnum)
     {
-        printf("%-12s\t%-12s\t%-12s\t%-12s\t%-12s\t%-12s\n",
-               var[rowindex].strategy_id,var[rowindex].strategy_type,var[rowindex].strategy_level,
-               var[rowindex].strategy_info,var[rowindex].strategy_terminal,var[rowindex].strategy_target);
+        printf("%-12s\t%-12s\t%-12s\t%-12s\t%-12s\t%-12s\n",var[rowindex].strategy_id,var[rowindex].strategy_type,var[rowindex].strategy_level,var[rowindex].strategy_info,var[rowindex].strategy_terminal,var[rowindex].strategy_target);
         rowindex++;
     }
-    virus_listRelase(&var);
+    spamlistRelase(&var);
 }
-void virus_listRelase(viurlistPtr* tables)
+void spamlistRelase(spamlistPtr* tables)
 {
     if(*tables)
         free(*tables);
@@ -79,7 +78,7 @@ void virus_listRelase(viurlistPtr* tables)
 ***1：更新数据库      &2   0x02
 ***0：打印测试信息		&1	 0x01
 ********************************************************/
-int VirusListTest(int flags)
+int SpamListTest(int flags)
 {
     char*** results=NULL/*,***tptr=NULL*/;
     FetchRtePtr retval=NULL;
@@ -96,14 +95,14 @@ int VirusListTest(int flags)
     //int ret = database_insert("Protocol_switch","'789','789',123");
 
     if(flags&INSERT_DB_FLAGS)
-        database_insert(tableName,"1,2,3,'strategy_info',4,'strategy_target'");
+        database_insert(tableName,"1,0,3,'spam_list',0,'strategy_target'");
     //database_query("Protocol_switch");
 
     if(flags&DISPLAY_DATA_FLAGS)
-        printvirus_list();
+        print_spamlist();
 
     if(flags&UPDATE_DB_FLAGS)
-        database_update(tableName,"set strategy_target='对对对,我就是病毒hhh' where strategy_id=1");
+        database_update(tableName,"set strategy_type=1,strategy_level=41,strategy_info='垃圾库列表',strategy_terminal=1,strategy_target='目标是大唐奥舒' where strategy_id=1");
     //database_update("Protocol_switch","set protocol='456',direction='456' where switch=456");
     if(flags&UNCON_QUERRY_FLAGS)
     {
@@ -114,13 +113,13 @@ int VirusListTest(int flags)
             return 0;
     }
     if(flags&DISPLAY_DATA_FLAGS)
-        printvirus_list();
+        print_spamlist();
 
     if(flags&DELETE_DB_FLAGS)
         database_delete(tableName,"strategy_id=1");
 
     if(flags&DISPLAY_DATA_FLAGS)
-        printvirus_list();
+        print_spamlist();
 
     if(flags&DEBUG_DB_FLAGS)
 		printf("Test for %s done!\n",tableName);

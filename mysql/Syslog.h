@@ -1,7 +1,7 @@
 /*************************************************************************
 	> File Name: syslog.h
-	> Author: 
-	> Mail: 
+	> Author:
+	> Mail:
 	> Created Time: 2016年03月17日 星期四 12时58分24秒
  ************************************************************************/
 
@@ -19,5 +19,5 @@ typedef struct SYSLOG
 syslogPtr load_syslog(void* A, void* B);
 void print_syslog(void);
 void syslogRelase(syslogPtr* tables);
+int SysLogTest(int flags);
 #endif
-

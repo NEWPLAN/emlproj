@@ -1,7 +1,7 @@
 /*************************************************************************
 	> File Name: strategywords.h
-	> Author: 
-	> Mail: 
+	> Author:
+	> Mail:
 	> Created Time: 2016年03月17日 星期四 13时05分21秒
  ************************************************************************/
 
@@ -21,5 +21,5 @@ typedef struct STRATEGYWORDS
 strategywordsPtr load_strategywords(void* A, void* B);
 void print_strategywords(void);
 void strategywordsRelase(strategywordsPtr* tables);
+int StrategyWordsTest(int flags);
 #endif
-

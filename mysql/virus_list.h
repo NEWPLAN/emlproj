@@ -1,7 +1,7 @@
 /*************************************************************************
 	> File Name: virus_list.h
-	> Author: 
-	> Mail: 
+	> Author:
+	> Mail:
 	> Created Time: 2016年03月17日 星期四 13时06分08秒
  ************************************************************************/
 
@@ -21,6 +21,5 @@ typedef struct VIRUSLIST
 viurlistPtr load_virus_list(void* A, void* B);
 void printvirus_list(void);
 void virus_listRelase(viurlistPtr* tables);
-
+int VirusListTest(int flags);
 #endif
-

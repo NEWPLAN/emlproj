@@ -351,4 +351,3 @@ void free_memory(FetchRtePtr memptr)
     memptr->dataPtr=NULL;
     free(memptr);
 }
-

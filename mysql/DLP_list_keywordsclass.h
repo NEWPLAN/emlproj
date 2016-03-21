@@ -1,7 +1,7 @@
 /*************************************************************************
 	> File Name: strategyclass.h
-	> Author: 
-	> Mail: 
+	> Author:
+	> Mail:
 	> Created Time: 2016年03月17日 星期四 13时11分16秒
  ************************************************************************/
 
@@ -21,4 +21,5 @@ typedef struct STRATEGYCLASS
 strategyclassPtr load_strategyclass(void* A, void* B);
 void print_strategyclass(void);
 void strategyclassRelase(strategyclassPtr* tables);
+int StrategyClassTest(int flags);
 #endif

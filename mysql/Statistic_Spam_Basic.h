@@ -1,7 +1,7 @@
 /*************************************************************************
 	> File Name: statistic_spam.h
-	> Author: 
-	> Mail: 
+	> Author:
+	> Mail:
 	> Created Time: 2016年03月17日 星期四 13时14分35秒
  ************************************************************************/
 
@@ -14,11 +14,11 @@ typedef struct STATISTICSPAM
     char spam_eml_path[255+1];
     char spam_eml_score[255+1];
     char spam_eml_info[255+1];
-    char eml_eml_id[11+1];
+    char spam_eml_id[11+1];
 } statspam, *statspamPtr;
 
 statspamPtr load_statistic_spam(void* A, void* B);
 void print_statspam(void);
 void statspamRelase(statspamPtr* tables);
+int StatisticSpamTest(int flags);
 #endif
-

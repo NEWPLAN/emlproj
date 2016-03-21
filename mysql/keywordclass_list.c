@@ -1,61 +1,59 @@
 /*************************************************************************
-	> File Name: protocol.c
+	> File Name: keyclass.c
 	> Author:
 	> Mail:
-	> Created Time: 2016年03月16日 星期三 18时44分02秒
+	> Created Time: 2016年03月17日 星期四 12时52分06秒
  ************************************************************************/
 
-#include <stdio.h>
-#include "protocol.h"
+#include<stdio.h>
+#include "keywordclass_list.h"
 #include "dboperate.h"
-#include <string.h>
-
-static const char * const tableName="Protocol_switch";
+static const char * const tableName="keywordclass_list";
 static int rowNum=0;
 
-protocolPtr load_protocolSwitch(void* A, void* B)
+keyclassPtr load_keyclass(void* A, void* B)
 {
 
     FetchRtePtr val=NULL;
-    protocolPtr prolist=NULL;
+    keyclassPtr prolist=NULL;
     int index=0;
     if((val=database_query(tableName))==NULL)
     {
-        printf("error in loading table protocol switch\n");
+        printf("error in loading table keyclass \n");
         return NULL;
     }
     rowNum=val->row;
-    prolist=(protocolPtr)malloc(sizeof(protocol)*(val->row+1));
+    prolist=(keyclassPtr)malloc(sizeof(keyclass)*(val->row+1));
     if(!prolist)
     {
-        printf("error in malloc for protocol switch\n");
+        printf("error in malloc for keyclass \n");
         return NULL;
     }
-    memset(prolist,0,sizeof(protocol)*(val->row+1));
+    memset(prolist,0,sizeof(keyclass)*(val->row+1));
     for(index=0; index<val->row; index++)
     {
-        memcpy(prolist[index].protocol,val->dataPtr[index][0],sizeof(prolist[index].protocol)-1);
-        memcpy(prolist[index].direction,val->dataPtr[index][1],sizeof(prolist[index].direction)-1);
-        memcpy(prolist[index].switchs,val->dataPtr[index][2],sizeof(prolist[index].switchs)-1);
+        memcpy(prolist[index].class_id,val->dataPtr[index][0],sizeof(prolist[index].class_id)-1);
+        memcpy(prolist[index].class_name,val->dataPtr[index][1],sizeof(prolist[index].class_name)-1);
+        memcpy(prolist[index].class_regex,val->dataPtr[index][2],sizeof(prolist[index].class_regex)-1);
     }
     free_memory(val);
     val=NULL;
     return prolist;
 }
 
-void printProtocolSwitch(void)
+void print_keyclass(void)
 {
-    protocolPtr var=load_protocolSwitch(NULL,NULL);
+    keyclassPtr var=load_keyclass(NULL,NULL);
     int rowindex=0,totalnum=rowNum;
-    printf("test in printProtocolSwitch\n");
+    printf("test in print_keyclass\n");
     while(rowindex<totalnum)
     {
-        printf("%-12s\t%s\t%12s\n",var[rowindex].protocol,var[rowindex].direction,var[rowindex].switchs);
+        printf("%-12s\t%-12s\t%-12s\n",var[rowindex].class_id,var[rowindex].class_name,var[rowindex].class_regex);
         rowindex++;
     }
-    protocolRelase(&var);
+    keyclassRelase(&var);
 }
-void protocolRelase(protocolPtr* tables)
+void keyclassRelase(keyclassPtr* tables)
 {
     if(*tables)
         free(*tables);
@@ -75,31 +73,31 @@ void protocolRelase(protocolPtr* tables)
 ***1：更新数据库      &2   0x02
 ***0：打印测试信息		&1	 0x01
 ********************************************************/
-int ProtocolSwitchTest(int flags)
+int KeyClassTest(int flags)
 {
     char*** results=NULL/*,***tptr=NULL*/;
     FetchRtePtr retval=NULL;
-	
+
 	if(flags&DEBUG_DB_FLAGS)
 		printf("Test for %s done!\n",tableName);
-	
+
     if(flags&LOCAL_CONNECT_FLAGS)
         database_connect_local("root");
-        
+
     if(flags&REMOT_CONNECT_FLAGS)
         database_connect("127.0.0.1","root");
-        
+
     //int ret = database_insert("Protocol_switch","'789','789',123");
-    
+
     if(flags&INSERT_DB_FLAGS)
-        database_insert(tableName,"'789','789',456");
+        database_insert(tableName,"11,'bankcard','[\\d]{19,17}'");
     //database_query("Protocol_switch");
-    
+
     if(flags&DISPLAY_DATA_FLAGS)
-        printProtocolSwitch();
-        
+        print_keyclass();
+
     if(flags&UPDATE_DB_FLAGS)
-        database_update(tableName,"set direction='NEWPLAN' where switch=456");
+        database_update(tableName,"set class_name='银行卡号码', class_regex='Tsinghua' where class_id=11");
     //database_update("Protocol_switch","set protocol='456',direction='456' where switch=456");
     if(flags&UNCON_QUERRY_FLAGS)
     {
@@ -110,16 +108,15 @@ int ProtocolSwitchTest(int flags)
             return 0;
     }
     if(flags&DISPLAY_DATA_FLAGS)
-        printProtocolSwitch();
+        print_keyclass();
 
     if(flags&DELETE_DB_FLAGS)
-        database_delete(tableName,"protocol=789");
+        database_delete(tableName,"class_id=11");
 
     if(flags&DISPLAY_DATA_FLAGS)
-        printProtocolSwitch();
-        
+        print_keyclass();
+
     if(flags&DEBUG_DB_FLAGS)
 		printf("Test for %s done!\n",tableName);
     return 0;
 }
-

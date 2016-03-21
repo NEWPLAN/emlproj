@@ -2,26 +2,30 @@ TARGET=test
 
 WARINING=-Wall
 
+FPIC=-fPIC
+
+SHARELIBS=-shared
+
 #ADDITIONS=-lmysqlclient -I/usr/include/mysql -L/usr/lib/mysql
 
 INCLUDE +=	-I/usr/include/mysql
 
 LINKS	+=	-lmysqlclient -L/usr/lib/mysql
 
-Heads	+=	all.h  dboperate.h strategywords.h behaviorLog.h strategyclass.h keywords.h keyclass.h \
-				   protocol.h spamlist.h statistic_DLP_keywords.h statistic_DLP_url.h syslog.h \
-				   statistic_eml_info_basic.h statistic_keyclass_basic.h statistic_spam.h url_list.h \
-				   statistic_virus.h user_info.h virus_list.h statistic_protocol.h
+Heads	+=	all.h  dboperate.h DLP_list_keywords.h behavior_log.h DLP_list_keywordsclass.h keyword_list.h keywordclass_list.h \
+				   Protocol_switch.h spam_list.h Statistic_DLP_keywords.h Statistic_DLP_URL.h Syslog.h \
+				   Statistic_Emlinfo_basic.h Statistic_keywordclass_Basic.h Statistic_Spam_Basic.h URL_list.h \
+				   Statistic_Virus_Basic.h user_info.h virus_list.h Statistic_Protocol.h
 
-Cfiles	+=	main.c dboperate.c strategywords.c behaviorLog.c strategyclass.c keywords.c keyclass.c \
-					protocol.c spamlist.c statistic_DLP_keywords.c statistic_DLP_url.c syslog.c \
-					statistic_eml_info_basic.c statistic_keyclass_basic.c statistic_spam.c url_list.c \
-					statistic_virus.c user_info.c virus_list.c statistic_protocol.c
+Cfiles	+=	main.c dboperate.c DLP_list_keywords.c behavior_log.c DLP_list_keywordsclass.c keyword_list.c keywordclass_list.c \
+					Protocol_switch.c spam_list.c Statistic_DLP_keywords.c Statistic_DLP_URL.c Syslog.c \
+					Statistic_Emlinfo_basic.c Statistic_keywordclass_Basic.c Statistic_Spam_Basic.c URL_list.c \
+					Statistic_Virus_Basic.c user_info.c virus_list.c Statistic_Protocol.c
 
-OBJS	+=	main.o dboperate.o strategywords.o behaviorLog.o strategyclass.o keywords.o keyclass.o \
-					protocol.o spamlist.o statistic_DLP_keywords.o statistic_DLP_url.o syslog.o \
-					statistic_eml_info_basic.o statistic_keyclass_basic.o statistic_spam.o url_list.o \
-					statistic_virus.o user_info.o virus_list.o statistic_protocol.o
+OBJS	+=	main.o dboperate.o DLP_list_keywords.o behavior_log.o DLP_list_keywordsclass.o keyword_list.o keywordclass_list.o \
+					Protocol_switch.o spam_list.o Statistic_DLP_keywords.o Statistic_DLP_URL.o Syslog.o \
+					Statistic_Emlinfo_basic.o Statistic_keywordclass_Basic.o Statistic_Spam_Basic.o URL_list.o \
+					Statistic_Virus_Basic.o user_info.o virus_list.o Statistic_Protocol.o
 
 CC		=	gcc
 DEBUGS	=	-g
@@ -30,7 +34,7 @@ all:$(OBJS)
 	$(CC) $(WARINING) $(OBJS) -o $(TARGET) $(LINKS)
 
 %.o:%.c $(Heads)
-	$(CC) $(WARINING) $(DEBUGS) -c $(INCLUDE)  $< -o $@
+	$(CC) $(FPIC)  $(WARINING) $(DEBUGS) -c $(INCLUDE)  $< -o $@
 
 run:
 	./$(TARGET)

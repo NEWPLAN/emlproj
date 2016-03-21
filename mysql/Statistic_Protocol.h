@@ -1,7 +1,7 @@
 /*************************************************************************
 	> File Name: statistic_protocol.h
-	> Author: 
-	> Mail: 
+	> Author:
+	> Mail:
 	> Created Time: 2016年03月17日 星期四 13时17分12秒
  ************************************************************************/
 
@@ -15,12 +15,11 @@ typedef struct STATISTICPROTOCOL
     char dest_ip[255+1];
     char open_time[255+1];
     char close_time[255+1];
-    char filepath[255+1];
+    char eml_file_path[255+1];
 } staprotocol, *staprotocolPtr;
 
 staprotocolPtr load_statisticProtocol(void* A, void* B);
 void print_staprotocol(void);
 void staprotocolRelase(staprotocolPtr* tables);
-
+int StatisticProtocolTest(int flags);
 #endif
-

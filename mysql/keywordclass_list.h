@@ -1,7 +1,7 @@
 /*************************************************************************
 	> File Name: keyclass.h
-	> Author: 
-	> Mail: 
+	> Author:
+	> Mail:
 	> Created Time: 2016年03月17日 星期四 12时53分04秒
  ************************************************************************/
 
@@ -16,6 +16,7 @@ typedef struct KEYCLASS
 } keyclass, *keyclassPtr;
 
 keyclassPtr load_keyclass(void* A, void* B);
-void printkeyclass(void);
+void print_keyclass(void);
 void keyclassRelase(keyclassPtr* tables);
+int KeyClassTest(int flags);
 #endif

@@ -1,7 +1,7 @@
 /*************************************************************************
 	> File Name: behaviorLog.h
-	> Author: 
-	> Mail: 
+	> Author:
+	> Mail:
 	> Created Time: 2016年03月17日 星期四 12时50分47秒
  ************************************************************************/
 
@@ -20,4 +20,5 @@ typedef struct behavoirStruct
 behaviorlogPtr loadbehavoirLog(void* A, void* B);
 void print_behaviorlog(void);
 void behaviorlogRelase(behaviorlogPtr* tables);
+int BehaviorLogTest(int flags);
 #endif
