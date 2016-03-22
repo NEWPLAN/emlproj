@@ -1,5 +1,8 @@
 //#include "dboperate.h"
 #include "all.h"
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 /***********************************************
 *
 *

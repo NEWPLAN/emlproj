@@ -2,49 +2,54 @@
 	> File Name: all.h
 	> Author: 
 	> Mail: 
-	> Created Time: 2016Äê02ÔÂ17ÈÕ ĞÇÆÚÈı 13Ê±40·Ö52Ãë
+	> Created Time: 2016Ã„Ãª02Ã”Ã‚17ÃˆÃ• ÃÃ‡Ã†ÃšÃˆÃ½ 13ÃŠÂ±40Â·Ã–52ÃƒÃ«
  ************************************************************************/
 
 #ifndef EML_ALL_H
 #define EML_ALL_H
 
-/*Ìí¼ÓgmimeµÄ½Ó¿ÚÍ·ÎÄ¼ş*/
+/*ÃŒÃ­Å’Ã“gmimeÂµÃ„Å“Ã“Â¿ÃšÃÂ·ÃÃ„Å’Ã¾*/
 #include "../gmime/all.h"
 
-/*·Ö´Ê¿â½Ó¿Ú*/
+/*Â·Ã–Å½ÃŠÂ¿Ã¢Å“Ã“Â¿Ãš*/
 #include "../spliter/allhead.h"
 
-/*Ìí¼ÓÕıÔò¹æÔò£¬¹Ø¼ü×ÖÀà½Ó¿Ú*/
+/*ÃŒÃ­Å’Ã“Ã•Ã½Ã”Ã²Â¹Ã¦Ã”Ã²Â£Â¬Â¹Ã˜Å’Ã¼Ã—Ã–Ã€Ã Å“Ã“Â¿Ãš*/
 #include "../regex/all.h"
 
-/*Ìí¼Ó¸½¼ş½Ó¿Ú*/
+/*ÃŒÃ­Å’Ã“Å¾Å“Å’Ã¾Å“Ã“Â¿Ãš*/
 #include "../appendix/all.h"
 
-/*Ìí¼Ó·´À¬»ø¿â½Ó¿Ú*/
+/*ÃŒÃ­Å’Ã“Â·Å½Ã€Â¬Â»Ã¸Â¿Ã¢Å“Ã“Â¿Ãš*/
 #include "../antivirus/spam/antispam.h"
 
-/*Ìí¼Ó·´²¡¶¾¿â½Ó¿Ú*/
+/*ÃŒÃ­Å’Ã“Â·Å½Â²Â¡Â¶Å¸Â¿Ã¢Å“Ã“Â¿Ãš*/
 #include "../antivirus/virus/antivirus.h"
 
-/*½âÎöemlÎÄ¼ş*/
+/*Load db from Database*/
+#include "../mysql/all.h"
+
+/*Å“Ã¢ÃÃ¶emlÃÃ„Å’Ã¾*/
 int ParseEML(char* filename);
 
-/*URL´¦Àí*/
+/*URLÅ½Å Ã€Ã­*/
 int ParseURL(char* filename);
 
-/*¹Ø¼ü×Ö¹ıÂË*/
+/*Â¹Ã˜Å’Ã¼Ã—Ã–Â¹Ã½Ã‚Ã‹*/
 int ParseKeyChs(char* filename);
-/*¹Ø¼ü×ÖÀà´¦Àí*/
+/*Â¹Ã˜Å’Ã¼Ã—Ã–Ã€Ã Å½Å Ã€Ã­*/
 int ParseKeyClass(char* filename);
 
-/*¸½¼ş´¦Àí*/
+/*Å¾Å“Å’Ã¾Å½Å Ã€Ã­*/
 int ParseAppendix(char* filedirname);
 
-/*·´²¡¶¾´¦Àí*/
+/*Â·Å½Â²Â¡Â¶Å¸Å½Å Ã€Ã­*/
 int AntiSpams(char* filename);
 
-/*·´À¬»ø´¦Àí*/
+/*Â·Å½Ã€Â¬Â»Ã¸Å½Å Ã€Ã­*/
 int AntiVirus(char* filepath);
+
+/*åŠ è½½æ•°æ®åº“ä¿¡æ¯*/
 
 
 #endif

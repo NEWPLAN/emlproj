@@ -41,6 +41,7 @@ syslogPtr load_syslog(void* A, void* B)
     }
     free_memory(val);
     val=NULL;
+    if(A)
     *((int *)A)=rowNum;
     return prolist;
 }

@@ -44,6 +44,7 @@ strategywordsPtr load_strategywords(void* A, void* B)
     }
     free_memory(val);
     val=NULL;
+    if(A)
     *((int *)A)=rowNum;
     return stgwd;
 }

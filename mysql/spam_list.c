@@ -43,6 +43,7 @@ spamlistPtr load_spamlist(void* A, void* B)
     }
     free_memory(val);
     val=NULL;
+    if(A)
     *((int *)A)=rowNum;
     return spam_list;
 }

@@ -44,6 +44,7 @@ userinfoPtr load_user_info(void* A, void* B)
     }
     free_memory(val);
     val=NULL;
+    if(A)
     *((int *)A)=rowNum;
     return prolist;
 }

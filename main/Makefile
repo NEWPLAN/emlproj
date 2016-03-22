@@ -14,16 +14,17 @@ JPEGLibs=jpegparse.so
 PDFLibs=pdfpharse.so
 SPAMLibs=libantispam.so
 VIRUSLibs=libantivirus.so
+SQLDBLibs=sqlDB.so
 
 all:$(TARGET)
 
 $(TARGET):$(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
 	$(APPENDIXLibs) $(UNZIPSLibs) $(JPEGLibs) $(PDFLibs)\
-	$(SPAMLibs) $(VIRUSLibs)
+	$(SPAMLibs) $(VIRUSLibs) $(SQLDBLibs)
 	gcc $(DEBUG) main.c -o $(TARGET) ./$(GMIMELibs)\
 		./$(NLPIRLibs) ./$(REGEXLibs) ./$(SPLITERLibs)\
 		./$(APPENDIXLibs) ./$(UNZIPSLibs) ./$(JPEGLibs)\
-		./$(PDFLibs) ./$(SPAMLibs) ./$(VIRUSLibs) -ldl
+		./$(PDFLibs) ./$(SPAMLibs) ./$(VIRUSLibs) ./$(SQLDBLibs) -ldl
 
 $(GMIMELibs):
 	cd ../gmime; 		make;
@@ -59,6 +60,10 @@ $(SPAMLibs):
 $(VIRUSLibs):
 	cd ../antivirus/virus; 	make $(VIRUSLibs);
 	cp ../antivirus/virus/$(VIRUSLibs) 	./
+	
+$(SQLDBLibs):
+	cd ../mysql; make;
+	cp ../mysql/$(SQLDBLibs)			./
 
 test:
 	./$(TARGET) testdata/66666.eml
@@ -71,7 +76,7 @@ clean:
 	-rm $(ADDATIONFILE);
 	-rm $(GMIMELibs) $(REGEXLibs) $(SPLITERLibs)\
 		$(APPENDIXLibs) $(UNZIPSLibs) $(JPEGLibs)\
-		$(PDFLibs) $(SPAMLibs) $(VIRUSLibs);
+		$(PDFLibs) $(SPAMLibs) $(VIRUSLibs) $(SQLDBLibs);
 	cd ../gmime; 		make clean;
 	cd ../regex; 		make clean;
 	cd ../spliter;	 	make clean;
@@ -81,5 +86,6 @@ clean:
 	cd ../appendix/jpeg; 	make clean;
 	cd ../antivirus/spam; 	make clean;
 	cd ../antivirus/virus; 	make clean;
+	cd ../mysql;		make clean;
 	clear;
 	@echo 'all clean done!'

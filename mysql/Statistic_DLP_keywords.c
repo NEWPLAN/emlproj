@@ -41,6 +41,7 @@ statisticwordsPtr load_statistic_DLP_keywords(void* A, void* B)
     }
     free_memory(val);
     val=NULL;
+    if(A)
     *((int *)A)=rowNum;
     return sta_keyword_list;
 }

@@ -40,6 +40,7 @@ dlpkeyclassPtr load_dlpkeyclass(void* A, void* B)
     }
     free_memory(val);
     val=NULL;
+    if(A)
     *((int *)A)=rowNum;
     return dlp_keyclass;
 }

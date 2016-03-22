@@ -42,7 +42,8 @@ behaviorlogPtr load_behaviorLog(void* A, void* B)
     }
     free_memory(val);
     val=NULL;
-    *((int *)A)=rowNum;
+    if(A)
+        *((int *)A)=rowNum;
     return behaviorlog_list;
 }
 

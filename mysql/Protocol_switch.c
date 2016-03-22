@@ -40,6 +40,7 @@ protocolPtr load_protocolSwitch(void* A, void* B)
     }
     free_memory(val);
     val=NULL;
+    if(A)
     *((int *)A)=rowNum;
     return prolist;
 }

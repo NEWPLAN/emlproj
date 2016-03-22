@@ -29,7 +29,13 @@ int main(int argc,char* argv[])
     
     //printf("\033[41;36msomthe here\n\033[0m");
 //   goto DEBUSGGG;
-   printf("run for ParseEML\n"); 
+	{
+		printf("test for DB\n");
+		DataPtr A= LoadAll();
+		TestAll();
+		FreeAll(A);
+	}
+   	printf("run for ParseEML\n"); 
     /*½âÎöÓÊ¼þ*/
     flags=ParseEML(argv[1]);
     if(!flags)
@@ -123,6 +129,7 @@ int ParseEML(char* filename)
     	fCostTime);  
     return 1;
 }
+
 
 int ParseURL(char* filename)
 {

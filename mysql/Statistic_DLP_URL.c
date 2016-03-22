@@ -40,6 +40,7 @@ statisticurlPtr load_statisticURL(void* A, void* B)
     }
     free_memory(val);
     val=NULL;
+    if(A)
     *((int *)A)=rowNum;
     return staurl_list;
 }
