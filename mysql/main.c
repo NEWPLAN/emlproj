@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include "dboperate.h"
 /***********************************************
 *
 *
@@ -14,7 +15,7 @@ static int TestAll(void);
 static DataPtr LoadAll(void);
 static int FreeAll(DataPtr A);
 */
-#define MYSQL_LIBS
+//#define MYSQL_LIBS
 #ifndef MYSQL_LIBS
 int main(int argc, char* argv[])
 {
@@ -54,51 +55,53 @@ DataPtr LoadAll(void)
         A->URL_list_Data=load_url_list(&A->URL_list_Num,0);
         A->user_info_Data=load_user_info(&A->user_info_Num,0);
         A->virus_list_Data=load_virus_list(&A->virus_list_Num,0);
+        printf("%d\n\n",A->behavior_Num);
     }
     return NULL;
 }
 
 int TestAll(void)
 {
+    int flags=255;
     printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-    BehaviorLogTest(255);
+    BehaviorLogTest(flags&(~DELETE_DB_FLAGS));
     printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-    StrategyWordsTest(255);
+    StrategyWordsTest(flags&(~DELETE_DB_FLAGS));
     printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-    StrategyClassTest(255);
+    StrategyClassTest(flags&(~DELETE_DB_FLAGS));
     printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-    KeyWordsTest(255);
+    KeyWordsTest(flags&(~DELETE_DB_FLAGS));
     printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-    KeyClassTest(255);
-    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-
-    ProtocolSwitchTest(255);
-    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-    SpamListTest(255);
-    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-    StatisticDLPKeyWordsTest(255);
-    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-    StatisticDLPUrlTest(255);
-    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-    StatisticEmlInfoBasicTest(255);
+    KeyClassTest(flags&(~DELETE_DB_FLAGS));
     printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 
-    StatisticKeyClassBasicTest(255);
+    ProtocolSwitchTest(flags&(~DELETE_DB_FLAGS));
     printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-    StatisticProtocolTest(255);
+    SpamListTest(flags&(~DELETE_DB_FLAGS));
     printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-    StatisticSpamTest(255);
+    StatisticDLPKeyWordsTest(flags&(~DELETE_DB_FLAGS));
     printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-    StatisticVirusTest(255);
+    StatisticDLPUrlTest(flags&(~DELETE_DB_FLAGS));
     printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-    SysLogTest(255);
+    StatisticEmlInfoBasicTest(flags&(~DELETE_DB_FLAGS));
     printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 
-    UrlListTest(255);
+    StatisticKeyClassBasicTest(flags&(~DELETE_DB_FLAGS));
     printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-    UserInfoTest(255);
+    StatisticProtocolTest(flags&(~DELETE_DB_FLAGS));
     printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-    VirusListTest(255);
+    StatisticSpamTest(flags&(~DELETE_DB_FLAGS));
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    StatisticVirusTest(flags&(~DELETE_DB_FLAGS));
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    SysLogTest(flags&(~DELETE_DB_FLAGS));
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+
+    UrlListTest(flags&(~DELETE_DB_FLAGS));
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    UserInfoTest(flags&(~DELETE_DB_FLAGS));
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    VirusListTest(flags&(~DELETE_DB_FLAGS));
 
     return 0;
 }
