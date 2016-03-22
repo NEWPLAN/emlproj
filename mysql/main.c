@@ -6,10 +6,29 @@
 *测试文件
 *
 ************************************************/
+
+static int TestAll(void);
+static int LoadAll(void);
+static int FreeAll(void);
+
 int main(int argc, char* argv[])
 {
 	//printProtocolSwitch();
-	printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+	 //printStatistic_DLP_keywords();
+    LoadAll();
+    TestAll();
+    FreeAll();
+    return 0;
+}
+
+int LoadAll(void)
+{
+    return 0;
+}
+
+int TestAll(void)
+{
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 	BehaviorLogTest(255);
 	printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 	StrategyWordsTest(255);
@@ -48,6 +67,12 @@ int main(int argc, char* argv[])
 	UserInfoTest(255);
 	printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 	VirusListTest(255);
-    //printStatistic_DLP_keywords();
+
+    return 0;
+}
+
+
+int FreeAll(void)
+{
     return 0;
 }
