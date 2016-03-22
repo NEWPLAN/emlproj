@@ -15,7 +15,7 @@ typedef struct PROTOCOL
     char switchs[10+1];
 } protocol, *protocolPtr;
 
-protocolPtr load_protocolSitch(void* A, void* B);
+protocolPtr load_protocolSwitch(void* A, void* B);
 void printProtocolSwitch(void);
 void protocolRelase(protocolPtr* tables);
 int ProtocolSwitchTest(int flags);

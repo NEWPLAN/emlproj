@@ -38,6 +38,7 @@ keywordsPtr load_keywords(void* A, void* B)
     }
     free_memory(val);
     val=NULL;
+    *((int *)A)=rowNum;
     return prolist;
 }
 

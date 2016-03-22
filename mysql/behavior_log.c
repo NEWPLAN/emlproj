@@ -13,7 +13,7 @@
 static const char * const tableName="behavior_log";
 static int rowNum=0;
 
-behaviorlogPtr load_behavoirLog(void* A, void* B)
+behaviorlogPtr load_behaviorLog(void* A, void* B)
 {
 
     FetchRtePtr val=NULL;
@@ -42,12 +42,13 @@ behaviorlogPtr load_behavoirLog(void* A, void* B)
     }
     free_memory(val);
     val=NULL;
+    *((int *)A)=rowNum;
     return behaviorlog_list;
 }
 
 void print_behaviorlog(void)
 {
-    behaviorlogPtr var=load_behavoirLog(NULL,NULL);
+    behaviorlogPtr var=load_behaviorLog(NULL,NULL);
     int rowindex=0,totalnum=rowNum;
     printf("test in print_behaviorlog\n");
     while(rowindex<totalnum)

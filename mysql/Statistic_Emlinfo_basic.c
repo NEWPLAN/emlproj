@@ -49,6 +49,7 @@ emlinfoPtr load_emlinfo(void* A, void* B)
     }
     free_memory(val);
     val=NULL;
+    *((int *)A)=rowNum;
     return emlinfolist;
 }
 

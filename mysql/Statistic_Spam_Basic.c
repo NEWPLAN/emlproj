@@ -42,6 +42,7 @@ statspamPtr load_statistic_spam(void* A, void* B)
     }
     free_memory(val);
     val=NULL;
+    *((int *)A)=rowNum;
     return prolist;
 }
 

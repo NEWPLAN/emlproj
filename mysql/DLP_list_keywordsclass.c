@@ -44,6 +44,7 @@ strategyclassPtr load_strategyclass(void* A, void* B)
     }
     free_memory(val);
     val=NULL;
+    *((int *)A)=rowNum;
     return keyclass;
 }
 

@@ -1,4 +1,4 @@
-TARGET=test
+TARGET=sqlDB.so
 
 WARINING=-Wall
 
@@ -31,7 +31,7 @@ CC		=	gcc
 DEBUGS	=	-g
 
 all:$(OBJS)
-	$(CC) $(WARINING) $(OBJS) -o $(TARGET) $(LINKS)
+	$(CC) $(SHARELIBS) $(WARINING) $(OBJS) -o $(TARGET) $(LINKS)
 
 %.o:%.c $(Heads)
 	$(CC) $(FPIC)  $(WARINING) $(DEBUGS) -c $(INCLUDE)  $< -o $@

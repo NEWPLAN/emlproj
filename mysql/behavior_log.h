@@ -17,7 +17,7 @@ typedef struct behavoirStruct
     char behavior[255+1];
 } behaviorlog,*behaviorlogPtr;
 
-behaviorlogPtr loadbehavoirLog(void* A, void* B);
+behaviorlogPtr load_behaviorLog(void* A, void* B);
 void print_behaviorlog(void);
 void behaviorlogRelase(behaviorlogPtr* tables);
 int BehaviorLogTest(int flags);

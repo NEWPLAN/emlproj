@@ -41,6 +41,7 @@ statvirusPtr load_statistic_virus(void* A, void* B)
     }
     free_memory(val);
     val=NULL;
+    *((int *)A)=rowNum;
     return viruslist;
 }
 
