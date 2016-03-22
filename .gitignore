@@ -1,0 +1,7 @@
+*.exe
+*.o
+*.out
+*.err
+*.log
+*.Log
+*.LOG
