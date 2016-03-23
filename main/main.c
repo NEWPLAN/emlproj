@@ -1,8 +1,8 @@
 /*************************************************************************
 	> File Name: main.c
-	> Author: 
-	> Mail: 
-	> Created Time: 2016Äê02ÔÂ17ÈÕ ÐÇÆÚÈý 10Ê±07·Ö13Ãë
+	> Author: NEWPLAN
+	> Mail:
+	> Created Time: 2016年02月17日 
  ************************************************************************/
 
 #include <stdio.h>
@@ -16,7 +16,7 @@
 int main(int argc,char* argv[])
 {
     int flags=0;
-    char errorinfo[1024]={0};
+    char errorinfo[1024]= {0};
     if(argc<2)
     {
         printf("error in  input format , try again!\n");
@@ -26,17 +26,17 @@ int main(int argc,char* argv[])
     float fCostTime;
 
     gettimeofday(&tBeginTime,NULL);/*calculate timer*/
-    
+
     //printf("\033[41;36msomthe here\n\033[0m");
 //   goto DEBUSGGG;
-	{
-		printf("test for DB\n");
-		DataPtr A= LoadAll();
-		TestAll();
-		FreeAll(A);
-	}
-   	printf("run for ParseEML\n"); 
-    /*½âÎöÓÊ¼þ*/
+    {
+        printf("test for DB\n");
+        DataPtr A= LoadAll();
+        TestAll();
+        FreeAll(A);
+    }
+    printf("run for ParseEML\n");
+    /*邮件解析模块*/
     flags=ParseEML(argv[1]);
     if(!flags)
     {
@@ -44,7 +44,7 @@ int main(int argc,char* argv[])
         goto  exit;
     }
     printf("\033[32m-----------------------------------------------------------------------------------------\n\n\n\n\033[0m");
-    /*·´À¬»ø*/
+    /*反垃圾*/
 ANTISPAMSTEST:
     flags=AntiSpams(argv[1]);
     if(!flags)
@@ -53,7 +53,7 @@ ANTISPAMSTEST:
         goto exit;
     }
     printf("\033[32m-----------------------------------------------------------------------------------------\n\n\n\n\033[0m");
-    /*´¦ÀíURL*/
+    /*url分析*/
     flags=ParseURL("urldic/url");
     if(!flags)
     {
@@ -61,7 +61,7 @@ ANTISPAMSTEST:
         goto  exit;
     }
     printf("\033[32m-----------------------------------------------------------------------------------------\n\n\n\n\033[0m");
-     /*´¦Àí¸½¼þ*/
+    /*附件解析*/
 TEST:
     flags= ParseAppendix("testfile");
     if(!flags)
@@ -70,7 +70,7 @@ TEST:
         goto exit;
     }
     printf("\033[32m-----------------------------------------------------------------------------------------\n\n\n\n\033[0m");
-     /*´¦Àí¹Ø¼ü×ÖÀà*/
+    /*关键字类*/
     flags=ParseKeyClass("temps");
     if(!flags)
     {
@@ -79,22 +79,22 @@ TEST:
     }
     printf("\033[32m-----------------------------------------------------------------------------------------\n\n\n\n\033[0m");
 DEBUSGGG:
-    /*´¦Àí¹Ø¼ü×Ö*/
+    /*关键字*/
     flags=ParseKeyChs("temps");
-   // flags=ParseKeyChs(temps);
+    // flags=ParseKeyChs(temps);
     if(!flags)
     {
         strcat(errorinfo,"ParseKeyChs");
         goto exit;
     }
     printf("\033[32m-----------------------------------------------------------------------------------------\n\n\n\n\033[0m");
-    
+
     printf("parse eml done!\n");
     gettimeofday(&tEndTime,NULL);
     fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
     fCostTime /= 1000000;
     printf("\033[31m the execute time for parsing an email is = %f(Second)\n\033[0m",
-    	fCostTime);
+           fCostTime);
     return 0;
 
 exit:
@@ -104,7 +104,7 @@ exit:
 
 int ParseEML(char* filename)
 {
-    char* inputs[2]={NULL,filename};
+    char* inputs[2]= {NULL,filename};
     void *handle;
     int (*dlfunc)(int argc,char* argv[]);
     struct timeval tBeginTime, tEndTime;
@@ -126,21 +126,21 @@ int ParseEML(char* filename)
     fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
     fCostTime /= 1000000;
     printf("\033[31m the execute time for decoding EML is = %f(Second)\n\033[0m",
-    	fCostTime);  
+           fCostTime);
     return 1;
 }
 
 
 int ParseURL(char* filename)
 {
-   // printf("´¦Àí¶ñÒâurl·ÖÎö\n");
+    // printf("URL测试模块\n");
     return 1;
 }
 
 int ParseKeyChs(char* filename)
 {
     static flags=1;
-    char * inputs[3]={NULL,filename,NULL};
+    char * inputs[3]= {NULL,filename,NULL};
     int (*dlfunc)(int argc, char* argv[]);
     void *handle;
     struct timeval tBeginTime, tEndTime;
@@ -161,7 +161,7 @@ int ParseKeyChs(char* filename)
     fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
     fCostTime /= 1000000;
     printf("\033[31m the execute time for parsing key characters is = %f(Second)\n\033[0m",
-    	fCostTime);
+           fCostTime);
     flags=0;
     return 1;
 }
@@ -170,7 +170,7 @@ int ParseKeyClass(char* filename)
 {
     int (*dlfunc)(int argc, char* argv[]);
     void *handle;
-    char *inputs[2]={NULL,filename};
+    char *inputs[2]= {NULL,filename};
     struct timeval tBeginTime, tEndTime;
     float fCostTime;
 
@@ -189,13 +189,13 @@ int ParseKeyClass(char* filename)
     fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
     fCostTime /= 1000000;
     printf("\033[31m the execute time for parsing key class is = %f(Second)\n\033[0m",
-    	fCostTime);
+           fCostTime);
     return 1;
 }
 
 int ParseAppendix(char* filedirname)
 {
-    char * ins[2]={NULL,filedirname};
+    char * ins[2]= {NULL,filedirname};
     int (*dlfunc)(int argc, char* argv[]);
     void *handle;
     printf("hello in ParseAppendix\n");
@@ -237,7 +237,7 @@ int AntiSpams(char* filename)
     fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
     fCostTime /= 1000000;
     printf("\033[31m the execute time for detecting spams is = %f(Second)\n\033[0m",
-    	fCostTime);
+           fCostTime);
     return 1;
 }
 
@@ -249,7 +249,7 @@ int AntiVirus(char* filepath)
     struct timeval tBeginTime, tEndTime;
     float fCostTime;
 
-    gettimeofday(&tBeginTime,NULL);/*calculate timer*/    
+    gettimeofday(&tBeginTime,NULL);/*calculate timer*/
     printf("hello in AntiVirus\n");
     handle=dlopen("./libantivirus.so",RTLD_LAZY);
     if (!handle)
@@ -266,36 +266,37 @@ int AntiVirus(char* filepath)
         printf("this detect result is %d [1->virus, 0->notvirus]\n\
                 this size of file is %2.2LfMB\n\
                 this detail of virus is :%s\n"
-                ,RteVal.isVirus,RteVal.fileSize,RteVal.virusInfo);
-    else{
+               ,RteVal.isVirus,RteVal.fileSize,RteVal.virusInfo);
+    else
+    {
         switch(RteVal.errorInfo)
         {
-            case OPEN_FILE_ERROR:
-                printf("open file error\n");
-                break;
-            case INIT_LIBCLAMAV_ERROR:
-                printf("initilize libclamav error\n");
-                break;
-            case CREATE_ENGINE_ERROR:
-                printf("create antivirus engine error\n");
-                break;
-            case LOAD_DATABASE_ERROR:
-                printf("load libvirus database error\n");
-                break;
-            case DETECT_VIRUS_ERROR:
-                printf("detecting file error\n");
-                break;
-            case DATABASE_INIT_ERROR:
-                printf("antivirus database init error\n");
-                break;
-            default:
-                break;
+        case OPEN_FILE_ERROR:
+            printf("open file error\n");
+            break;
+        case INIT_LIBCLAMAV_ERROR:
+            printf("initilize libclamav error\n");
+            break;
+        case CREATE_ENGINE_ERROR:
+            printf("create antivirus engine error\n");
+            break;
+        case LOAD_DATABASE_ERROR:
+            printf("load libvirus database error\n");
+            break;
+        case DETECT_VIRUS_ERROR:
+            printf("detecting file error\n");
+            break;
+        case DATABASE_INIT_ERROR:
+            printf("antivirus database init error\n");
+            break;
+        default:
+            break;
         }
     }
     gettimeofday(&tEndTime,NULL);
     fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
     fCostTime /= 1000000;
     printf("\033[31m the execute time for detecting virus is = %f(Second)\n\033[0m",
-    	fCostTime);
+           fCostTime);
     return 1;
 }
