@@ -5,7 +5,8 @@ PART4= REGEX
 PART5= SPLITER
 PART6=UNZIP
 
-all:$(PART1) $(PART2) $(PART3) $(PART4) $(PART5) $(PART6)
+all:
+	cd main/; make;
 	@echo 'make done!'
 $(PART1):
 	cd appendix/jpeg; make
@@ -25,33 +26,15 @@ $(PART5):
 $(PART6):
 	cd appendix/zips;make
 
-test:
+run:
 	@echo 'test for heres'
-	make all;
-	@echo '@test for jpeg analyse';
-	cd appendix/jpeg; make run ;
-	@echo '@test for pdf analyse';
-	cd appendix/pdf; make run ;
-	@echo '@test for GMIME analyse';
-	cd gmime; make run;
-	@echo '@test for regex analyse';
-	cd regex; make run ;
-	@echo '@test for spliter analyse';
-	cd spliter ; make run ;
-	@echo '@test for zips analyse';
-	cd appendix/zips; make run ;
-	@echo 'test for demo is OK!';
+	cd main/; make test;
 
 
 
 .PHONY:clean
 clean:
-	cd appendix/jpeg ; make clean; cd ../.;
-	cd appendix/pdf ; make clean; cd ../..;
-	cd gmime ; 		  make clean; cd ../..;
-	cd regex ; 		  make clean; cd ../..;
-	cd spliter ; 		 make clean; cd ..;
-	cd appendix/zips ; 	 make clean; cd ..;
+	cd main/; make clean;
 	clear ;
 	@echo "clean done"
 
