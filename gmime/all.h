@@ -6,9 +6,10 @@
 //#include "basicInfo.h"
 //#include "EnableSwitch.h"
 //#include "messageParser.h"
+#include "DataStructure.h"
 #define EML__SYSTEMS__
 #ifdef  EML__SYSTEMS__
-    int GmimeMain(int argc, char const *argv[]);
+    GmimeDataPtr GmimeMain(int argc, char const *argv[]);
 #endif
 
 #endif

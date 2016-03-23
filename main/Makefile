@@ -3,6 +3,7 @@ DEBUG=-g
 ADDATION=testfile/appendix 
 ADDATIONFILE=temps/* testfile/*
 ABSPATH=`pwd`
+DISABLEWEAR=-fno-stack-protector
 
 GMIMELibs=gmimelibs.so
 NLPIRLibs=libNLPIR.so
@@ -21,7 +22,7 @@ all:$(TARGET)
 $(TARGET):$(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
 	$(APPENDIXLibs) $(UNZIPSLibs) $(JPEGLibs) $(PDFLibs)\
 	$(SPAMLibs) $(VIRUSLibs) $(SQLDBLibs)
-	gcc $(DEBUG) main.c -o $(TARGET) ./$(GMIMELibs)\
+	gcc $(DISABLEWEAR) $(DEBUG) main.c -o $(TARGET) ./$(GMIMELibs)\
 		./$(NLPIRLibs) ./$(REGEXLibs) ./$(SPLITERLibs)\
 		./$(APPENDIXLibs) ./$(UNZIPSLibs) ./$(JPEGLibs)\
 		./$(PDFLibs) ./$(SPAMLibs) ./$(VIRUSLibs) ./$(SQLDBLibs) -ldl

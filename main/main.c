@@ -106,7 +106,8 @@ int ParseEML(char* filename)
 {
     char* inputs[2]= {NULL,filename};
     void *handle;
-    int (*dlfunc)(int argc,char* argv[]);
+    GmimeDataPtr A=NULL;
+    GmimeDataPtr (*dlfunc)(int argc,char* argv[]);
     struct timeval tBeginTime, tEndTime;
     float fCostTime;
 
@@ -121,7 +122,15 @@ int ParseEML(char* filename)
         printf("error in open dynamic libs %s\n",dlerror());
         return 0;
     }
-    dlfunc(2,inputs);
+    A=dlfunc(2,inputs);
+    if(A)
+    {
+    	printf("sender:%s\n",A->from );
+    	printf("to:%s\n",A->to );
+    	printf("ReplayTo%s\n",A->replayto );
+    	printf("subjects:%s\n",A->subjects );
+    	printf("messageID%s\n",A->messageID );
+    }
     gettimeofday(&tEndTime,NULL);
     fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
     fCostTime /= 1000000;

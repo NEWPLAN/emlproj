@@ -16,11 +16,12 @@
 #include "inits.h"
 
 #ifdef  EML__SYSTEMS__
-    int GmimeMain(int argc, char const * argv[])
+    GmimeDataPtr GmimeMain(int argc, char const * argv[])
 #else
     int main(int argc, char const *argv[])
 #endif
 {
+	GmimeDataPtr A=NULL;
     /* code */
     GMimeMessage* pMessage=AllInits(argc,(char**)argv);
     if(!pMessage)
@@ -31,7 +32,7 @@
 
     /*analyze header message*/
     //GetHeader(pMessage);
-    GetBasicInfo(pMessage);
+    A=GetBasicInfo(pMessage);
 
     count_parts_in_message(pMessage);
     //GetBody( pMessage);
@@ -43,7 +44,7 @@
     printf("[log]:\tshutdown for gmime\n");
     printf("local charset %s\n", g_mime_charset_locale_name());
     g_mime_shutdown();
-
+	return A;
     return 0;
 
 }

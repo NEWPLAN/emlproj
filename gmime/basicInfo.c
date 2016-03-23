@@ -1,6 +1,10 @@
 #include "basicInfo.h"
+#include "DataStructure.h"
+#include <string.h>
+#include <stdlib.h>
+#include <assert.h>
 
-void GetBasicInfo(GMimeMessage * pMessage)
+GmimeDataPtr GetBasicInfo(GMimeMessage * pMessage)
 {
     FILE * fptr=fopen("temps/test.txt","ab");
     if(fptr)
@@ -20,5 +24,70 @@ void GetBasicInfo(GMimeMessage * pMessage)
     printf("subject:%s\n",g_mime_message_get_subject (pMessage));/*get subject*/
     printf("message ID:%s\n",g_mime_message_get_message_id(pMessage));/*get message ID*/
     printf("date:%s\n",g_mime_message_get_date_as_string(pMessage) );/*get date of e-mail*/
+    {
+        /*write to memory*/
+        const char *temps=NULL;
+        GmimeDataPtr A=NULL;
+        A=(GmimeDataPtr)malloc(sizeof(GmimeData));
+        assert(A!=NULL);
+        memset(A,0,sizeof(GmimeData));
+        
+        temps=g_mime_message_get_sender(pMessage);/*get sender*/
+        if(temps)
+        {
+            int temNu=0;
+            temNu=strlen(temps);
+            A->from=(char*)malloc(temNu+2);
+            memset(A->from,0,temNu+2);
+            memcpy(A->from,temps,temNu+2);
+            temps=NULL;
+        }
+        
+        temps=g_mime_message_get_reply_to(pMessage);/*replay to*/
+        if(temps)
+        {
+            int temNu=0;
+            temNu=strlen(temps);
+            A->replayto=(char*)malloc(temNu+2);
+            memset(A->replayto,0,temNu+2);
+            memcpy(A->replayto,temps,temNu+2);
+            temps=NULL;
+        }
+        
+        temps=internet_address_list_to_string(g_mime_message_get_recipients(pMessage,GMIME_RECIPIENT_TYPE_TO),FALSE);/*To*/
+        if(temps)
+        {
+            int temNu=0;
+            temNu=strlen(temps);
+            A->to=(char*)malloc(temNu+2);
+            memset(A->to,0,temNu+2);
+            memcpy(A->to,temps,temNu+2);
+            temps=NULL;
+        }
+        
+        temps=g_mime_message_get_message_id(pMessage);/*MESSAGE ID*/
+        if(temps)
+        {
+            int temNu=0;
+            temNu=strlen(temps);
+            A->messageID=(char*)malloc(temNu+2);
+            memset(A->messageID,0,temNu+2);
+            memcpy(A->messageID,temps,temNu+2);
+            temps=NULL;
+        }
+        
+        temps=g_mime_message_get_subject (pMessage);/*subject*/
+        if(temps)
+        {
+            int temNu=0;
+            temNu=strlen(temps);
+            A->subjects=(char*)malloc(temNu+2);
+            memset(A->subjects,0,temNu+2);
+            memcpy(A->subjects,temps,temNu+2);
+            temps=NULL;
+        }
+		return A;
+    }
+    
     /* code */
 }
