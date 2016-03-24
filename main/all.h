@@ -8,49 +8,53 @@
 #ifndef EML_ALL_H
 #define EML_ALL_H
 
-/*ÌíŒÓgmimeµÄœÓ¿ÚÍ·ÎÄŒþ*/
+/*load gmime libs*/
 #include "../gmime/all.h"
 
-/*·ÖŽÊ¿âœÓ¿Ú*/
+/*load spliter words module*/
 #include "../spliter/allhead.h"
 
-/*ÌíŒÓÕýÔò¹æÔò£¬¹ØŒü×ÖÀàœÓ¿Ú*/
+/*load regex module*/
 #include "../regex/all.h"
 
-/*ÌíŒÓžœŒþœÓ¿Ú*/
+/*load appendix parsing module*/
 #include "../appendix/all.h"
 
-/*ÌíŒÓ·ŽÀ¬»ø¿âœÓ¿Ú*/
+/*load antispam module*/
 #include "../antivirus/spam/antispam.h"
 
-/*ÌíŒÓ·Ž²¡¶Ÿ¿âœÓ¿Ú*/
+/*load anti virus module*/
 #include "../antivirus/virus/antivirus.h"
 
 /*Load db from Database*/
 #include "../mysql/all.h"
 
-/*œâÎöemlÎÄŒþ*/
+#include "kmp.h"
+
+/*Parsing email function */
 //int ParseEML(char* filename);
 int ParseEML(char* filename,GmimeDataPtr* rtevalPtr);
 
-/*URLŽŠÀí*/
+/*parsing URL module*/
 int ParseURL(char* filename);
 
-/*¹ØŒü×Ö¹ýÂË*/
+/*parsing key words module*/
 int ParseKeyChs(char* filename);
-/*¹ØŒü×ÖÀàŽŠÀí*/
+/*parsing key words class */
 int ParseKeyClass(char* filename);
 
-/*žœŒþŽŠÀí*/
+/*parsing appendix module*/
 int ParseAppendix(char* filedirname);
 
-/*·Ž²¡¶ŸŽŠÀí*/
+/*anti spam modules*/
 int AntiSpams(char* filename);
 
-/*·ŽÀ¬»øŽŠÀí*/
+/*anti virus modules*/
 int AntiVirus(char* filepath);
 
 /*加载数据库信息*/
+DataPtr load_db(int *dbflags);
 
+void cleanAll(void);
 
 #endif

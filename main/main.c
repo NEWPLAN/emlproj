@@ -13,11 +13,34 @@
 #include <unistd.h>
 #include <sys/time.h>
 
+/*
+--------31---------30---------29---------28---------27---------26---------25---------24--------
+---------|----------|----------|----------|----------|----------|----------|----------|--------
+-0x80000000-0x40000000-0x20000000-0x10000000-0x08000000-0x04000000-0x02000000-0x01000000-------
+
+--------23---------22---------21---------20---------19---------18---------17---------16--------
+---------|----------|----------|----------|----------|----------|----------|----------|--------
+-0x00800000-0x00400000-0x00200000-0x00100000-0x00080000-0x00040000-0x00020000-0x00010000-------
+
+--------15---------14---------13---------12---------11---------10---------09---------08--------
+---------|----------|----------|----------|----------|----------|----------|----------|--------
+-0x00008000-0x00004000-0x00002000-0x00001000-0x00000800-0x00000400-0x00000200-0x00000100-------
+
+--------07---------06---------05---------04---------03---------02---------01---------00--------
+---------|----------|----------|----------|----------|----------|----------|----------|--------
+-0x00000080-0x00000040-0x00000020-0x00000010-0x00000008-0x00000004-0x00000002-0x00000001-------
+-isspam----isvirus-----isclass----iskeywords-antispam---antivirus--keyclass---keywords---------
+*/
+static int strategy_flags=0;
+static DataPtr sqldatas=NULL;
+static GmimeDataPtr mimedata=NULL;
+static int setRegular(void);
+
 int main(int argc,char* argv[])
 {
     int flags=0;
     char errorinfo[1024]= {0};
-    GmimeDataPtr mimedata=NULL;
+    
     if(argc<2)
     {
         printf("error in  input format , try again!\n");
@@ -30,12 +53,9 @@ int main(int argc,char* argv[])
 
     //printf("\033[41;36msomthe here\n\033[0m");
 //   goto DEBUSGGG;
-    {
-        printf("test for DB\n");
-        DataPtr A= LoadAll();
-        TestAll();
-        FreeAll(A);
-    }
+	load_db(&strategy_flags);
+    
+    
     printf("run for ParseEML\n");
     /*邮件解析模块*/
     flags=ParseEML(argv[1],&mimedata);
@@ -53,6 +73,8 @@ int main(int argc,char* argv[])
     	printf("subjects:%s\n",mimedata->subjects );
     	printf("messageID%s\n",mimedata->messageID );
     }
+    setRegular();
+    
     printf("\033[32m-----------------------------------------------------------------------------------------\n\n\n\n\033[0m");
     /*反垃圾*/
 ANTISPAMSTEST:
@@ -103,11 +125,12 @@ DEBUSGGG:
     gettimeofday(&tEndTime,NULL);
     fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
     fCostTime /= 1000000;
-    printf("\033[31m the execute time for parsing an email is = %f(Second)\n\033[0m",
-           fCostTime);
+    printf("\033[31m the execute time for parsing an email is = %f(Second)\n\033[0m",fCostTime);
+    //cleanAll();
     return 0;
 
 exit:
+	cleanAll();
     printf("error in module %s\n",errorinfo);
     return 0;
 }
@@ -322,3 +345,91 @@ int AntiVirus(char* filepath)
            fCostTime);
     return 1;
 }
+
+DataPtr load_db(int *dbflags)
+{
+	printf("test for DB\n");
+	DataPtr A= LoadAll();
+	//TestAll();
+	//FreeAll(A);
+	sqldatas=A;
+	return A;
+}
+
+void cleanAll(void)
+{
+	if(sqldatas)
+		FreeAll(sqldatas);
+	sqldatas=NULL;
+	system("make clean");
+}
+
+#include <assert.h>
+int setRegular(void)
+{
+	if(NULL==mimedata||NULL==sqldatas)
+		return -1;
+    int num=0;
+	for(num=0;num<sqldatas->DLP_list_keywords_Num;num++)/*关键字*/
+    {
+        if(sqldatas->DLP_list_keywords_data[num].strategy_type[0]=='0')/*黑名单*/
+        {
+        	if((mimedata->from!=NULL)&&(sqldatas->DLP_list_keywords_data[num].strategy_info!=NULL))/*not null*/
+		    {
+		    	if(check_sub(mimedata->from,
+						strlen(mimedata->from),
+						sqldatas->DLP_list_keywords_data[num].strategy_info,
+						strlen(sqldatas->DLP_list_keywords_data[num].strategy_info)
+					)!=0)/*符合黑名单规则,添加*/
+				{
+				    FILE* fptr=fopen("userdict.txt","wb");
+				    assert(fptr!=NULL);
+				    char* ptrA,*ptrB;
+				    ptrA=ptrB=sqldatas->DLP_list_keywords_data[num].strategy_content;
+				    while(*ptrA!=0)
+				    {
+				    	if(*ptrA=='&')
+				    	{
+				    		*ptrA=0;
+				    		fwrite(ptrB,sizeof(char),strlen(ptrB),fptr);
+				    		fwrite("\n",sizeof(char),strlen("\n"),fptr);
+				    		*ptrA='&';
+				    		ptrB=++ptrA;
+				    	}else
+				    		ptrA++;
+				    	
+				    }
+				    if(ptrB!=ptrA)
+				    {
+				    	fwrite(ptrB,sizeof(char),strlen(ptrB),fptr);
+				    	fwrite("\n",sizeof(char),strlen("\n"),fptr);
+				    	*ptrA='&';
+				    }
+				    
+				}
+		    }
+        }
+        else if(sqldatas->DLP_list_keywords_data[num].strategy_type[0]=='1')/*白名单，不过*/
+       {
+        	printf("white list\n");
+        }
+        
+    }
+    
+    
+    for(num=0;num<sqldatas->DLP_list_keywordsclass_Num;num++)/*关键字列表*/
+    {
+        
+    }
+
+    for(num=0;num<sqldatas->spam_list_Num;num++)/*垃圾列表*/
+    {
+
+    }
+
+    for(num=0;num<sqldatas->spam_list_Num;num++)/*病毒列表*/
+    {
+        
+    }
+}
+

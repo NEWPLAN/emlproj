@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
-void preKmp(char *src, int m, int *rule)
+#include "kmp.h"
+static void preKmp(char *src, int m, int *rule)
 {
     int i=0,j=-1;
     rule[0]=j;
@@ -16,7 +17,7 @@ void preKmp(char *src, int m, int *rule)
     }
 }
 //int recount=0;
-int kmp(char *src, int m, char *dest, int n)
+int check_sub(char *src, int m, char *dest, int n)
 {
     int rule[10005];
     preKmp(src,m,rule);
