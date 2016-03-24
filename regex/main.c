@@ -53,12 +53,22 @@ int main(int argc,char* argv[])
             return -1;
         }
         printf("\033[35m this page can be descrribed as follow:\n%s\n\033[0m",txtstr);
-        EmlMatch();
-        idCardMatch();
-        mobileMatch();
-        bankCardMatch();
-        UrlMatch();
-        IPMatch();
+        /*
+        -bankcard---idcard-----mobphone---emailadd---urls-------ip_address-
+        --------07---------06---------05---------04---------03---------02--
+        */
+        if((*argv[2])&(1<<4))
+            EmlMatch();
+        if((*argv[2])&(1<<6))
+            idCardMatch();
+        if((*argv[2])&(1<<5))
+            mobileMatch();
+        if((*argv[2])&(1<<7))
+            bankCardMatch();
+        if((*argv[2])&(1<<3))
+            UrlMatch();
+        if((*argv[2])&(1<<2))
+            IPMatch();
         RelasePage();
     }
     chdir(oldpath);

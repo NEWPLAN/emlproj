@@ -87,15 +87,15 @@ int main(int argc,char* argv[])
     printf("\033[32m-----------------------------------------------------------------------------------------\n\n\n\n\033[0m");
     /*反垃圾*/
 ANTISPAMSTEST:
-	if(strategy_flags&(1<<3))/*如果需要反病毒*/
-	{
-    flags=AntiSpams(argv[1]);
-    if(!flags)
+    if(strategy_flags&(1<<3))/*如果需要反病毒*/
     {
-        strcat(errorinfo,"AntiSpams");
-        goto exit;
+        flags=AntiSpams(argv[1]);
+        if(!flags)
+        {
+            strcat(errorinfo,"AntiSpams");
+            goto exit;
+        }
     }
-	}
     printf("\033[32m-----------------------------------------------------------------------------------------\n\n\n\n\033[0m");
     /*url分析*/
     flags=ParseURL("urldic/url");
@@ -118,26 +118,26 @@ TEST:
 
     if(strategy_flags&(1<<1))/*关键字类*/
     {
-    flags=ParseKeyClass("temps");
-    if(!flags)
-    {
-        strcat(errorinfo, "ParseKeyClass");
-        goto  exit;
+        flags=ParseKeyClass("temps");
+        if(!flags)
+        {
+            strcat(errorinfo, "ParseKeyClass");
+            goto  exit;
+        }
     }
-	}
     printf("\033[32m-----------------------------------------------------------------------------------------\n\n\n\n\033[0m");
 DEBUSGGG:
     /*关键字*/
-	if(strategy_flags&(1<0))
-	{
-    flags=ParseKeyChs("temps");
-    // flags=ParseKeyChs(temps);
-    if(!flags)
+    if(strategy_flags&(1<0))
     {
-        strcat(errorinfo,"ParseKeyChs");
-        goto exit;
+        flags=ParseKeyChs("temps");
+        // flags=ParseKeyChs(temps);
+        if(!flags)
+        {
+            strcat(errorinfo,"ParseKeyChs");
+            goto exit;
+        }
     }
-	}
     printf("\033[32m-----------------------------------------------------------------------------------------\n\n\n\n\033[0m");
 
     printf("parse eml done!\n");
@@ -234,7 +234,9 @@ int ParseKeyClass(char* filename)
 {
     int (*dlfunc)(int argc, char* argv[]);
     void *handle;
-    char *inputs[2]= {NULL,filename};
+    int backval=0;
+    char Ate=(char)((strategy_flags>>8)&0xff);
+    char *inputs[2]= {NULL,filename,&Ate};
     struct timeval tBeginTime, tEndTime;
     float fCostTime;
 
@@ -249,6 +251,11 @@ int ParseKeyClass(char* filename)
         return 0;
     }
     dlfunc(2,inputs);
+    backval=(int)Ate;
+    backval=backval<<8;
+    backval=backval&0xff00;
+    strategy_flags&=0xffff00ff;
+    strategy_flags!=backval;
     gettimeofday(&tEndTime,NULL);
     fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
     fCostTime /= 1000000;
@@ -259,7 +266,8 @@ int ParseKeyClass(char* filename)
 
 int ParseAppendix(char* filedirname)
 {
-	char Ate=(char)(strategy_flags&0xff);
+    char Ate=(char)(strategy_flags&0xff);
+    int backval;
     char * ins[2]= {NULL,filedirname,&Ate};
     int (*dlfunc)(int argc, char* argv[]);
     void *handle;
@@ -275,6 +283,10 @@ int ParseAppendix(char* filedirname)
         return 0;
     }
     dlfunc(2,ins);
+    backval=(int)Ate;
+    backval=backval&0xff;
+    strategy_flags&=0xffffff00;
+    strategy_flags!=backval;
     return 1;
 }
 
@@ -441,11 +453,11 @@ int setRegular(void)
             }
         }
         else if(sqldatas->DLP_list_keywords_data[num].strategy_type[0]==WHITELIST)/*白名单，不过*/
-        ;/*白名单对于过滤关键字来说没有意义*/
+            ;/*白名单对于过滤关键字来说没有意义*/
     }
 
     /*关键字类列表，这一部分的规则是，扫描数据库信息，然后设置相关的开关，在符合条件的开关选项上进行选择性*/
-    for(num=0; num<sqldatas->DLP_list_keywordsclass_Num; num++) 
+    for(num=0; num<sqldatas->DLP_list_keywordsclass_Num; num++)
     {
         if(sqldatas->DLP_list_keywordsclass_data[num].strategy_type[0]==BLACKLIST)/*黑名单*/
         {
@@ -481,83 +493,83 @@ int setRegular(void)
                         strategy_flags|=1<<10;
                     }
                 }
+            }
+            else if(sqldatas->DLP_list_keywordsclass_data[num].strategy_type[0]=WHITELIST)/*白名单，不过*/
+                ;/*关键字类的白名单也是没有过滤意义，因此选择不处理*/
         }
-        else if(sqldatas->DLP_list_keywordsclass_data[num].strategy_type[0]=WHITELIST)/*白名单，不过*/
-        ;/*关键字类的白名单也是没有过滤意义，因此选择不处理*/
+
+        /*垃圾列表,针对这一部分处理方法是：如果遇到白名单，直接通过，如果遇到黑名单，直接拉黑*/
+        for(num=0; num<sqldatas->spam_list_Num; num++)
+        {
+            if(sqldatas->spam_list_Data[num].strategy_type[0]==BLACKLIST)/*黑名单*/
+            {
+                if(mime_cmp)
+                {
+                    if(check_sub(mime_cmp,strlen(mime_cmp),
+                                 sqldatas->spam_list_Data[num].strategy_info,
+                                 strlen(sqldatas->spam_list_Data[num].strategy_info))!=0)/*check for current regular*/
+                    {
+                        strategy_flags|=1<<7;/*set flag and return */
+                        strategy_flags&=(~(1<<3));/*清零标志位，因为已经可以判断是垃圾了,后面不需要扫描判断了*/
+                        break;/*exit for this for loop*/
+                    }
+                }
+                else break;
+            }
+            else if(sqldatas->spam_list_Data[num].strategy_type[0]==WHITELIST)/*white名单*/
+            {
+                if(mime_cmp)
+                {
+                    if(check_sub(mime_cmp,strlen(mime_cmp),
+                                 sqldatas->spam_list_Data[num].strategy_info,
+                                 strlen(sqldatas->spam_list_Data[num].strategy_info))!=0)/*check for current regular*/
+                    {
+                        strategy_flags&=(~(1<<3));/*清零标志位，因为已经可以判断是垃圾了,后面不需要扫描判断了*/
+                        break;/*exit for this for loop*/
+                    }
+                }
+                else break;
+            }
+
+        }
+
+        /*病毒列表，这一部分处理方法是：对于黑名单直接拉黑，不处理，对于白名单，直接返回，也不需要处理*/
+        for(num=0; num<sqldatas->virus_list_Num; num++)
+        {
+            if(sqldatas->virus_list_Data[num].strategy_type[0]==BLACKLIST)/*黑名单*/
+            {
+                if(mime_cmp)
+                {
+                    if(check_sub(mime_cmp,strlen(mime_cmp),
+                                 sqldatas->virus_list_Data[num].strategy_info,
+                                 strlen(sqldatas->virus_list_Data[num].strategy_info))!=0)/*check for current regular*/
+                    {
+                        strategy_flags|=1<<6;/*set flag and return */
+                        strategy_flags&=(~(1<<2));/*清零标志位，因为已经可以判断是垃圾了,后面不需要扫描判断了*/
+                        break;/*exit for this for loop*/
+                    }
+                }
+                else
+                    break;
+
+            }
+            else if(sqldatas->virus_list_Data[num].strategy_type[0]==WHITELIST)/*white名单*/
+            {
+                if(mime_cmp!=NULL)
+                {
+                    if(check_sub(mime_cmp,strlen(mime_cmp),
+                                 sqldatas->virus_list_Data[num].strategy_info,
+                                 strlen(sqldatas->virus_list_Data[num].strategy_info))!=0)/*check for current regular*/
+                    {
+                        strategy_flags&=(~(1<<6));/*set flag and return */
+                        strategy_flags&=(~(1<<2));/*清零标志位，因为已经可以判断是垃圾了,后面不需要扫描判断了*/
+                        break;/*exit for this for loop*/
+                    }
+                }
+                else
+                    break;
+            }
+        }
+        return 1;
     }
-
-    /*垃圾列表,针对这一部分处理方法是：如果遇到白名单，直接通过，如果遇到黑名单，直接拉黑*/
-    for(num=0; num<sqldatas->spam_list_Num; num++) 
-    {
-        if(sqldatas->spam_list_Data[num].strategy_type[0]==BLACKLIST)/*黑名单*/
-        {
-            if(mime_cmp)
-            {
-                if(check_sub(mime_cmp,strlen(mime_cmp),
-                             sqldatas->spam_list_Data[num].strategy_info,
-                             strlen(sqldatas->spam_list_Data[num].strategy_info))!=0)/*check for current regular*/
-                {
-                    strategy_flags|=1<<7;/*set flag and return */
-                    strategy_flags&=(~(1<<3));/*清零标志位，因为已经可以判断是垃圾了,后面不需要扫描判断了*/
-                    break;/*exit for this for loop*/
-                }
-            }
-            else break;
-        }
-        else if(sqldatas->spam_list_Data[num].strategy_type[0]==WHITELIST)/*white名单*/
-        {
-            if(mime_cmp)
-            {
-                if(check_sub(mime_cmp,strlen(mime_cmp),
-                             sqldatas->spam_list_Data[num].strategy_info,
-                             strlen(sqldatas->spam_list_Data[num].strategy_info))!=0)/*check for current regular*/
-                {
-                    strategy_flags&=(~(1<<3));/*清零标志位，因为已经可以判断是垃圾了,后面不需要扫描判断了*/
-                    break;/*exit for this for loop*/
-                }
-            }
-            else break;
-        }
-
-    }
-
-    /*病毒列表，这一部分处理方法是：对于黑名单直接拉黑，不处理，对于白名单，直接返回，也不需要处理*/
-    for(num=0; num<sqldatas->virus_list_Num; num++) 
-    {
-        if(sqldatas->virus_list_Data[num].strategy_type[0]==BLACKLIST)/*黑名单*/
-        {
-            if(mime_cmp)
-            {
-                if(check_sub(mime_cmp,strlen(mime_cmp),
-                             sqldatas->virus_list_Data[num].strategy_info,
-                             strlen(sqldatas->virus_list_Data[num].strategy_info))!=0)/*check for current regular*/
-                {
-                    strategy_flags|=1<<6;/*set flag and return */
-                   	strategy_flags&=(~(1<<2));/*清零标志位，因为已经可以判断是垃圾了,后面不需要扫描判断了*/
-                    break;/*exit for this for loop*/
-                }
-            }
-            else
-                break;
-
-        }
-        else if(sqldatas->virus_list_Data[num].strategy_type[0]==WHITELIST)/*white名单*/
-        {
-            if(mime_cmp!=NULL)
-            {
-                if(check_sub(mime_cmp,strlen(mime_cmp),
-                             sqldatas->virus_list_Data[num].strategy_info,
-                             strlen(sqldatas->virus_list_Data[num].strategy_info))!=0)/*check for current regular*/
-                {
-                    strategy_flags&=(~(1<<6));/*set flag and return */
-                    strategy_flags&=(~(1<<2));/*清零标志位，因为已经可以判断是垃圾了,后面不需要扫描判断了*/
-                    break;/*exit for this for loop*/
-                }
-            }
-            else
-                break;
-        }
-    }
-    return 1;
-}
 
