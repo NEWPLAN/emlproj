@@ -40,7 +40,8 @@ int main(int argc, char  *argv[])
     {
         if(strncmp(file->d_name,".",1)==0)
             continue;
-        {/*判断是文件夹处理下一个*/
+        {
+            /*判断是文件夹处理下一个*/
             struct stat info;
             stat(file->d_name,&info);
             if(S_ISDIR(info.st_mode))
@@ -50,34 +51,37 @@ int main(int argc, char  *argv[])
             }
         }
         struct timeval tBeginTime, tEndTime;
-    	float fCostTime;
+        float fCostTime;
 
-    	gettimeofday(&tBeginTime,NULL);/*calculate timer*/
-       {
+        gettimeofday(&tBeginTime,NULL);/*calculate timer*/
+        if((*argv[2])&(1<<2))/*如果需要扫病毒*/
+        {
             struct antivirusInfo Rteval;
-                Rteval=antiVirus(file->d_name,flags==0?0:1);
-                flags=1;
+            Rteval=antiVirus(file->d_name,flags==0?0:1);
+            flags=1;
             if(Rteval.errorInfo==0)
             {
+                (*(argv[2]))|=((char)Rteval.isVirus<<6);/*标志病毒*/
                 printf("this detect result 0s %d [1-->>Virus, 0-->>NotVirus]\n\
                         the size of file is %2.2Lf MB\n\
                         this detail of virus is : %s\n",
-                        Rteval.isVirus,Rteval.fileSize,Rteval.virusInfo);
+                       Rteval.isVirus,Rteval.fileSize,Rteval.virusInfo);
             }
-            else{
+            else
+            {
                 printf("error in detect virus for this file\n");
                 return -2;
             }
         }
         gettimeofday(&tEndTime,NULL);
-	    fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
-	    fCostTime /= 1000000;
-	    printf("\033[31m the execute time for detect whether %s can be virus  is = %f(Second)\n\033[0m",file->d_name,fCostTime);
+        fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
+        fCostTime /= 1000000;
+        printf("\033[31m the execute time for detect whether %s can be virus  is = %f(Second)\n\033[0m",file->d_name,fCostTime);
         DealFile(file->d_name);
         gettimeofday(&tBeginTime,NULL);
         fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
-	    fCostTime /= 1000000;
-	    printf("\033[31m the execute time for decoding %s is %lf(Second)\n\033[0m",file->d_name,-fCostTime);
+        fCostTime /= 1000000;
+        printf("\033[31m the execute time for decoding %s is %lf(Second)\n\033[0m",file->d_name,-fCostTime);
     }
     chdir(oldpath);
     closedir(d);
@@ -153,6 +157,4 @@ void DealFile(char* filename)
         printf("unknow file type, make sure it valid\n");
         break;
     }
-
-
 }

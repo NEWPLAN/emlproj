@@ -31,13 +31,18 @@
 -0x00000080-0x00000040-0x00000020-0x00000010-0x00000008-0x00000004-0x00000002-0x00000001-------
 -isspam-----isvirus----isclass----iskeywords-do_spam----do_virus---do_class---do_keywords------
 */
-static int strategy_flags=0;
+static int strategy_flags=0x0f;
 static DataPtr sqldatas=NULL;
 static GmimeDataPtr mimedata=NULL;
 static int setRegular(void);
 
+/*黑白名单*/
 #define WHITELIST '1'
 #define BLACKLIST '0'
+
+/*针对源地址和目的地址*/
+#define TERMINAL  '1'
+#define SOURCE    '0'
 
 
 int main(int argc,char* argv[])
@@ -82,12 +87,15 @@ int main(int argc,char* argv[])
     printf("\033[32m-----------------------------------------------------------------------------------------\n\n\n\n\033[0m");
     /*反垃圾*/
 ANTISPAMSTEST:
+	if(strategy_flags&(1<<3))/*如果需要反病毒*/
+	{
     flags=AntiSpams(argv[1]);
     if(!flags)
     {
         strcat(errorinfo,"AntiSpams");
         goto exit;
     }
+	}
     printf("\033[32m-----------------------------------------------------------------------------------------\n\n\n\n\033[0m");
     /*url分析*/
     flags=ParseURL("urldic/url");
@@ -107,15 +115,21 @@ TEST:
     }
     printf("\033[32m-----------------------------------------------------------------------------------------\n\n\n\n\033[0m");
     /*关键字类*/
+
+    if(strategy_flags&(1<<1))/*关键字类*/
+    {
     flags=ParseKeyClass("temps");
     if(!flags)
     {
         strcat(errorinfo, "ParseKeyClass");
         goto  exit;
     }
+	}
     printf("\033[32m-----------------------------------------------------------------------------------------\n\n\n\n\033[0m");
 DEBUSGGG:
     /*关键字*/
+	if(strategy_flags&(1<0))
+	{
     flags=ParseKeyChs("temps");
     // flags=ParseKeyChs(temps);
     if(!flags)
@@ -123,6 +137,7 @@ DEBUSGGG:
         strcat(errorinfo,"ParseKeyChs");
         goto exit;
     }
+	}
     printf("\033[32m-----------------------------------------------------------------------------------------\n\n\n\n\033[0m");
 
     printf("parse eml done!\n");
@@ -244,7 +259,8 @@ int ParseKeyClass(char* filename)
 
 int ParseAppendix(char* filedirname)
 {
-    char * ins[2]= {NULL,filedirname};
+	char Ate=(char)(strategy_flags&0xff);
+    char * ins[2]= {NULL,filedirname,&Ate};
     int (*dlfunc)(int argc, char* argv[]);
     void *handle;
     printf("hello in ParseAppendix\n");
@@ -375,17 +391,26 @@ int setRegular(void)
     if(NULL==mimedata||NULL==sqldatas)
         return -1;
     int num=0;
-    for(num=0; num<sqldatas->DLP_list_keywords_Num; num++) /*关键字*/
+    char* mime_cmp=NULL;
+
+    /*看看是源地址还是目的地址的模式匹配*/
+    if(DLP_list_keywords_data[num].strategy_terminal[0]==SOURCE)
+        mime_cmp=mimedata->from;
+    else if(DLP_list_keywords_data[num].strategy_terminal[0]==TERMINAL)
+        mime_cmp=mimedata->to;
+    assert(mime_cmp!=NULL);/*确保不能为空*/
+
+    /*关键字，处理思路是：将关键字加入到用户自定义的文件中，用于分词结束后，进行匹配过滤*/
+    for(num=0; num<sqldatas->DLP_list_keywords_Num; num++)
     {
-        if(sqldatas->DLP_list_keywords_data[num].strategy_type[0]=='0')/*黑名单*/
+        if(sqldatas->DLP_list_keywords_data[num].strategy_type[0]==BLACKLIST)/*黑名单*/
         {
-            if((mimedata->from!=NULL)&&(sqldatas->DLP_list_keywords_data[num].strategy_info!=NULL))/*not null*/
+            if(mime_cmp!=NULL)/*确保非空*/
             {
-                if(check_sub(mimedata->from,
-                             strlen(mimedata->from),
+                if(check_sub(mime_cmp,strlen(mime_cmp),
                              sqldatas->DLP_list_keywords_data[num].strategy_info,
                              strlen(sqldatas->DLP_list_keywords_data[num].strategy_info)
-                            )!=0)/*符合黑名单规则,添加*/
+                            )!=0)/*符合黑名单规则,添加进入用户字典*/
                 {
                     FILE* fptr=fopen("userdict.txt","wb");
                     assert(fptr!=NULL);
@@ -415,132 +440,124 @@ int setRegular(void)
                 }
             }
         }
-        else if(sqldatas->DLP_list_keywords_data[num].strategy_type[0]=='1')/*白名单，不过*/
-        {
-            printf("white list\n");
-        }
-
+        else if(sqldatas->DLP_list_keywords_data[num].strategy_type[0]==WHITELIST)/*白名单，不过*/
+        ;/*白名单对于过滤关键字来说没有意义*/
     }
 
-
-    for(num=0; num<sqldatas->DLP_list_keywordsclass_Num; num++) /*关键字类列表*/
+    /*关键字类列表，这一部分的规则是，扫描数据库信息，然后设置相关的开关，在符合条件的开关选项上进行选择性*/
+    for(num=0; num<sqldatas->DLP_list_keywordsclass_Num; num++) 
     {
-        if(sqldatas->DLP_list_keywordsclass_data[num].strategy_type[0]=='0')/*黑名单*/
+        if(sqldatas->DLP_list_keywordsclass_data[num].strategy_type[0]==BLACKLIST)/*黑名单*/
         {
-            if((mimedata->from!=NULL)&&(sqldatas->DLP_list_keywordsclass_data[num].strategy_info!=NULL))/*not null*/
+            if((mime_cmp!=NULL))/*not null*/
             {
-                if(check_sub(mimedata->from,
-                             strlen(mimedata->from),
+                if(check_sub(mime_cmp,strlen(mime_cmp),
                              sqldatas->DLP_list_keywordsclass_data[num].strategy_info,
                              strlen(sqldatas->DLP_list_keywordsclass_data[num].strategy_info)
                             )!=0)/*符合黑名单规则,添加*/
                 {
-                
                     if(strcmp(sqldatas->DLP_list_keywordsclass_data[num].strategy_content,"bank card")!=0)/*银行卡*/
                     {
-                    	strategy_flags|=1<<15;
+                        strategy_flags|=1<<15;
                     }
                     else if(strcmp(sqldatas->DLP_list_keywordsclass_data[num].strategy_content,"id card")!=0)/*身份证号*/
                     {
-                    	strategy_flags|=1<<14;
-                    }                    
+                        strategy_flags|=1<<14;
+                    }
                     else if(strcmp(sqldatas->DLP_list_keywordsclass_data[num].strategy_content,"mobile phone")!=0)/*电话号码*/
                     {
-                    	strategy_flags|=1<<13;
+                        strategy_flags|=1<<13;
                     }
                     else if(strcmp(sqldatas->DLP_list_keywordsclass_data[num].strategy_content,"email address")!=0)/*邮件地址*/
                     {
-                    	strategy_flags|=1<<12;
+                        strategy_flags|=1<<12;
                     }
                     else if(strcmp(sqldatas->DLP_list_keywordsclass_data[num].strategy_content,"url")!=0)/*链接地址*/
                     {
-                    	strategy_flags|=1<<11;
+                        strategy_flags|=1<<11;
                     }
                     else if(strcmp(sqldatas->DLP_list_keywordsclass_data[num].strategy_content,"ip address")!=0)/*iP 地址*/
                     {
-                    	strategy_flags|=1<<10;
+                        strategy_flags|=1<<10;
                     }
-
                 }
-                else
-            }
         }
         else if(sqldatas->DLP_list_keywordsclass_data[num].strategy_type[0]=WHITELIST)/*白名单，不过*/
-        {
-            printf("white list do nothing\n");
-        }
+        ;/*关键字类的白名单也是没有过滤意义，因此选择不处理*/
     }
 
-    for(num=0; num<sqldatas->spam_list_Num; num++) /*垃圾列表*/
+    /*垃圾列表,针对这一部分处理方法是：如果遇到白名单，直接通过，如果遇到黑名单，直接拉黑*/
+    for(num=0; num<sqldatas->spam_list_Num; num++) 
     {
         if(sqldatas->spam_list_Data[num].strategy_type[0]==BLACKLIST)/*黑名单*/
         {
-        	if(mimedata->from!=NULL)
-        	{
-        		if(check_sub(mimedata->from,strlen(mimedata->from),
-        		sqldatas->spam_list_Data[num].strategy_info,
-        		strlen(sqldatas->spam_list_Data[num].strategy_info))!=0)/*check for current regular*/
-        		{
-        			strategy_flags|=1<<7;/*set flag and return */
-        			break;/*exit for this for loop*/
-        		}
-        	}
-        	else
-        		break;
-        	
+            if(mime_cmp)
+            {
+                if(check_sub(mime_cmp,strlen(mime_cmp),
+                             sqldatas->spam_list_Data[num].strategy_info,
+                             strlen(sqldatas->spam_list_Data[num].strategy_info))!=0)/*check for current regular*/
+                {
+                    strategy_flags|=1<<7;/*set flag and return */
+                    strategy_flags&=(~(1<<3));/*清零标志位，因为已经可以判断是垃圾了,后面不需要扫描判断了*/
+                    break;/*exit for this for loop*/
+                }
+            }
+            else break;
         }
         else if(sqldatas->spam_list_Data[num].strategy_type[0]==WHITELIST)/*white名单*/
         {
-        	if(mimedata->from!=NULL)
-        	{
-        		if(check_sub(mimedata->from,strlen(mimedata->from),
-        		sqldatas->spam_list_Data[num].strategy_info,
-        		strlen(sqldatas->spam_list_Data[num].strategy_info))!=0)/*check for current regular*/
-        		{
-        			strategy_flags&=(~(1<<7));/*set flag and return */
-        			break;/*exit for this for loop*/
-        		}
-        	}
-        	else
-        		break;
+            if(mime_cmp)
+            {
+                if(check_sub(mime_cmp,strlen(mime_cmp),
+                             sqldatas->spam_list_Data[num].strategy_info,
+                             strlen(sqldatas->spam_list_Data[num].strategy_info))!=0)/*check for current regular*/
+                {
+                    strategy_flags&=(~(1<<3));/*清零标志位，因为已经可以判断是垃圾了,后面不需要扫描判断了*/
+                    break;/*exit for this for loop*/
+                }
+            }
+            else break;
         }
 
     }
 
-    for(num=0; num<sqldatas->virus_list_Num; num++) /*病毒列表*/
+    /*病毒列表，这一部分处理方法是：对于黑名单直接拉黑，不处理，对于白名单，直接返回，也不需要处理*/
+    for(num=0; num<sqldatas->virus_list_Num; num++) 
     {
         if(sqldatas->virus_list_Data[num].strategy_type[0]==BLACKLIST)/*黑名单*/
         {
-        	if(mimedata->from!=NULL)
-        	{
-        		if(check_sub(mimedata->from,strlen(mimedata->from),
-        		sqldatas->virus_list_Data[num].strategy_info,
-        		strlen(sqldatas->virus_list_Data[num].strategy_info))!=0)/*check for current regular*/
-        		{
-        			strategy_flags|=1<<6;/*set flag and return */
-        			break;/*exit for this for loop*/
-        		}
-        	}
-        	else
-        		break;
-        	
+            if(mime_cmp)
+            {
+                if(check_sub(mime_cmp,strlen(mime_cmp),
+                             sqldatas->virus_list_Data[num].strategy_info,
+                             strlen(sqldatas->virus_list_Data[num].strategy_info))!=0)/*check for current regular*/
+                {
+                    strategy_flags|=1<<6;/*set flag and return */
+                   	strategy_flags&=(~(1<<2));/*清零标志位，因为已经可以判断是垃圾了,后面不需要扫描判断了*/
+                    break;/*exit for this for loop*/
+                }
+            }
+            else
+                break;
+
         }
         else if(sqldatas->virus_list_Data[num].strategy_type[0]==WHITELIST)/*white名单*/
         {
-        	if(mimedata->from!=NULL)
-        	{
-        		if(check_sub(mimedata->from,strlen(mimedata->from),
-        		sqldatas->virus_list_Data[num].strategy_info,
-        		strlen(sqldatas->virus_list_Data[num].strategy_info))!=0)/*check for current regular*/
-        		{
-        			strategy_flags&=(~(1<<6));/*set flag and return */
-        			break;/*exit for this for loop*/
-        		}
-        	}
-        	else
-        		break;
+            if(mime_cmp!=NULL)
+            {
+                if(check_sub(mime_cmp,strlen(mime_cmp),
+                             sqldatas->virus_list_Data[num].strategy_info,
+                             strlen(sqldatas->virus_list_Data[num].strategy_info))!=0)/*check for current regular*/
+                {
+                    strategy_flags&=(~(1<<6));/*set flag and return */
+                    strategy_flags&=(~(1<<2));/*清零标志位，因为已经可以判断是垃圾了,后面不需要扫描判断了*/
+                    break;/*exit for this for loop*/
+                }
+            }
+            else
+                break;
         }
-    }  
-    return 1; 
+    }
+    return 1;
 }
 
