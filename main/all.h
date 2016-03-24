@@ -30,7 +30,8 @@
 #include "../mysql/all.h"
 
 /*œâÎöemlÎÄŒþ*/
-int ParseEML(char* filename);
+//int ParseEML(char* filename);
+int ParseEML(char* filename,GmimeDataPtr* rtevalPtr);
 
 /*URLŽŠÀí*/
 int ParseURL(char* filename);

@@ -17,15 +17,21 @@ SPAMLibs=libantispam.so
 VIRUSLibs=libantivirus.so
 SQLDBLibs=sqlDB.so
 
+ALLLIBS=main.o kmp.o
+ALLCFILE=main.c kmp.c
+
 all:$(TARGET)
 
 $(TARGET):$(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
 	$(APPENDIXLibs) $(UNZIPSLibs) $(JPEGLibs) $(PDFLibs)\
-	$(SPAMLibs) $(VIRUSLibs) $(SQLDBLibs)
-	gcc $(DISABLEWEAR) $(DEBUG) main.c -o $(TARGET) ./$(GMIMELibs)\
+	$(SPAMLibs) $(VIRUSLibs) $(SQLDBLibs) $(ALLLIBS)
+	gcc $(DISABLEWEAR) $(DEBUG) $(ALLLIBS) -o $(TARGET) ./$(GMIMELibs)\
 		./$(NLPIRLibs) ./$(REGEXLibs) ./$(SPLITERLibs)\
 		./$(APPENDIXLibs) ./$(UNZIPSLibs) ./$(JPEGLibs)\
 		./$(PDFLibs) ./$(SPAMLibs) ./$(VIRUSLibs) ./$(SQLDBLibs) -ldl
+
+%.o:%.c
+	gcc -c $(DISABLEWEAR) $(DEBUG) $< -o $@
 
 $(GMIMELibs):
 	cd ../gmime; 		make;
@@ -67,12 +73,12 @@ $(SQLDBLibs):
 	cp ../mysql/$(SQLDBLibs)			./
 
 test:
-	./$(TARGET) testdata/66666.eml
+	./$(TARGET) testdata/6666.eml
 
 .PHONY:clean
 
 clean:
-	-rm $(TARGET);
+	-rm $(TARGET) $(ALLLIBS);
 	-rm -r $(ADDATION);
 	-rm $(ADDATIONFILE);
 	-rm $(GMIMELibs) $(REGEXLibs) $(SPLITERLibs)\

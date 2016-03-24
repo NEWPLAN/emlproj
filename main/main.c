@@ -17,6 +17,7 @@ int main(int argc,char* argv[])
 {
     int flags=0;
     char errorinfo[1024]= {0};
+    GmimeDataPtr mimedata=NULL;
     if(argc<2)
     {
         printf("error in  input format , try again!\n");
@@ -37,11 +38,20 @@ int main(int argc,char* argv[])
     }
     printf("run for ParseEML\n");
     /*邮件解析模块*/
-    flags=ParseEML(argv[1]);
+    flags=ParseEML(argv[1],&mimedata);
     if(!flags)
     {
         strcat(errorinfo,"ParseEML");
         goto  exit;
+    }
+    if(mimedata)
+    {
+   		printf("=-=-=-=-=-=-=test for newplan=-=-=-=-=-=-=\n");
+    	printf("sender:%s\n",mimedata->from );
+    	printf("to:%s\n",mimedata->to );
+    	printf("ReplayTo%s\n",mimedata->replayto );
+    	printf("subjects:%s\n",mimedata->subjects );
+    	printf("messageID%s\n",mimedata->messageID );
     }
     printf("\033[32m-----------------------------------------------------------------------------------------\n\n\n\n\033[0m");
     /*反垃圾*/
@@ -102,7 +112,7 @@ exit:
     return 0;
 }
 
-int ParseEML(char* filename)
+int ParseEML(char* filename,GmimeDataPtr* rtevalPtr)
 {
     char* inputs[2]= {NULL,filename};
     void *handle;
@@ -123,6 +133,7 @@ int ParseEML(char* filename)
         return 0;
     }
     A=dlfunc(2,inputs);
+#if DEBUG
     if(A)
     {
     	printf("sender:%s\n",A->from );
@@ -131,6 +142,8 @@ int ParseEML(char* filename)
     	printf("subjects:%s\n",A->subjects );
     	printf("messageID%s\n",A->messageID );
     }
+#endif
+    *rtevalPtr=A;
     gettimeofday(&tEndTime,NULL);
     fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
     fCostTime /= 1000000;
