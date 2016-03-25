@@ -7,7 +7,7 @@ DISABLEWEAR=-fno-stack-protector
 
 GMIMELibs=gmimelibs.so
 NLPIRLibs=libNLPIR.so
-REGEXLibs=regex.so
+REGEXLibs=libregex.so
 SPLITERLibs=spliter.so
 APPENDIXLibs=appendix.so
 UNZIPSLibs=unzips.so
@@ -72,8 +72,11 @@ $(SQLDBLibs):
 	cd ../mysql; make;
 	cp ../mysql/$(SQLDBLibs)			./
 
-test:
+run:
 	./$(TARGET) testdata/6666.eml
+
+debug:$(TARGET)
+	gdb --args $(TARGET) testdata/6666.eml
 
 .PHONY:clean
 

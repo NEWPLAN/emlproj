@@ -64,5 +64,7 @@ void free_memory(FetchRtePtr memptr);
 #define	UPDATE_DB_FLAGS			0x02
 #define	DEBUG_DB_FLAGS			0x01
 
+//#define	DELETE_DB_FLAGS			0x0400
+
 #endif /* mysql_h */
 

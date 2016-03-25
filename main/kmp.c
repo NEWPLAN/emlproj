@@ -17,19 +17,19 @@ static void preKmp(char *src, int m, int *rule)
     }
 }
 //int recount=0;
-int check_sub(char *src, int m, char *dest, int n)
+int check_sub(char *src, int slen, char *pattern, int plen)
 {
     int rule[10005];
-    preKmp(src,m,rule);
+    preKmp(pattern,plen,rule);
     int i=0, j=0;
-    while(i<n)
+    while(i<slen)
     {
-        while(j!=-1 && src[j] != dest[i])
+        while(j!=-1 && pattern[j] != src[i])
         {
             j = rule[j];
         }
         i++,j++;
-        if(j==m)
+        if(j==plen)
         {
             //printf("%d\n",i-m);//匹配的位置
             //recount++;
@@ -39,13 +39,13 @@ int check_sub(char *src, int m, char *dest, int n)
     }
     return 0;
 }
-/*
+#if 0
 int main(int argc, char* argv[])
 {
-    char p2[]="asdasdasdfghj中文";
-    char p1[]="hj中文";
-    int i=kmp(p2,strlen(p2),p1,strlen(p1));
+    char p2[]="程阳 <zuricher@126.com>";
+    char p1[]="zuricher@126.com";
+    int i=check_sub(p2,strlen(p2),p1,strlen(p1));
     printf("%d\n",i);
     return 0;
 }
-*/
+#endif

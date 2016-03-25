@@ -93,7 +93,7 @@ last_para:
 static SpiPtr ImportDic(void)
 {
     int i=0;
-    SpiPtr p=(SpiPtr)malloc(30*255);
+    SpiPtr p=(SpiPtr)malloc(300*255);
     if(!p)
         return NULL;
     FILE *filPtr=fopen("userdict.txt","rb");

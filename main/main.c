@@ -49,7 +49,7 @@ int main(int argc,char* argv[])
 {
     int flags=0;
     char errorinfo[1024]= {0};
-
+//goto DEBUSGGG;
     if(argc<2)
     {
         printf("error in  input format , try again!\n");
@@ -73,17 +73,9 @@ int main(int argc,char* argv[])
         strcat(errorinfo,"ParseEML");
         goto  exit;
     }
-    if(mimedata)
-    {
-        printf("=-=-=-=-=-=-=test for newplan=-=-=-=-=-=-=\n");
-        printf("sender:%s\n",mimedata->from );
-        printf("to:%s\n",mimedata->to );
-        printf("ReplayTo%s\n",mimedata->replayto );
-        printf("subjects:%s\n",mimedata->subjects );
-        printf("messageID%s\n",mimedata->messageID );
-    }
     setRegular();
-
+	FreeAll(sqldatas);
+	sqldatas=NULL;
     printf("\033[32m-----------------------------------------------------------------------------------------\n\n\n\n\033[0m");
     /*反垃圾*/
 ANTISPAMSTEST:
@@ -128,7 +120,7 @@ TEST:
     printf("\033[32m-----------------------------------------------------------------------------------------\n\n\n\n\033[0m");
 DEBUSGGG:
     /*关键字*/
-    if(strategy_flags&(1<0))
+    if(strategy_flags&(1<<0))
     {
         flags=ParseKeyChs("temps");
         // flags=ParseKeyChs(temps);
@@ -242,7 +234,7 @@ int ParseKeyClass(char* filename)
 
     gettimeofday(&tBeginTime,NULL);/*calculate timer*/
     printf("hello in ParseKeyClass\n");
-    handle=dlopen("./regex.so",RTLD_LAZY);
+    handle=dlopen("./libregex.so",RTLD_LAZY);
     printf("in open libs\n");
     dlfunc=dlsym(handle,"RegexMain");
     if(!(handle&&dlfunc))
@@ -255,7 +247,7 @@ int ParseKeyClass(char* filename)
     backval=backval<<8;
     backval=backval&0xff00;
     strategy_flags&=0xffff00ff;
-    strategy_flags!=backval;
+    strategy_flags|=backval;
     gettimeofday(&tEndTime,NULL);
     fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
     fCostTime /= 1000000;
@@ -286,7 +278,7 @@ int ParseAppendix(char* filedirname)
     backval=(int)Ate;
     backval=backval&0xff;
     strategy_flags&=0xffffff00;
-    strategy_flags!=backval;
+    strategy_flags|=backval;
     return 1;
 }
 
@@ -404,17 +396,25 @@ int setRegular(void)
         return -1;
     int num=0;
     char* mime_cmp=NULL;
-
-    /*看看是源地址还是目的地址的模式匹配*/
-    if(sqldatas->DLP_list_keywords_Data[num].strategy_terminal[0]==SOURCE)
-        mime_cmp=mimedata->from;
-    else if(sqldatas->DLP_list_keywords_Data[num].strategy_terminal[0]==TERMINAL)
-        mime_cmp=mimedata->to;
-    assert(mime_cmp!=NULL);/*确保不能为空*/
+    char* backups="1231231231231";
 
     /*关键字，处理思路是：将关键字加入到用户自定义的文件中，用于分词结束后，进行匹配过滤*/
     for(num=0; num<sqldatas->DLP_list_keywords_Num; num++)
     {
+        /*看看是源地址还是目的地址的模式匹配*/
+        mime_cmp=NULL;
+        if(sqldatas->DLP_list_keywords_Data[num].strategy_terminal[0]==SOURCE)
+            mime_cmp=mimedata->from;
+        else if(sqldatas->DLP_list_keywords_Data[num].strategy_terminal[0]==TERMINAL)
+            mime_cmp=mimedata->to;
+        else
+        {
+            printf("in DLP_list_keywords\t can not recognise this kind of parameters make sure its correction!\n ");
+            mime_cmp=backups;
+        }
+        assert(mime_cmp!=NULL);/*确保不能为空*/
+
+
         if(sqldatas->DLP_list_keywords_Data[num].strategy_type[0]==BLACKLIST)/*黑名单*/
         {
             if(mime_cmp!=NULL)/*确保非空*/
@@ -424,7 +424,7 @@ int setRegular(void)
                              strlen(sqldatas->DLP_list_keywords_Data[num].strategy_info)
                             )!=0)/*符合黑名单规则,添加进入用户字典*/
                 {
-                    FILE* fptr=fopen("userdict.txt","wb");
+                    FILE* fptr=fopen("userdict.txt","ab");
                     assert(fptr!=NULL);
                     char* ptrA,*ptrB;
                     ptrA=ptrB=sqldatas->DLP_list_keywords_Data[num].strategy_content;
@@ -446,8 +446,9 @@ int setRegular(void)
                     {
                         fwrite(ptrB,sizeof(char),strlen(ptrB),fptr);
                         fwrite("\n",sizeof(char),strlen("\n"),fptr);
-                        *ptrA='&';
+                        //*ptrA='&';
                     }
+                    fclose(fptr);
 
                 }
             }
@@ -459,6 +460,19 @@ int setRegular(void)
     /*关键字类列表，这一部分的规则是，扫描数据库信息，然后设置相关的开关，在符合条件的开关选项上进行选择性*/
     for(num=0; num<sqldatas->DLP_list_keywordsclass_Num; num++)
     {
+        /*看看是源地址还是目的地址的模式匹配*/
+        mime_cmp=NULL;
+        if(sqldatas->DLP_list_keywordsclass_Data[num].strategy_terminal[0]==SOURCE)
+            mime_cmp=mimedata->from;
+        else if(sqldatas->DLP_list_keywordsclass_Data[num].strategy_terminal[0]==TERMINAL)
+            mime_cmp=mimedata->to;
+        else
+        {
+            printf("in DLP_list_keywordsclass\t can not recognise this kind of parameters make sure its correction!\n ");
+            mime_cmp=backups;
+        }
+        assert(mime_cmp!=NULL);/*确保不能为空*/
+
         if(sqldatas->DLP_list_keywordsclass_Data[num].strategy_type[0]==BLACKLIST)/*黑名单*/
         {
             if((mime_cmp!=NULL))/*not null*/
@@ -497,79 +511,106 @@ int setRegular(void)
             else if(sqldatas->DLP_list_keywordsclass_Data[num].strategy_type[0]=WHITELIST)/*白名单，不过*/
                 ;/*关键字类的白名单也是没有过滤意义，因此选择不处理*/
         }
-
-        /*垃圾列表,针对这一部分处理方法是：如果遇到白名单，直接通过，如果遇到黑名单，直接拉黑*/
-        for(num=0; num<sqldatas->spam_list_Num; num++)
-        {
-            if(sqldatas->spam_list_Data[num].strategy_type[0]==BLACKLIST)/*黑名单*/
-            {
-                if(mime_cmp)
-                {
-                    if(check_sub(mime_cmp,strlen(mime_cmp),
-                                 sqldatas->spam_list_Data[num].strategy_info,
-                                 strlen(sqldatas->spam_list_Data[num].strategy_info))!=0)/*check for current regular*/
-                    {
-                        strategy_flags|=1<<7;/*set flag and return */
-                        strategy_flags&=(~(1<<3));/*清零标志位，因为已经可以判断是垃圾了,后面不需要扫描判断了*/
-                        break;/*exit for this for loop*/
-                    }
-                }
-                else break;
-            }
-            else if(sqldatas->spam_list_Data[num].strategy_type[0]==WHITELIST)/*white名单*/
-            {
-                if(mime_cmp)
-                {
-                    if(check_sub(mime_cmp,strlen(mime_cmp),
-                                 sqldatas->spam_list_Data[num].strategy_info,
-                                 strlen(sqldatas->spam_list_Data[num].strategy_info))!=0)/*check for current regular*/
-                    {
-                        strategy_flags&=(~(1<<3));/*清零标志位，因为已经可以判断是垃圾了,后面不需要扫描判断了*/
-                        break;/*exit for this for loop*/
-                    }
-                }
-                else break;
-            }
-
-        }
-
-        /*病毒列表，这一部分处理方法是：对于黑名单直接拉黑，不处理，对于白名单，直接返回，也不需要处理*/
-        for(num=0; num<sqldatas->virus_list_Num; num++)
-        {
-            if(sqldatas->virus_list_Data[num].strategy_type[0]==BLACKLIST)/*黑名单*/
-            {
-                if(mime_cmp)
-                {
-                    if(check_sub(mime_cmp,strlen(mime_cmp),
-                                 sqldatas->virus_list_Data[num].strategy_info,
-                                 strlen(sqldatas->virus_list_Data[num].strategy_info))!=0)/*check for current regular*/
-                    {
-                        strategy_flags|=1<<6;/*set flag and return */
-                        strategy_flags&=(~(1<<2));/*清零标志位，因为已经可以判断是垃圾了,后面不需要扫描判断了*/
-                        break;/*exit for this for loop*/
-                    }
-                }
-                else
-                    break;
-
-            }
-            else if(sqldatas->virus_list_Data[num].strategy_type[0]==WHITELIST)/*white名单*/
-            {
-                if(mime_cmp!=NULL)
-                {
-                    if(check_sub(mime_cmp,strlen(mime_cmp),
-                                 sqldatas->virus_list_Data[num].strategy_info,
-                                 strlen(sqldatas->virus_list_Data[num].strategy_info))!=0)/*check for current regular*/
-                    {
-                        strategy_flags&=(~(1<<6));/*set flag and return */
-                        strategy_flags&=(~(1<<2));/*清零标志位，因为已经可以判断是垃圾了,后面不需要扫描判断了*/
-                        break;/*exit for this for loop*/
-                    }
-                }
-                else
-                    break;
-            }
-        }
-        return 1;
     }
+
+    /*垃圾列表,针对这一部分处理方法是：如果遇到白名单，直接通过，如果遇到黑名单，直接拉黑*/
+    for(num=0; num<sqldatas->spam_list_Num; num++)
+    {
+        /*看看是源地址还是目的地址的模式匹配*/
+        mime_cmp=NULL;
+        if(sqldatas->spam_list_Data[num].strategy_terminal[0]==SOURCE)
+            mime_cmp=mimedata->from;
+        else if(sqldatas->spam_list_Data[num].strategy_terminal[0]==TERMINAL)
+            mime_cmp=mimedata->to;
+        else
+        {
+            printf("in spam_list\t can not recognise this kind of parameters make sure its correction!\n ");
+            mime_cmp=backups;
+        }
+        assert(mime_cmp!=NULL);/*确保不能为空*/
+
+
+        if(sqldatas->spam_list_Data[num].strategy_type[0]==BLACKLIST)/*黑名单*/
+        {
+            if(mime_cmp)
+            {
+                if(check_sub(mime_cmp,strlen(mime_cmp),
+                             sqldatas->spam_list_Data[num].strategy_info,
+                             strlen(sqldatas->spam_list_Data[num].strategy_info))!=0)/*check for current regular*/
+                {
+                    strategy_flags|=1<<7;/*set flag and return */
+                    strategy_flags&=(~(1<<3));/*清零标志位，因为已经可以判断是垃圾了,后面不需要扫描判断了*/
+                    break;/*exit for this for loop*/
+                }
+            }
+            else break;
+        }
+        else if(sqldatas->spam_list_Data[num].strategy_type[0]==WHITELIST)/*white名单*/
+        {
+            if(mime_cmp)
+            {
+                if(check_sub(mime_cmp,strlen(mime_cmp),
+                             sqldatas->spam_list_Data[num].strategy_info,
+                             strlen(sqldatas->spam_list_Data[num].strategy_info))!=0)/*check for current regular*/
+                {
+                    strategy_flags&=(~(1<<3));/*清零标志位，因为已经可以判断是垃圾了,后面不需要扫描判断了*/
+                    break;/*exit for this for loop*/
+                }
+            }
+            else break;
+        }
+
+    }
+
+    /*病毒列表，这一部分处理方法是：对于黑名单直接拉黑，不处理，对于白名单，直接返回，也不需要处理*/
+    for(num=0; num<sqldatas->virus_list_Num; num++)
+    {
+        /*看看是源地址还是目的地址的模式匹配*/
+        mime_cmp=NULL;
+        if(sqldatas->virus_list_Data[num].strategy_terminal[0]==SOURCE)
+            mime_cmp=mimedata->from;
+        else if(sqldatas->virus_list_Data[num].strategy_terminal[0]==TERMINAL)
+            mime_cmp=mimedata->to;
+        else
+        {
+            printf("in virus_list\t can not recognise this kind of parameters make sure its correction!\n ");
+            mime_cmp=backups;
+        }
+        assert(mime_cmp!=NULL);/*确保不能为空*/
+
+        if(sqldatas->virus_list_Data[num].strategy_type[0]==BLACKLIST)/*黑名单*/
+        {
+            if(mime_cmp)
+            {
+                if(check_sub(mime_cmp,strlen(mime_cmp),
+                             sqldatas->virus_list_Data[num].strategy_info,
+                             strlen(sqldatas->virus_list_Data[num].strategy_info))!=0)/*check for current regular*/
+                {
+                    strategy_flags|=1<<6;/*set flag and return */
+                    strategy_flags&=(~(1<<2));/*清零标志位，因为已经可以判断是垃圾了,后面不需要扫描判断了*/
+                    break;/*exit for this for loop*/
+                }
+            }
+            else
+                break;
+
+        }
+        else if(sqldatas->virus_list_Data[num].strategy_type[0]==WHITELIST)/*white名单*/
+        {
+            if(mime_cmp!=NULL)
+            {
+                if(check_sub(mime_cmp,strlen(mime_cmp),
+                             sqldatas->virus_list_Data[num].strategy_info,
+                             strlen(sqldatas->virus_list_Data[num].strategy_info))!=0)/*check for current regular*/
+                {
+                    strategy_flags&=(~(1<<6));/*set flag and return */
+                    strategy_flags&=(~(1<<2));/*清零标志位，因为已经可以判断是垃圾了,后面不需要扫描判断了*/
+                    break;/*exit for this for loop*/
+                }
+            }
+            else
+                break;
+        }
+    }
+    return 1;
 }

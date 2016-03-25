@@ -37,6 +37,7 @@ DataPtr LoadAll(void)
         return NULL;
     }
     {
+        memset(A,0,sizeof(DataType));
         A->Behavior_Data=load_behaviorLog(&A->behavior_Num,NULL);
         A->DLP_list_keywords_Data=load_strategywords(&A->DLP_list_keywords_Num,0);
         A->DLP_list_keywordsclass_Data=load_strategyclass(&A->DLP_list_keywordsclass_Num,0);
@@ -57,12 +58,14 @@ DataPtr LoadAll(void)
         A->virus_list_Data=load_virus_list(&A->virus_list_Num,0);
         printf("%d\n\n",A->behavior_Num);
     }
-    return NULL;
+    return A;
 }
+
 
 int TestAll(void)
 {
     int flags=255;
+#if 0
     printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
     BehaviorLogTest(flags&(~DELETE_DB_FLAGS));
     printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
@@ -102,7 +105,18 @@ int TestAll(void)
     UserInfoTest(flags&(~DELETE_DB_FLAGS));
     printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
     VirusListTest(flags&(~DELETE_DB_FLAGS));
+    
+#else
 
+	StrategyWordsTest(flags&(~DELETE_DB_FLAGS));
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    StrategyClassTest(flags&(~DELETE_DB_FLAGS));
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    SpamListTest(flags&(~DELETE_DB_FLAGS));
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    VirusListTest(flags&(~DELETE_DB_FLAGS));
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+#endif
     return 0;
 }
 

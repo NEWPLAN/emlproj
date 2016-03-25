@@ -101,14 +101,14 @@ int StrategyWordsTest(int flags)
     //int ret = database_insert("Protocol_switch","'789','789',123");
 
     if(flags&INSERT_DB_FLAGS)
-        database_insert(tableName,"1,2,3,'strategy_info',5,'strategy_target','strategy_content'");
+        database_insert(tableName,"1,0,1,'strategy_info',5,'strategy_target','strategy_content'");
     //database_query("Protocol_switch");
 
     if(flags&DISPLAY_DATA_FLAGS)
         print_strategywords();
 
     if(flags&UPDATE_DB_FLAGS)
-        database_update(tableName,"set strategy_target='对对对,strategy_target' where strategy_id=1");
+        database_update(tableName,"set strategy_info='zuricher@126.com',strategy_terminal=1,strategy_content='对对对&strategy_content&help&me' where strategy_id=1");
     //database_update("Protocol_switch","set protocol='456',direction='456' where switch=456");
     if(flags&UNCON_QUERRY_FLAGS)
     {

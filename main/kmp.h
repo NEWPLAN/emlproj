@@ -7,5 +7,5 @@
 
 #ifndef _KMP_H
 #define _KMP_H
-int check_sub(char *src, int m, char *dest, int n);
+int check_sub(char *src, int slen, char *pattern, int plen);
 #endif

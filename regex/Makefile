@@ -1,4 +1,4 @@
-TARGET=regex.so
+TARGET=libregex.so
 CC=gcc
 CPP=g++
 LINKS=-lpcre
