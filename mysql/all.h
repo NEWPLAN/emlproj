@@ -33,16 +33,16 @@
 typedef struct MYSQLINTERFACE
 {
 	int behavior_Num;
-	behaviorlogPtr Behavior_data;/*behavior_log 表*/
+	behaviorlogPtr Behavior_Data;/*behavior_log 表*/
 
 	int DLP_list_keywords_Num;
-	strategywordsPtr DLP_list_keywords_data;/*DLP_list_keywords 表*/
+	strategywordsPtr DLP_list_keywords_Data;/*DLP_list_keywords 表*/
 
 	int DLP_list_keywordsclass_Num;
-	strategyclassPtr DLP_list_keywordsclass_data; /*DLP_list_keywordsclass 表*/
+	strategyclassPtr DLP_list_keywordsclass_Data; /*DLP_list_keywordsclass 表*/
 
 	int keyword_list_Num;
-	keywordsPtr keyword_list_data;/*keyword_list 表*/
+	keywordsPtr keyword_list_Data;/*keyword_list 表*/
 
 	int keywordclass_list_Num;
 	keyclassPtr keywordclass_list_Data;/*keywordclass_list*/

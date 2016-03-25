@@ -37,10 +37,10 @@ DataPtr LoadAll(void)
         return NULL;
     }
     {
-        A->Behavior_data=load_behaviorLog(&A->behavior_Num,NULL);
-        A->DLP_list_keywords_data=load_strategywords(&A->DLP_list_keywords_Num,0);
-        A->DLP_list_keywordsclass_data=load_strategyclass(&A->DLP_list_keywordsclass_Num,0);
-        A->keyword_list_data=load_keywords(&A->keyword_list_Num,0);
+        A->Behavior_Data=load_behaviorLog(&A->behavior_Num,NULL);
+        A->DLP_list_keywords_Data=load_strategywords(&A->DLP_list_keywords_Num,0);
+        A->DLP_list_keywordsclass_Data=load_strategyclass(&A->DLP_list_keywordsclass_Num,0);
+        A->keyword_list_Data=load_keywords(&A->keyword_list_Num,0);
         A->keywordclass_list_Data=load_keyclass(&A->keywordclass_list_Num,0);
         A->Protocol_switch_Data=load_protocolSwitch(&A->Protocol_switch_Num,0);
         A->spam_list_Data=load_spamlist(&A->spam_list_Num,0);

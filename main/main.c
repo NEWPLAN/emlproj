@@ -156,7 +156,7 @@ exit:
 
 int ParseEML(char* filename,GmimeDataPtr* rtevalPtr)
 {
-    char* inputs[2]= {NULL,filename};
+    char* inputs[3]= {NULL,filename};
     void *handle;
     GmimeDataPtr A=NULL;
     GmimeDataPtr (*dlfunc)(int argc,char* argv[]);
@@ -236,7 +236,7 @@ int ParseKeyClass(char* filename)
     void *handle;
     int backval=0;
     char Ate=(char)((strategy_flags>>8)&0xff);
-    char *inputs[2]= {NULL,filename,&Ate};
+    char *inputs[3]= {NULL,filename,&Ate};
     struct timeval tBeginTime, tEndTime;
     float fCostTime;
 
@@ -268,7 +268,7 @@ int ParseAppendix(char* filedirname)
 {
     char Ate=(char)(strategy_flags&0xff);
     int backval;
-    char * ins[2]= {NULL,filedirname,&Ate};
+    char * ins[3]= {NULL,filedirname,&Ate};
     int (*dlfunc)(int argc, char* argv[]);
     void *handle;
     printf("hello in ParseAppendix\n");
@@ -382,7 +382,7 @@ DataPtr load_db(int *dbflags)
 {
     printf("test for DB\n");
     DataPtr A= LoadAll();
-    //TestAll();
+    TestAll();
     //FreeAll(A);
     sqldatas=A;
     return A;
@@ -406,28 +406,28 @@ int setRegular(void)
     char* mime_cmp=NULL;
 
     /*看看是源地址还是目的地址的模式匹配*/
-    if(DLP_list_keywords_data[num].strategy_terminal[0]==SOURCE)
+    if(sqldatas->DLP_list_keywords_Data[num].strategy_terminal[0]==SOURCE)
         mime_cmp=mimedata->from;
-    else if(DLP_list_keywords_data[num].strategy_terminal[0]==TERMINAL)
+    else if(sqldatas->DLP_list_keywords_Data[num].strategy_terminal[0]==TERMINAL)
         mime_cmp=mimedata->to;
     assert(mime_cmp!=NULL);/*确保不能为空*/
 
     /*关键字，处理思路是：将关键字加入到用户自定义的文件中，用于分词结束后，进行匹配过滤*/
     for(num=0; num<sqldatas->DLP_list_keywords_Num; num++)
     {
-        if(sqldatas->DLP_list_keywords_data[num].strategy_type[0]==BLACKLIST)/*黑名单*/
+        if(sqldatas->DLP_list_keywords_Data[num].strategy_type[0]==BLACKLIST)/*黑名单*/
         {
             if(mime_cmp!=NULL)/*确保非空*/
             {
                 if(check_sub(mime_cmp,strlen(mime_cmp),
-                             sqldatas->DLP_list_keywords_data[num].strategy_info,
-                             strlen(sqldatas->DLP_list_keywords_data[num].strategy_info)
+                             sqldatas->DLP_list_keywords_Data[num].strategy_info,
+                             strlen(sqldatas->DLP_list_keywords_Data[num].strategy_info)
                             )!=0)/*符合黑名单规则,添加进入用户字典*/
                 {
                     FILE* fptr=fopen("userdict.txt","wb");
                     assert(fptr!=NULL);
                     char* ptrA,*ptrB;
-                    ptrA=ptrB=sqldatas->DLP_list_keywords_data[num].strategy_content;
+                    ptrA=ptrB=sqldatas->DLP_list_keywords_Data[num].strategy_content;
                     while(*ptrA!=0)
                     {
                         if(*ptrA=='&')
@@ -452,49 +452,49 @@ int setRegular(void)
                 }
             }
         }
-        else if(sqldatas->DLP_list_keywords_data[num].strategy_type[0]==WHITELIST)/*白名单，不过*/
+        else if(sqldatas->DLP_list_keywords_Data[num].strategy_type[0]==WHITELIST)/*白名单，不过*/
             ;/*白名单对于过滤关键字来说没有意义*/
     }
 
     /*关键字类列表，这一部分的规则是，扫描数据库信息，然后设置相关的开关，在符合条件的开关选项上进行选择性*/
     for(num=0; num<sqldatas->DLP_list_keywordsclass_Num; num++)
     {
-        if(sqldatas->DLP_list_keywordsclass_data[num].strategy_type[0]==BLACKLIST)/*黑名单*/
+        if(sqldatas->DLP_list_keywordsclass_Data[num].strategy_type[0]==BLACKLIST)/*黑名单*/
         {
             if((mime_cmp!=NULL))/*not null*/
             {
                 if(check_sub(mime_cmp,strlen(mime_cmp),
-                             sqldatas->DLP_list_keywordsclass_data[num].strategy_info,
-                             strlen(sqldatas->DLP_list_keywordsclass_data[num].strategy_info)
+                             sqldatas->DLP_list_keywordsclass_Data[num].strategy_info,
+                             strlen(sqldatas->DLP_list_keywordsclass_Data[num].strategy_info)
                             )!=0)/*符合黑名单规则,添加*/
                 {
-                    if(strcmp(sqldatas->DLP_list_keywordsclass_data[num].strategy_content,"bank card")!=0)/*银行卡*/
+                    if(strcmp(sqldatas->DLP_list_keywordsclass_Data[num].strategy_content,"bank card")!=0)/*银行卡*/
                     {
                         strategy_flags|=1<<15;
                     }
-                    else if(strcmp(sqldatas->DLP_list_keywordsclass_data[num].strategy_content,"id card")!=0)/*身份证号*/
+                    else if(strcmp(sqldatas->DLP_list_keywordsclass_Data[num].strategy_content,"id card")!=0)/*身份证号*/
                     {
                         strategy_flags|=1<<14;
                     }
-                    else if(strcmp(sqldatas->DLP_list_keywordsclass_data[num].strategy_content,"mobile phone")!=0)/*电话号码*/
+                    else if(strcmp(sqldatas->DLP_list_keywordsclass_Data[num].strategy_content,"mobile phone")!=0)/*电话号码*/
                     {
                         strategy_flags|=1<<13;
                     }
-                    else if(strcmp(sqldatas->DLP_list_keywordsclass_data[num].strategy_content,"email address")!=0)/*邮件地址*/
+                    else if(strcmp(sqldatas->DLP_list_keywordsclass_Data[num].strategy_content,"email address")!=0)/*邮件地址*/
                     {
                         strategy_flags|=1<<12;
                     }
-                    else if(strcmp(sqldatas->DLP_list_keywordsclass_data[num].strategy_content,"url")!=0)/*链接地址*/
+                    else if(strcmp(sqldatas->DLP_list_keywordsclass_Data[num].strategy_content,"url")!=0)/*链接地址*/
                     {
                         strategy_flags|=1<<11;
                     }
-                    else if(strcmp(sqldatas->DLP_list_keywordsclass_data[num].strategy_content,"ip address")!=0)/*iP 地址*/
+                    else if(strcmp(sqldatas->DLP_list_keywordsclass_Data[num].strategy_content,"ip address")!=0)/*iP 地址*/
                     {
                         strategy_flags|=1<<10;
                     }
                 }
             }
-            else if(sqldatas->DLP_list_keywordsclass_data[num].strategy_type[0]=WHITELIST)/*白名单，不过*/
+            else if(sqldatas->DLP_list_keywordsclass_Data[num].strategy_type[0]=WHITELIST)/*白名单，不过*/
                 ;/*关键字类的白名单也是没有过滤意义，因此选择不处理*/
         }
 
@@ -572,4 +572,4 @@ int setRegular(void)
         }
         return 1;
     }
-
+}
