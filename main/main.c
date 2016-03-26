@@ -374,7 +374,7 @@ DataPtr load_db(int *dbflags)
 {
     printf("test for DB\n");
     DataPtr A= LoadAll();
-    TestAll();
+    //TestAll();
     //FreeAll(A);
     sqldatas=A;
     return A;
