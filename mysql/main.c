@@ -106,8 +106,48 @@ int TestAll(void)
     printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
     VirusListTest(flags&(~DELETE_DB_FLAGS));
     
-#else
+#elif 0
 
+	printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    BehaviorLogTest(flags);
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    StrategyWordsTest(flags);
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    StrategyClassTest(flags);
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    KeyWordsTest(flags);
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    KeyClassTest(flags);
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+
+    ProtocolSwitchTest(flags);
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    SpamListTest(flags);
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    StatisticDLPKeyWordsTest(flags);
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    StatisticDLPUrlTest(flags);
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    StatisticEmlInfoBasicTest(flags);
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+
+    StatisticKeyClassBasicTest(flags);
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    StatisticProtocolTest(flags);
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    StatisticSpamTest(flags);
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    StatisticVirusTest(flags);
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    SysLogTest(flags);
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+
+    UrlListTest(flags);
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    UserInfoTest(flags);
+    printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    VirusListTest(flags);
+#else 
 	StrategyWordsTest(flags&(~DELETE_DB_FLAGS));
     printf("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
     StrategyClassTest(flags&(~DELETE_DB_FLAGS));

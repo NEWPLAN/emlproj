@@ -482,27 +482,28 @@ int setRegular(void)
                              strlen(sqldatas->DLP_list_keywordsclass_Data[num].strategy_info)
                             )!=0)/*符合黑名单规则,添加*/
                 {
-                    if(strcmp(sqldatas->DLP_list_keywordsclass_Data[num].strategy_content,"bank card")!=0)/*银行卡*/
+//                	printf("====== sqldatas->DLP_list_keywordsclass_Data[%d].strategy_content %s\n",num,sqldatas->DLP_list_keywordsclass_Data[num].strategy_content);
+                    if(!strcmp(sqldatas->DLP_list_keywordsclass_Data[num].strategy_content,"bank card"))/*银行卡*/
                     {
                         strategy_flags|=1<<15;
                     }
-                    else if(strcmp(sqldatas->DLP_list_keywordsclass_Data[num].strategy_content,"id card")!=0)/*身份证号*/
+                    else if(!strcmp(sqldatas->DLP_list_keywordsclass_Data[num].strategy_content,"id card"))/*身份证号*/
                     {
                         strategy_flags|=1<<14;
                     }
-                    else if(strcmp(sqldatas->DLP_list_keywordsclass_Data[num].strategy_content,"mobile phone")!=0)/*电话号码*/
+                    else if(!strcmp(sqldatas->DLP_list_keywordsclass_Data[num].strategy_content,"mobile phone"))/*电话号码*/
                     {
                         strategy_flags|=1<<13;
                     }
-                    else if(strcmp(sqldatas->DLP_list_keywordsclass_Data[num].strategy_content,"email address")!=0)/*邮件地址*/
+                    else if(!strcmp(sqldatas->DLP_list_keywordsclass_Data[num].strategy_content,"email address"))/*邮件地址*/
                     {
                         strategy_flags|=1<<12;
                     }
-                    else if(strcmp(sqldatas->DLP_list_keywordsclass_Data[num].strategy_content,"url")!=0)/*链接地址*/
+                    else if(!strcmp(sqldatas->DLP_list_keywordsclass_Data[num].strategy_content,"url"))/*链接地址*/
                     {
                         strategy_flags|=1<<11;
                     }
-                    else if(strcmp(sqldatas->DLP_list_keywordsclass_Data[num].strategy_content,"ip address")!=0)/*iP 地址*/
+                    else if(!strcmp(sqldatas->DLP_list_keywordsclass_Data[num].strategy_content,"ip address"))/*iP 地址*/
                     {
                         strategy_flags|=1<<10;
                     }

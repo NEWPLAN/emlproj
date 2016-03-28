@@ -6,13 +6,14 @@ objs=url.o mobile.o idCard.o email.o main.o ipnum.o compileRegur.o bankCard.o lo
 Cfile=url.c mobile.c idCard.c email.c main.c ipnum.c compileRegur.c bankCard.c loadstr.c
 HeadF=  all.h url.h mobile.h idCard.h email.h ipnum.h compileRegur.h bankCard.h loadstr.h
 WALL=-Wall
+DEBUG=-g
 
 
 all:$(TARGET)
 
 
 %.o:%.c $(HeadF)
-	$(CC) $(WALL) -fPIC -c $< -o $@
+	$(CC) $(DEBUG) $(WALL) -fPIC -c $< -o $@
 
 $(TARGET):$(objs)
 	$(CC) -shared $(objs) -o $(TARGET) $(LINKS)

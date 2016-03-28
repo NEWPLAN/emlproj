@@ -58,17 +58,35 @@ int main(int argc,char* argv[])
         --------07---------06---------05---------04---------03---------02--
         */
         if((*argv[2])&(1<<4))
+        {
+        	printf("in Matching email\n");
             EmlMatch();
+        }
         if((*argv[2])&(1<<6))
+        {
+        	printf("in matching id card\n");
             idCardMatch();
+        }
         if((*argv[2])&(1<<5))
+        {
+        	printf("in matching mobile phone\n");
             mobileMatch();
+        }
         if((*argv[2])&(1<<7))
+        {
+        	printf("in matching bank card\n");
             bankCardMatch();
+        }
         if((*argv[2])&(1<<3))
+        {
+        	printf("in matching urls\n");
             UrlMatch();
+        }
         if((*argv[2])&(1<<2))
+        {
+        	printf("in matching IP address\n");
             IPMatch();
+        }
         RelasePage();
     }
     chdir(oldpath);
