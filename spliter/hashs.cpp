@@ -81,8 +81,9 @@ static HaType * HashCreate(SpiPtr pattern,int numpatt)
     return Hd;
 }
 
-void HashMach(char* objs, SpiPtr pattern,int numpatt)
+int HashMach(char* objs, SpiPtr pattern,int numpatt)
 {
+	int matchres=0;
     HaType * Hed=HashCreate(pattern,numpatt);
     int Nums=strlen(objs);
     char *p=(char*)malloc(Nums);
@@ -90,7 +91,7 @@ void HashMach(char* objs, SpiPtr pattern,int numpatt)
     if(!p)
     {
         printf("error in malloc\n");
-        return;
+        return matchres;
     }
     strcpy(p,objs);
     char *before=p;
@@ -107,6 +108,7 @@ void HashMach(char* objs, SpiPtr pattern,int numpatt)
                 if(!strcmp(nptr->str,before))
                 {
                     printf("%-8d\t%s\n",(int)(before-Links),before);
+                    matchres=1;
                     break;
                 }
                 nptr=nptr->next;
@@ -116,5 +118,6 @@ void HashMach(char* objs, SpiPtr pattern,int numpatt)
         }
         p++;
     }
+    return matchres;
 //    free(Links);
 }

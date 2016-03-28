@@ -2,5 +2,5 @@
 #define __HASH_TABLES__
 
 typedef char (*SpiPtr)[255];
-void HashMach(char* objs, SpiPtr pattern,int numpatt);
+int HashMach(char* objs, SpiPtr pattern,int numpatt);
 #endif

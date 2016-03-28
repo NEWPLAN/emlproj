@@ -35,6 +35,5 @@ int idCardMatch(void)
     /*规则*/
     char* regIdCard="(^|\\b|(?<=[^\\d]))(\\d{17}(\\d|[Xx]))(\\b|$)";
     //char* regIdCard="(^|[^\\d]|\\b)(([1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3})|([1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])((\\d{4})|\\d{3}[Xx])))($|\\b)";
-    compliemain(regIdCard,flags?txtstr:src);
-    return 0;
+    return compliemain(regIdCard,flags?txtstr:src);
 }

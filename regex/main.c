@@ -60,32 +60,44 @@ int main(int argc,char* argv[])
         if((*argv[2])&(1<<4))
         {
         	printf("in Matching email\n");
-            EmlMatch();
+            //EmlMatch();
+            if(EmlMatch())
+                *argv[2]|=1<<5;
         }
         if((*argv[2])&(1<<6))
         {
         	printf("in matching id card\n");
-            idCardMatch();
+            //idCardMatch();
+            if(idCardMatch())
+                *argv[2]|=1<<5;
         }
         if((*argv[2])&(1<<5))
         {
         	printf("in matching mobile phone\n");
-            mobileMatch();
+            //mobileMatch();
+            if(mobileMatch())
+                *argv[2]|=1<<5;
         }
         if((*argv[2])&(1<<7))
         {
         	printf("in matching bank card\n");
-            bankCardMatch();
+            //bankCardMatch();
+            if(bankCardMatch())
+                *argv[2]|=1<<5;
         }
         if((*argv[2])&(1<<3))
         {
         	printf("in matching urls\n");
-            UrlMatch();
+            //UrlMatch();
+            if(UrlMatch())
+                *argv[2]|=1<<5;
         }
         if((*argv[2])&(1<<2))
         {
         	printf("in matching IP address\n");
-            IPMatch();
+            //IPMatch();
+            if(IPMatch())
+                *argv[2]|=1<<5;
         }
         RelasePage();
     }

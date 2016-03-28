@@ -37,8 +37,9 @@ extern "C"
         struct dirent *file;
         struct stat info;
         stat(argv[1],&info);
-        if(!S_ISDIR(info.st_mode))
+        if(!S_ISDIR(info.st_mode))/*传递的如果是一个文件，单独处理,否则按照文件夹处理*/
             goto last_para;
+            
         if(!(d=opendir(argv[1])))
         {
             printf("error in open dir : %s\n",argv[1]);
@@ -64,7 +65,8 @@ extern "C"
             strcat(filepath,file->d_name);
             q=testImportUserDict(flags,&NumPatt,filepath);
             printf("\n------using brute match methods---------\n");
-            HashMach(q,pp,NumPatt);
+            if(HashMach(q,pp,NumPatt))/*匹配到结果，可以返回垃圾*/
+            	*argv[2]|=1<<4;
             
     		RelasePage();
             //free(q);
@@ -80,7 +82,9 @@ extern "C"
 last_para:
     q=testImportUserDict(flags,&NumPatt,argv[1]);
     printf("\n------using brute match methods---------\n");
-    HashMach(q,pp,NumPatt);
+    //HashMach(q,pp,NumPatt);
+    if(HashMach(q,pp,NumPatt))/*匹配到结果，可以返回垃圾*/
+    	*argv[2]|=1<<4;
     free(q);
     clock_t B=clock();
     printf("System Executing Time :%f(Second)\n",((double)B-A)/CLOCKS_PER_SEC);

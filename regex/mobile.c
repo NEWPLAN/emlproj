@@ -23,6 +23,5 @@ int mobileMatch(void)
     /*规则*/
     char* regMobile="(^|(?<=[^\\d\\.]))(1[3,5,8]\\d{9})((?=[^(\\.\\d)*])|$)";
    /* char* regPhone="(?<=[^\\d\\.])((^0\\d{2}-?\\d{8}$)|(^0\\d{3}-?\\d{7}$)|(^0\\d2-?\\d{8}$)|(^0\\d3-?\\d{7}$))(?=[^(\\.\\d)*])";*/
-    compliemain(regMobile,flags?txtstr:src);
-    return 0;
+    return compliemain(regMobile,flags?txtstr:src);
 }

@@ -21,6 +21,5 @@ int IPMatch(void)
 	char src[]="my ip is y 1.1.1.1 and 192.168.2.33  do you know here is 2.12.21.1.92.168.2.33?, 3.3.3.3. ?5.5.5.5? .6.6.6.6 7.7.7.7";
     /*规则*/
     char pattern[]="(^|(?<=[^\\d.]))(((([1-9]\\d?)|(1\\d{2})|(2[0-4]\\d)|(25[0-5]))\\.){3}(([1-9]\\d?)|(1\\d{2})|(2[0-4]\\d)|(25[0-5])))($|(?=[^.\\d]))";
-    compliemain(pattern,flags?txtstr:src);
-    return 0;
+    return compliemain(pattern,flags?txtstr:src);
 }

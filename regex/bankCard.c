@@ -10,6 +10,5 @@ int bankCardMatch(void)
 	char src[]="62270038190009959 is 我的银行卡, my second mobilephone is6227003819000995963 ,6227003819000995964也是我的银行卡 is too and my phone is 6227003819000995965";
     /*规则*/
     char* regIdCard="(^|\\b|(?<=[^\\d]))(\\d{19}|(\\d{16}))(\\b|$|(?=[^\\d]))";
-    compliemain(regIdCard,flags?txtstr:src);
-    return 0;
+    return compliemain(regIdCard,flags?txtstr:src);
 }

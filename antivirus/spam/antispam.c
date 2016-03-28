@@ -85,9 +85,6 @@ struct mes detectSpam(const char *path)
                 continue;
             }
             char s[4] = {0};
-            //for (int i = 1; i <= 3; i++) {
-            //    s[i - 1] = buf[i];
-            //}
             int i = 0;
             while(i < 3)
             {
@@ -103,8 +100,7 @@ struct mes detectSpam(const char *path)
             line++;
             if(line == 20)  break;
         }
-        //printf("%s",buf);
-    }//end of while
+    }
     if (ferror(f))
     {
         printf("error");
@@ -112,7 +108,6 @@ struct mes detectSpam(const char *path)
     }
     else
     {
-        //printf("reach EOF\n");
         ret->line = line;
         pclose(f);
         return *ret;

@@ -123,7 +123,6 @@ DEBUSGGG:
     if(strategy_flags&(1<<0))
     {
         flags=ParseKeyChs("temps");
-        // flags=ParseKeyChs(temps);
         if(!flags)
         {
             strcat(errorinfo,"ParseKeyChs");
@@ -138,7 +137,9 @@ DEBUSGGG:
     fCostTime /= 1000000;
     printf("\033[31m the execute time for parsing an email is = %f(Second)\n\033[0m",fCostTime);
     //cleanAll();
-    return 0;
+    //return 0;
+    printf("%d",strategy_flags);
+    return strategy_flags;
 
 exit:
     cleanAll();
@@ -181,8 +182,7 @@ int ParseEML(char* filename,GmimeDataPtr* rtevalPtr)
     gettimeofday(&tEndTime,NULL);
     fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
     fCostTime /= 1000000;
-    printf("\033[31m the execute time for decoding EML is = %f(Second)\n\033[0m",
-           fCostTime);
+    printf("\033[31m the execute time for decoding EML is = %f(Second)\n\033[0m",fCostTime);
     return 1;
 }
 
@@ -196,12 +196,16 @@ int ParseURL(char* filename)
 int ParseKeyChs(char* filename)
 {
     static flags=1;
-    char * inputs[3]= {NULL,filename,NULL};
+    
+    char Ate=(char)(strategy_flags&0xff);
+    int backval;
     int (*dlfunc)(int argc, char* argv[]);
     void *handle;
     struct timeval tBeginTime, tEndTime;
     float fCostTime;
-
+    
+    
+    char * inputs[3]= {NULL,filename,&Ate};
     gettimeofday(&tBeginTime,NULL);/*calculate timer*/
     printf("hello in ParseKeyChs\n");
     handle=dlopen("./spliter.so",RTLD_LAZY);
@@ -213,6 +217,12 @@ int ParseKeyChs(char* filename)
         return 0;
     }
     dlfunc(flags? 3:1,inputs);
+    
+    backval=(int)Ate;
+    backval=backval&0xf0;/*只需要取得结果就可以了*/
+    strategy_flags&=0xffffff0f;
+    strategy_flags|=backval;
+    
     gettimeofday(&tEndTime,NULL);
     fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
     fCostTime /= 1000000;
@@ -276,8 +286,8 @@ int ParseAppendix(char* filedirname)
     }
     dlfunc(2,ins);
     backval=(int)Ate;
-    backval=backval&0xff;
-    strategy_flags&=0xffffff00;
+    backval=backval&0xf0;/*只需要取得结果就可以了*/
+    strategy_flags&=0xffffff0f;
     strategy_flags|=backval;
     return 1;
 }
@@ -302,6 +312,7 @@ int AntiSpams(char* filename)
     }
     RteVal=dlfunc(filename);
     printf("the score is %2.2lf\n",RteVal.score);
+    strategy_flags=(RteVal.score>5?(strategy_flags|(1<<7)):strategy_flags);/*高于5分是垃圾*/
     gettimeofday(&tEndTime,NULL);
     fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
     fCostTime /= 1000000;
@@ -310,65 +321,6 @@ int AntiSpams(char* filename)
     return 1;
 }
 
-int AntiVirus(char* filepath)
-{
-    struct antivirusInfo RteVal;
-    struct antivirusInfo (*dlfunc)(char* path,int flags);
-    void *handle;
-    struct timeval tBeginTime, tEndTime;
-    float fCostTime;
-
-    gettimeofday(&tBeginTime,NULL);/*calculate timer*/
-    printf("hello in AntiVirus\n");
-    handle=dlopen("./libantivirus.so",RTLD_LAZY);
-    if (!handle)
-        return 1;
-    printf("in open libs\n");
-    dlfunc=dlsym(handle,"antiVirus");
-    if(!(handle&&dlfunc))
-    {
-        printf("error in open dynamic libs %s\n",dlerror());
-        return 0;
-    }
-    RteVal=dlfunc(filepath,0);
-    if(RteVal.errorInfo==0)
-        printf("this detect result is %d [1->virus, 0->notvirus]\n\
-                this size of file is %2.2LfMB\n\
-                this detail of virus is :%s\n"
-               ,RteVal.isVirus,RteVal.fileSize,RteVal.virusInfo);
-    else
-    {
-        switch(RteVal.errorInfo)
-        {
-        case OPEN_FILE_ERROR:
-            printf("open file error\n");
-            break;
-        case INIT_LIBCLAMAV_ERROR:
-            printf("initilize libclamav error\n");
-            break;
-        case CREATE_ENGINE_ERROR:
-            printf("create antivirus engine error\n");
-            break;
-        case LOAD_DATABASE_ERROR:
-            printf("load libvirus database error\n");
-            break;
-        case DETECT_VIRUS_ERROR:
-            printf("detecting file error\n");
-            break;
-        case DATABASE_INIT_ERROR:
-            printf("antivirus database init error\n");
-            break;
-        default:
-            break;
-        }
-    }
-    gettimeofday(&tEndTime,NULL);
-    fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
-    fCostTime /= 1000000;
-    printf("\033[31m the execute time for detecting virus is = %f(Second)\n\033[0m",
-           fCostTime);
-    return 1;
-}
 
 DataPtr load_db(int *dbflags)
 {
@@ -604,8 +556,8 @@ int setRegular(void)
                              sqldatas->virus_list_Data[num].strategy_info,
                              strlen(sqldatas->virus_list_Data[num].strategy_info))!=0)/*check for current regular*/
                 {
-                    strategy_flags&=(~(1<<6));/*set flag and return */
-                    strategy_flags&=(~(1<<2));/*清零标志位，因为已经可以判断是垃圾了,后面不需要扫描判断了*/
+                    //strategy_flags&=(~(1<<6));/*set flag and return */
+                    strategy_flags&=(~(1<<2));/*清零标志位，因为已经可以判断不是垃圾了,后面不需要扫描判断了*/
                     break;/*exit for this for loop*/
                 }
             }

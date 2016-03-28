@@ -22,6 +22,5 @@ foo.bar hello 欢迎访问我的地址：www.baidu.com and another url like http
     /*规则*/
     char* regEmail="(^|\\b)(([a-zA-Z0-9]+[_|\\-|\\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\\-|\\.]?)*[a-zA-Z0-9]+(\\.[a-zA-Z]{2,3})+)(\\b|$)";
 //    printf("%s\n",ppt);
-    compliemain(regEmail,flags?txtstr:src);
-    return 0;
+    return compliemain(regEmail,flags?txtstr:src);
 }
