@@ -253,11 +253,15 @@ int ParseKeyClass(char* filename)
         return 0;
     }
     dlfunc(2,inputs);
+    if(Ate)
+    	 strategy_flags|=1<<5;
+    /*
     backval=(int)Ate;
     backval=backval<<8;
     backval=backval&0xff00;
     strategy_flags&=0xffff00ff;
     strategy_flags|=backval;
+    */
     gettimeofday(&tEndTime,NULL);
     fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
     fCostTime /= 1000000;
@@ -289,6 +293,7 @@ int ParseAppendix(char* filedirname)
     backval=backval&0xf0;/*只需要取得结果就可以了*/
     strategy_flags&=0xffffff0f;
     strategy_flags|=backval;
+
     return 1;
 }
 
