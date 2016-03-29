@@ -139,7 +139,7 @@ DEBUSGGG:
     //cleanAll();
     //return 0;
     printf("%d",strategy_flags);
-    return strategy_flags;
+    return strategy_flags&0xf0;
 
 exit:
     cleanAll();
