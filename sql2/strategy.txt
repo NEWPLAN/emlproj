@@ -1,0 +1,122 @@
+'''
+table Strategy
+id               主键，自动生成
+owner            规则拥有者，
+                 用户创建的规则，owner记为该用户的邮件地址；
+                 域管理员创建的规则，owner为该域域名，适用于该域收发的邮件；
+                 网关管理员创建的规则，owner为GLOBAL，适用于全网关收发的邮件
+level            规则层级， 0（用户级），1（域级），2（网关级）
+direction        0（进）、1（出）
+
+spam             垃圾邮件处理策略，放行\堵截\转发到垃圾箱\未设置，（ignore\block\trash\none）
+virus            病毒邮件处理策略，放行\堵截\未设置，（ignore\block\none）
+keyword          关键字处理策略，  放行\堵截\未设置，(ignore\block\none)
+keywordClass     关键字类处理策略，放行\堵截\未设置，(ignore\block\none)
+url              url处理策略，    放行\堵截\未设置，（ignore\block\none）
+
+'''
+
+#direction,0(进)，1(出)
+# spamCheck(email,owner,direction)
+# virusCheck(email,owner,direction)
+# keywordCheck(email, owner, direction)
+# keywordClassCheck(email, owner, direction)
+# urlCheck(email, owner, direction)
+
+def combine_strategy(strategy_A, strategy_B):
+    if strategy_A == 'block' || strategy_B == 'block': 
+        return 'block'
+    
+    if strategy_A == 'trash' || strategy_B == 'trash':
+        return 'trash'
+    
+    return 'ignore'
+
+
+#
+def get_valid_strategy(owner, field, direction):   
+    user_strategy = SELECT field in Strategy WHERE owner == owner and level == 0 and direction == direction
+    if user_strategy != none:
+        return user_strategy
+    
+    domain = getDomain(owner)
+    domain_strategy = SELECT field in Strategy WHERE owner == domain and level == 1 and direction == direction
+    if domain_strategy != none:
+        return domain_strategy
+    
+    global_strategy = SELECT field in Strategy WHERE owner == GLOBAL and level == 2 and direction == direction
+    return global_strategy
+    
+
+def overall_check_single_side(email, owner, direction, &final_strategy, &notify_info):#final_strategy和notify_info传引用
+    #1.垃圾检测
+    spam_result = spamCheck(email,owner,direction)
+    #2.病毒检测
+    virus_result = virusCheck(email,owner,direction)
+    #3.关键字检测
+    keyword_result = keywordCheck(email,owner,direction)
+    #4.关键字类检测
+    keywordclass_result = keywordClassCheck(email,owner,direction)
+    #5.url检测
+    url_result = urlCheck(email,owner,direction)
+        
+    notify_info = ''
+        
+    if spam_result == 'Confirmed':
+        notify_info += '垃圾邮件' #类似的信息
+        spam_strategy = get_valid_strategy('spam', owner, direction)
+        final_strategy = combine_strategy(final_strategy, spam_strategy)
+        
+    if virus_result == 'Confirmed':
+        notify_info += '您的邮件中含有病毒' #类似的信息
+        virus_strategy = get_valid_strategy('virus', owner, direction)
+        final_strategy = combine_strategy(final_strategy, virus_strategy)
+        
+    if keyword_result == 'Confirmed':
+        notify_info += '您的邮件中含有关键字' #类似的信息
+        keyword_strategy = get_valid_strategy('keyword', owner, direction)
+        final_strategy = combine_strategy(final_strategy, keyword_strategy)
+        
+    if keywordclass_result == 'Confirmed':
+        notify_info += '您的邮件中含有关键字类' #类似的信息
+        keywordclass_strategy = get_valid_strategy('keywordClass', owner, direction)
+        final_strategy = combine_strategy(final_strategy, keywordclass_strategy)
+        
+    if url_result == 'Confirmed':
+        notify_info += '您的邮件中含有URL' #类似的信息
+        url_strategy = get_valid_strategy('url', owner, direction)
+        final_strategy = combine_strategy(final_strategy, url_strategy)
+    
+    
+def overall_check(email):
+    
+    #发送端检测
+    
+    sender = getSender(email)
+    sender_final_strategy = 'ignore' #默认放行
+    
+    if sender in netgate:
+        notify_info = ''
+        overall_check_single_side(email,sender,1,sender_final_strategy,notify_info)
+        
+        if final_strategy != 'ignore':
+            notify_sender(sender,notify_info) #通知发件人
+        
+    receiver = getReceiver(email)
+    receiver_final_strategy = 'ignore'    
+    
+    if final_strategy != 'block' and receiver in netgate: #邮件能从发送端网关发出
+        #接收端检测
+        
+        notify_info = ''
+        overall_check_single_side(email,receiver,0,receiver_final_strategy,notify_info)
+        
+        if final_strategy == 'block':
+            #堵截
+        else if final_strategy == 'trash':
+            #发送到垃圾箱
+        else if final_strategy == 'ignore':
+            #直接发送
+        
+    
+    

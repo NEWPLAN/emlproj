@@ -22,6 +22,10 @@ extern "C"
     int SpliterMain(int argc, char* argv[])
 #endif
 {
+#if 1
+	printf("shortpath here sorry\n");
+	return 0;
+#else
     int flags=0;
     if(argc==3)
     {
@@ -89,6 +93,7 @@ last_para:
     clock_t B=clock();
     printf("System Executing Time :%f(Second)\n",((double)B-A)/CLOCKS_PER_SEC);
     return 0;
+#endif
 }
 #ifdef  EML__SYSTEMS__
 }

@@ -17,9 +17,9 @@ SPAMLibs=libantispam.so
 VIRUSLibs=libantivirus.so
 SQLDBLibs=sqlDB.so
 
-ALLLIBS+=main.o kmp.o strategy.o
-ALLCFILE+=main.c kmp.c strategy.c
-ALLHEADS+=strategy.h
+ALLLIBS+=main.o kmp.o strategy.o test.o
+ALLCFILE+=main.c kmp.c strategy.c test.c
+ALLHEADS+=strategy.h all.h
 all:$(TARGET)
 
 $(TARGET):$(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\

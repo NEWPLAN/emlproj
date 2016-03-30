@@ -45,7 +45,7 @@ static int setRegular(void);
 #define SOURCE    '0'
 
 
-int main(int argc,char* argv[])
+int email_main(int argc,char* argv[])
 {
     int flags=0;
     char errorinfo[1024]= {0};

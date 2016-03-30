@@ -7,7 +7,8 @@
 //
 #include "dboperate.h"
 
-#define  defaultDB "mailgateway"
+//#define  defaultDB "mailgateway"
+#define  defaultDB "main"
 
 char defaultAddr[20] = "localhost";
 char defaultPassWord[20] = "root";
