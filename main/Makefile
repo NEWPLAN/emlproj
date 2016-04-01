@@ -1,7 +1,8 @@
 TARGET=eml.exe
 DEBUG=-g
 ADDATION=testfile/appendix 
-ADDATIONFILE=temps/* testfile/*
+ADDATIONFILE=temps/* testfile/* 
+ADDATIONFOLDE+=running*
 ABSPATH=`pwd`
 DISABLEWEAR=-fno-stack-protector
 
@@ -17,8 +18,8 @@ SPAMLibs=libantispam.so
 VIRUSLibs=libantivirus.so
 SQLDBLibs=sqlDB.so
 
-ALLLIBS+=main.o kmp.o strategy.o test.o
-ALLCFILE+=main.c kmp.c strategy.c test.c
+ALLLIBS+=main.o kmp.o strategy.o
+ALLCFILE+=main.c kmp.c strategy.c
 ALLHEADS+=strategy.h all.h
 all:$(TARGET)
 
@@ -87,6 +88,7 @@ clean:
 	-rm $(GMIMELibs) $(REGEXLibs) $(SPLITERLibs)\
 		$(APPENDIXLibs) $(UNZIPSLibs) $(JPEGLibs)\
 		$(PDFLibs) $(SPAMLibs) $(VIRUSLibs) $(SQLDBLibs);
+	-rm -rf $(ADDATIONFOLDE);
 	cd ../gmime; 		make clean;
 	cd ../regex; 		make clean;
 	cd ../spliter;	 	make clean;

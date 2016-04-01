@@ -42,5 +42,7 @@ void updateVirusDatabase();
 
 void autoUpdate();//默认一天一次
 
+int AntiVirusInit(void);
+
 #endif /* antivirus_h */
 

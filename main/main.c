@@ -35,7 +35,7 @@ static int strategy_flags=0x0f;
 static DataPtr sqldatas=NULL;
 static GmimeDataPtr mimedata=NULL;
 static int setRegular(void);
-
+static char workspace[1024]={0};
 /*黑白名单*/
 #define WHITELIST '1'
 #define BLACKLIST '0'
@@ -107,7 +107,7 @@ TEST:
     }
     printf("\033[32m-----------------------------------------------------------------------------------------\n\n\n\n\033[0m");
     /*关键字类*/
-
+	flags=ParseKeyClass("temps");
     if(strategy_flags&(1<<1))/*关键字类*/
     {
         flags=ParseKeyClass("temps");
@@ -149,14 +149,19 @@ exit:
 
 int ParseEML(char* filename,GmimeDataPtr* rtevalPtr)
 {
+	char oldpath[1024]={0};
     char* inputs[3]= {NULL,filename};
     void *handle;
     GmimeDataPtr A=NULL;
     GmimeDataPtr (*dlfunc)(int argc,char* argv[]);
     struct timeval tBeginTime, tEndTime;
     float fCostTime;
-
-    gettimeofday(&tBeginTime,NULL);/*calculate timer*/
+    
+    strcat(oldpath,workspace);// add new workspace
+    inputs[2]=oldpath;
+  
+  
+    gettimeofday(&tBeginTime,NULL);
     printf("hello in ParseEML \n");
     handle=dlopen("./gmimelibs.so",RTLD_LAZY);
     printf("in open libs\n");
@@ -167,7 +172,9 @@ int ParseEML(char* filename,GmimeDataPtr* rtevalPtr)
         printf("error in open dynamic libs %s\n",dlerror());
         return 0;
     }
+    
     A=dlfunc(2,inputs);
+    
 #if DEBUG
     if(A)
     {
@@ -204,8 +211,11 @@ int ParseKeyChs(char* filename)
     struct timeval tBeginTime, tEndTime;
     float fCostTime;
     
-    
-    char * inputs[3]= {NULL,filename,&Ate};
+    char workpath[1024]={0};
+
+    sprintf(workpath,"%s/%s",workspace,filename);
+
+    char * inputs[3]= {NULL,workpath,&Ate};
     gettimeofday(&tBeginTime,NULL);/*calculate timer*/
     printf("hello in ParseKeyChs\n");
     handle=dlopen("./spliter.so",RTLD_LAZY);
@@ -237,11 +247,14 @@ int ParseKeyClass(char* filename)
     int (*dlfunc)(int argc, char* argv[]);
     void *handle;
     int backval=0;
+    char oldpath[1024]={0};
     char Ate=(char)((strategy_flags>>8)&0xff);
     char *inputs[3]= {NULL,filename,&Ate};
     struct timeval tBeginTime, tEndTime;
     float fCostTime;
 
+	sprintf(oldpath,"%s/%s",workspace,filename);
+	inputs[1]=oldpath;
     gettimeofday(&tBeginTime,NULL);/*calculate timer*/
     printf("hello in ParseKeyClass\n");
     handle=dlopen("./libregex.so",RTLD_LAZY);
@@ -255,13 +268,6 @@ int ParseKeyClass(char* filename)
     dlfunc(2,inputs);
     if(Ate)
     	 strategy_flags|=1<<5;
-    /*
-    backval=(int)Ate;
-    backval=backval<<8;
-    backval=backval&0xff00;
-    strategy_flags&=0xffff00ff;
-    strategy_flags|=backval;
-    */
     gettimeofday(&tEndTime,NULL);
     fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
     fCostTime /= 1000000;
@@ -277,6 +283,10 @@ int ParseAppendix(char* filedirname)
     char * ins[3]= {NULL,filedirname,&Ate};
     int (*dlfunc)(int argc, char* argv[]);
     void *handle;
+    char oldpath[1024]={0};
+
+	sprintf(oldpath,"%s/%s",workspace,filedirname);
+	ins[1]=oldpath;
     printf("hello in ParseAppendix\n");
     handle=dlopen("./appendix.so",RTLD_LAZY);
     if (!handle)
@@ -289,6 +299,8 @@ int ParseAppendix(char* filedirname)
         return 0;
     }
     dlfunc(2,ins);
+    
+
     backval=(int)Ate;
     backval=backval&0xf0;/*只需要取得结果就可以了*/
     strategy_flags&=0xffffff0f;
@@ -571,4 +583,125 @@ int setRegular(void)
         }
     }
     return 1;
+}
+
+static int AllInits(void)
+{
+	if(SpliterInit())
+		printf("init spliter successfully\n");
+	else
+	{
+		printf("init spliter failed");
+		return 0;
+	}
+	if(AntiVirusInit())
+		printf("init AntiVirus successfully\n");
+	else
+	{
+		printf("init AntiVirus failed");
+		return 0;
+	}
+    return 1;
+}
+
+static int AllFree(void)
+{
+	SpliterExit();
+}
+static int ParseAEmail(char*filepath,char*workpath)
+{
+	char errorinfo[1024]= {0};/*错误处理*/
+	assert(filepath!=NULL && workpath!=NULL);
+	strcat(workspace,workpath);
+	
+GMIMEPARSE:/*邮件解析*/
+	if(ParseEML(filepath,&mimedata)==0)
+	{
+		strcat(errorinfo,"ParseEML");
+        goto  exit;
+	}
+ANITSPAM:/*反病毒*/
+	if(AntiSpams(filepath)==0)
+	{
+		strcat(errorinfo,"Antispams");
+        goto  exit;
+	}
+PARSEAPPENDIX:/*分析附件*/
+	if(ParseAppendix("appendix")==0)
+	{
+		strcat(errorinfo,"Appendix");
+        goto  exit;
+	}
+PARSEKEYCLASS:/*分析关键字类*/
+	if(ParseKeyClass("temps")==0)
+	{
+		strcat(errorinfo,"ParseKeyClass");
+        goto  exit;
+	}
+PARSEKEYWORDS:/*分析关键字*/
+	if(ParseKeyChs("temps")==0)
+	{
+		strcat(errorinfo,"ParseKeyWords");
+        goto  exit;
+	}
+	return 0;
+exit:/*退出，结束*/
+    cleanAll();
+    printf("error in module %s\n",errorinfo);
+    return 0;
+}
+
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main(int argc, char* argv[])
+{
+	
+	static int flags=0;
+	int rte = 5;
+	AllInits();
+	while(rte--)
+	{
+		if(fork()==0)
+		{
+			char runningFiles[1024]={0};
+			char newpath_temps[1024]={0};
+			char newpath_appendix[1024]={0};
+			char command[1024]={0};
+			sprintf(runningFiles,"runningFiles_%d",getpid());
+			sprintf(newpath_temps,"%s/temps",runningFiles);
+			sprintf(newpath_appendix,"%s/appendix",runningFiles);
+			if(mkdir(runningFiles, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)==0)/*success*/
+			{
+				printf("%s\n",runningFiles);
+			}
+			if(mkdir(newpath_temps, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)==0)/*success*/
+			{
+				printf("%s\n",newpath_temps);
+			}
+			if(mkdir(newpath_appendix, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)==0)/*success*/
+			{
+				printf("%s\n",newpath_appendix);
+			}
+			//return 0;
+			//chdir(runningFiles);
+		 	printf("%d\t%d\n",getpid(),ParseAEmail(argv[1],runningFiles));
+		 	
+		 	if(remove(runningFiles)==0)
+		 		printf("remove done\n");
+		 	else
+		 		printf("can't delete this fold\n");		 	
+		 	sprintf(command,"rm -rf %s",runningFiles);
+		 	system(command);
+		 	
+		 	return 0;
+		}
+	}
+	wait(NULL);
+	AllFree();
+	printf("done\n");
+	return 0;
 }

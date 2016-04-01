@@ -57,6 +57,8 @@ int main(int argc,char* argv[])
         -bankcard---idcard-----mobphone---emailadd---urls-------ip_address-
         --------07---------06---------05---------04---------03---------02--
         */
+        char ss=0xffff;
+        argv[2]=(char*)(&ss);
         if((*argv[2])&(1<<4))
         {
         	printf("in Matching email\n");
@@ -64,7 +66,7 @@ int main(int argc,char* argv[])
             if(EmlMatch())
             {
                 *argv[2]=1;
-                goto BYSBYE;
+               // goto BYSBYE;
             }
         }
         if((*argv[2])&(1<<6))
@@ -74,7 +76,7 @@ int main(int argc,char* argv[])
             if(idCardMatch())
             {
                 *argv[2]=1;
-                goto BYSBYE;
+               // goto BYSBYE;
             }
         }
         if((*argv[2])&(1<<5))
@@ -84,7 +86,7 @@ int main(int argc,char* argv[])
             if(mobileMatch())
             {
                 *argv[2]=1;
-                goto BYSBYE;
+                //goto BYSBYE;
             }
         }
         if((*argv[2])&(1<<7))
@@ -94,7 +96,7 @@ int main(int argc,char* argv[])
             if(bankCardMatch())
             {
                 *argv[2]=1;
-                goto BYSBYE;
+                //goto BYSBYE;
             }
         }
         if((*argv[2])&(1<<3))
@@ -104,7 +106,7 @@ int main(int argc,char* argv[])
             if(UrlMatch())
             {
                 *argv[2]=1;
-                goto BYSBYE;
+               // goto BYSBYE;
             }
         }
         if((*argv[2])&(1<<2))
@@ -114,7 +116,7 @@ int main(int argc,char* argv[])
             if(IPMatch())
             {
                 *argv[2]=1;
-                goto BYSBYE;
+               // goto BYSBYE;
             }
         }
         RelasePage();

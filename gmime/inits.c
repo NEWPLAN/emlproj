@@ -1,9 +1,15 @@
 #include "inits.h"
 #include "all.h"
 #include "EnableSwitch.h"
+#include "assert.h"
+
+char* workspace;
 
 GMimeMessage* AllInits(int argc, char **argv)
 {
+    workspace=argv[2];
+    assert(workspace!=NULL);
+
     g_mime_init(0);
     if(argc<2)
     {

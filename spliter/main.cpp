@@ -9,6 +9,7 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include "NLPIR.h"
 #define EML__SYSTEMS__
 
 typedef char (*SpiPtr)[255];
@@ -22,15 +23,13 @@ extern "C"
     int SpliterMain(int argc, char* argv[])
 #endif
 {
-#if 1
-	printf("shortpath here sorry\n");
-	return 0;
+#if 0
+    printf("shortpath here sorry\n");
+    return 0;
 #else
     int flags=0;
     if(argc==3)
-    {
         flags=1;
-    }
     char *q=NULL;
     clock_t A=clock();
     int NumPatt=0;
@@ -43,7 +42,7 @@ extern "C"
         stat(argv[1],&info);
         if(!S_ISDIR(info.st_mode))/*传递的如果是一个文件，单独处理,否则按照文件夹处理*/
             goto last_para;
-            
+
         if(!(d=opendir(argv[1])))
         {
             printf("error in open dir : %s\n",argv[1]);
@@ -70,9 +69,9 @@ extern "C"
             q=testImportUserDict(flags,&NumPatt,filepath);
             printf("\n------using brute match methods---------\n");
             if(HashMach(q,pp,NumPatt))/*匹配到结果，可以返回垃圾*/
-            	*argv[2]|=1<<4;
-            
-    		RelasePage();
+                *argv[2]|=1<<4;
+
+            RelasePage();
             //free(q);
             flags=0;
         }
@@ -88,7 +87,7 @@ last_para:
     printf("\n------using brute match methods---------\n");
     //HashMach(q,pp,NumPatt);
     if(HashMach(q,pp,NumPatt))/*匹配到结果，可以返回垃圾*/
-    	*argv[2]|=1<<4;
+        *argv[2]|=1<<4;
     free(q);
     clock_t B=clock();
     printf("System Executing Time :%f(Second)\n",((double)B-A)/CLOCKS_PER_SEC);
@@ -99,6 +98,30 @@ last_para:
 }
 #endif
 
+extern "C"
+{
+    int SpliterInit(void)
+    {
+        if(!NLPIR_Init(0,1))
+        {
+            printf("NLPIR INIT FAILED!\n");  //初始化失败，退出。
+            return 0;
+        }
+        else
+        {
+            printf("------------Init ok!--------------\n\n");
+        }
+        return 1;
+    }
+
+    int SpliterExit(void)
+    {
+        NLPIR_Exit();
+        return 1;
+    }
+}
+
+
 static SpiPtr ImportDic(void)
 {
     int i=0;
@@ -106,6 +129,11 @@ static SpiPtr ImportDic(void)
     if(!p)
         return NULL;
     FILE *filPtr=fopen("userdict.txt","rb");
+    if(!filPtr)
+    {
+        free(p);
+        return NULL;
+    }
     while (!feof(filPtr))
     {
         memset(p[i],0,255);

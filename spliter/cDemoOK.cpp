@@ -27,7 +27,7 @@ char* testImportUserDict(int flags, int *NumPtr, char* filename)
 {
     //初始化分词组件。
     //必须调用此接口后，才能调用其它接口！
-    if(flags)
+    if(0)
     {
         if(!NLPIR_Init(0,1))
         {

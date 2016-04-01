@@ -1,6 +1,9 @@
 #include "messageParser.h"
 #include <string.h>
 #include <stdlib.h>
+
+extern char* workspace;
+
 void AnalyseMessageParse(GMimePart * mime_part)
 {
     int ichar=0,iencode =0;
@@ -30,11 +33,12 @@ void AnalyseMessageParse(GMimePart * mime_part)
         printf("get disposition\t%s\n%s\n",ppp,qqq);
         if(qqq)
         {
-            char filepath[50]={0};
+            char filepath[1024]={0};
             FILE *ps=NULL;
             memset(filepath,0,sizeof(filepath));
-            strcpy(filepath,"testfile/");
-            strcat(filepath,qqq);
+            sprintf(filepath,"%s/appendix/%s",workspace,qqq);
+            //strcpy(filepath,"testfile/");
+            //strcat(filepath,qqq);
             ps=fopen(filepath,"w+b");
             if(!ps)
             {
@@ -70,7 +74,14 @@ exits:{}
     ichar = g_mime_stream_filter_add (GMIME_STREAM_FILTER (pFilterStream), secondPtr);
 
     /*convert stream into stdout*/
-    FILE* fileptr=fopen("temps/test.txt","ab");
+    char emailpath[1024]={0};
+    sprintf(emailpath,"%s/temps/test.email.txt",workspace);
+    FILE* fileptr=fopen(emailpath,"ab");
+    if(fileptr==NULL)
+    {
+        printf("can't open files\n");
+        return ;
+    }
     GMimeStream *stream;
     if(fileptr)
         stream = g_mime_stream_file_new (fileptr);

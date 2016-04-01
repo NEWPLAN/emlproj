@@ -7,6 +7,16 @@
 
 #include "antivirus.h"
 
+int AntiVirusInit(void)
+{
+	if(cl_init(CL_INIT_DEFAULT) != CL_SUCCESS)
+	{
+		printf("INIT_LIBCLAMAV_ERROR\n");
+		return 0;
+	}
+	return 1;
+}
+
 static int AllInits(struct antivirusInfo* retInfo)
 {
 
@@ -20,7 +30,6 @@ static int AllInits(struct antivirusInfo* retInfo)
     return 1;
 }
 
-
 struct antivirusInfo antiVirus(const char *filePath, int flags)
 {
     assert(filePath != NULL);
@@ -32,13 +41,13 @@ struct antivirusInfo antiVirus(const char *filePath, int flags)
     const char *virname;
     struct cl_engine *engine;
     unsigned int sigs = 0;
-
-    if(flags==0)/*first run here*/
+/*
+    if(flags==0)
 	    if(AllInits(&retInfo)==-1)
 	    {
 	    	return retInfo;
 	    }
-
+*/
 	if(!(engine = cl_engine_new()))
     {
         //printf("Can't create new engine\n");

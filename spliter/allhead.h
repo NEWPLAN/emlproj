@@ -10,6 +10,8 @@ extern "C"
 {
 #endif
 int SpliterMain(int argc, char* argv[]);
+int SpliterExit(void);
+int SpliterInit(void);
 #ifdef __cplusplus
 }
 #endif
