@@ -661,7 +661,7 @@ int main(int argc, char* argv[])
 {
 	
 	static int flags=0;
-	int rte = 5;
+	int rte = 500000;
 	AllInits();
 	while(rte--)
 	{
@@ -695,8 +695,9 @@ int main(int argc, char* argv[])
 		 	else
 		 		printf("can't delete this fold\n");		 	
 		 	sprintf(command,"rm -rf %s",runningFiles);
-		 	system(command);
-		 	
+		 	//system(command);
+		 	if(fork()==0)
+		 		execlp("rm","rm","-rf",runningFiles,NULL);
 		 	return 0;
 		}
 	}

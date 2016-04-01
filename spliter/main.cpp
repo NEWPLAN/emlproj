@@ -11,6 +11,8 @@
 #include <sys/stat.h>
 #include "NLPIR.h"
 #define EML__SYSTEMS__
+#include <assert.h>
+char* workspace=NULL;
 
 typedef char (*SpiPtr)[255];
 extern int  RelasePage(void);
@@ -62,10 +64,14 @@ extern "C"
                     continue;
                 }
             }
+            workspace=argv[1];
+            assert(workspace!=NULL);
             memset(filepath,0,sizeof(filepath));
             strcat(filepath,argv[1]);
             filepath[strlen(filepath)]='/';
             strcat(filepath,file->d_name);
+            
+            
             q=testImportUserDict(flags,&NumPatt,filepath);
             printf("\n------using brute match methods---------\n");
             if(HashMach(q,pp,NumPatt))/*匹配到结果，可以返回垃圾*/

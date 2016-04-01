@@ -22,7 +22,7 @@ History    :
 #include "loadstr.h"
 
 extern char * txtstr;
-
+extern char* workspace;
 char* testImportUserDict(int flags, int *NumPtr, char* filename)
 {
     //初始化分词组件。
@@ -81,9 +81,11 @@ char* testImportUserDict(int flags, int *NumPtr, char* filename)
     memset(pt,0,NumPt+5);
     strncpy(pt,sRst1,NumPt);
 */
+	char tempth[1024]={0};
 	
-    NLPIR_FileProcess(filename,"temps/qqqqqqqqqq",0);
-    if(LoadTxtPage((char*)"temps/qqqqqqqqqq")<0)
+	sprintf(tempth,"%s/%s",workspace,"qqqqqqqqqq");
+    NLPIR_FileProcess(filename,tempth,0);
+    if(LoadTxtPage(tempth)<0)
     {
         printf("error in load test file\n");
         return NULL;

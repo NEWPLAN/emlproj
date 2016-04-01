@@ -55,7 +55,7 @@ int main(int argc, char  *argv[])
 
         gettimeofday(&tBeginTime,NULL);/*calculate timer*/
         //if((*argv[2])&(1<<2))/*如果需要扫病毒*/
-        if(1)/*注释掉病毒模块*/
+        if(0)/*注释掉病毒模块*/
         {
             struct antivirusInfo Rteval;
             Rteval=antiVirus(file->d_name,flags==0?0:1);

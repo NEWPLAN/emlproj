@@ -3,10 +3,12 @@
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
-
+char* workspace;
 GmimeDataPtr GetBasicInfo(GMimeMessage * pMessage)
 {
-    FILE * fptr=fopen("temps/test.txt","ab");
+    char emailpath[1024]={0};
+    sprintf(emailpath,"%s/temps/test.email.txt",workspace);
+    FILE * fptr=fopen(emailpath,"ab");
     if(fptr)
     {
         fprintf(fptr, "sender : %s\n",g_mime_message_get_sender(pMessage));/*get sender*/
@@ -31,7 +33,7 @@ GmimeDataPtr GetBasicInfo(GMimeMessage * pMessage)
         A=(GmimeDataPtr)malloc(sizeof(GmimeData));
         assert(A!=NULL);
         memset(A,0,sizeof(GmimeData));
-        
+
         temps=g_mime_message_get_sender(pMessage);/*get sender*/
         if(temps)
         {
@@ -42,7 +44,7 @@ GmimeDataPtr GetBasicInfo(GMimeMessage * pMessage)
             memcpy(A->from,temps,temNu+2);
             temps=NULL;
         }
-        
+
         temps=g_mime_message_get_reply_to(pMessage);/*replay to*/
         if(temps)
         {
@@ -53,7 +55,7 @@ GmimeDataPtr GetBasicInfo(GMimeMessage * pMessage)
             memcpy(A->replayto,temps,temNu+2);
             temps=NULL;
         }
-        
+
         temps=internet_address_list_to_string(g_mime_message_get_recipients(pMessage,GMIME_RECIPIENT_TYPE_TO),FALSE);/*To*/
         if(temps)
         {
@@ -64,7 +66,7 @@ GmimeDataPtr GetBasicInfo(GMimeMessage * pMessage)
             memcpy(A->to,temps,temNu+2);
             temps=NULL;
         }
-        
+
         temps=g_mime_message_get_message_id(pMessage);/*MESSAGE ID*/
         if(temps)
         {
@@ -75,7 +77,7 @@ GmimeDataPtr GetBasicInfo(GMimeMessage * pMessage)
             memcpy(A->messageID,temps,temNu+2);
             temps=NULL;
         }
-        
+
         temps=g_mime_message_get_subject (pMessage);/*subject*/
         if(temps)
         {
@@ -88,6 +90,6 @@ GmimeDataPtr GetBasicInfo(GMimeMessage * pMessage)
         }
 		return A;
     }
-    
+
     /* code */
 }
