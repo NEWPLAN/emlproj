@@ -7,6 +7,137 @@
 
 #include<stdio.h>
 #include"all.h"
+
+extern CheckType spamCheck(char* email, char* owner, int direction);
+extern CheckType virusCheck(char* email, char* owner, int direction);
+extern CheckType keywordCheck(char* email,char* owner,int direction);
+extern CheckType keywordClassCheck(char* email,char* owner,int direction);
+extern CheckType urlCheck(char* email,char* owner,int direction);
+
+
+typedef enum A
+{
+	IGNORE,BLOCK,TRASH,NONE
+}strategyType;
+
+strategyType combine_strategy(strategyType strategy_A, strategyType strategy_B)
+{
+	if(strategy_A==BLOCK||strategy_B==BLOCK)
+		return BLOCK;
+	if(strategy_A==TRASH||strategy_B==TRASH)
+		return TRASH;
+	return IGNORE;
+}
+
+
+void get_valid_strategy(char* owner,char* field,int direction)
+{
+	char command1[1024]={0},command2[1024]={0},command3[1024]={0};
+	char* rteval=NULL,*domain=NULL;
+	sprintf(command1,"SELCET %s in owner=%s and level=0 and direction=%d",field ,owner, dircetion);
+	if((rteval=select_SQL(command1))!=NULL)/*user_strategy*/
+		return rteval;
+	domain = getDomain(owner);
+	sprintf(command2,"SELCET %s in owner=%s and level=1 and direction=%d",field ,domain, dircetion);
+	if((rteval=select_SQL(command2))!=NULL)/*domain_strategy*/
+		return rteval;
+	sprintf(command3,"SELCET %s in owner=%s and level=2 and direction=%d",field ,owner, dircetion);
+	if((rteval=select_SQL(command3))!=NULL)/*global_strategy*/
+		return rteval;
+	
+}
+
+void overall_check_single_side(char* email,char* owner,int direction, char *final_strategy,char* notify_info)/*:#final_strategy和notify_info传引用*/
+{
+	char *spam_result=NULL,*virus_result=NULL,*keyword_result=NULL,*keywordclass_result=NULL,*url_result=NULL;
+    //#1.垃圾检测
+    spam_result = spamCheck(email,owner,direction);    
+    //#2.病毒检测
+    virus_result = virusCheck(email,owner,direction);
+    //#3.关键字检测
+    keyword_result = keywordCheck(email,owner,direction);
+    //#4.关键字类检测
+    keywordclass_result = keywordClassCheck(email,owner,direction);
+    //#5.url检测
+    url_result = urlCheck(email,owner,direction);
+    
+    memset(notify_info,0,strlen(notify_info));
+        
+    if(strcmp(spam_result,"Confirmed")==0)
+    {
+    	strcat(notify_info,"垃圾邮件\t");// #类似的信息
+    	stataegyType spam_strategy = get_valid_strategy("spam", owner, direction);
+    	strcat(final_strategy,combine_strategy(final_strategy, spam_strategy));    	
+    }
+    
+    if(strcmp(virus_result,"Confirmed")==0)
+    {
+    	strcat(notify_info,"您的邮件中含有病毒\t");// #类似的信息
+    	stataegyType virus_strategy = get_valid_strategy("virus", owner, direction);
+    	strcat(final_strategy,combine_strategy(final_strategy, virus_strategy));    	
+    }
+    
+    if(strcmp(spam_result,"Confirmed")==0)
+    {
+    	strcat(notify_info,"您的邮件中含有关键字\t");// #类似的信息
+    	stataegyType keyword_strategy = get_valid_strategy("keyword", owner, direction);
+    	strcat(final_strategy,combine_strategy(final_strategy, keyword_strategy));    	
+    }
+    
+    if(strcmp(spam_result,"Confirmed")==0)
+    {
+    	strcat(notify_info,"您的邮件中含有关键字类\t");// #类似的信息
+    	stataegyType keywordclass_strategy = get_valid_strategy("keywordClass", owner, direction);
+    	strcat(final_strategy,combine_strategy(final_strategy, keywordclass_strategy));    	
+    }
+    
+    if(strcmp(spam_result,"Confirmed")==0)
+    {
+    	strcat(notify_info,"您的邮件中含有URL\t");// #类似的信息
+    	stataegyType url_strategy = get_valid_strategy("url", owner, direction);
+    	strcat(final_strategy,combine_strategy(final_strategy, url_strategy));    	
+    }
+    return ;
+    
+}
+
+
+int overall_check(char* email)
+{
+    
+    //#发送端检测
+    char* sender = getSender(email);
+    strategyType sender_final_strategy = IGNORE;// #默认放行
+    char notify_info[1024]={0};
+        
+    if(/*sender in netgate*/)
+    {
+    	memset(notify_info, 0, sizeof(nofity_info));
+    	overall_check_single_side(email,sender,1,sender_final_strategy,notify_info);
+    	if(sender_final_strategy!=IGNORE)
+    		notify_sender(sneder,notify_info);//通知发件人
+    }
+    
+        
+    char* receiver = getReceiver(email);
+    strategyType receiver_final_strategy =IGNORE;    
+    
+    if(/*final_strategy != 'block' and receiver in netgate*/)//: #邮件能从发送端网关发出
+        //#接收端检测
+    { 
+        memset(notify_info, 0, sizeof(nofity_info));
+        
+        overall_check_single_side(email,receiver,0,receiver_final_strategy,notify_info)
+        
+        if(receiver_final_strategy ==BLOCK)
+            return 1;//#堵截
+        else if (receiver_final_strategy == TRASH)
+            return 2;//#发送到垃圾箱
+        else if (receiver_final_strategy == IGONRE)
+            return 0;//#直接发送
+	}
+
+
 /*
 '''
 table Strategy
