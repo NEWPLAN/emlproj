@@ -1,71 +1,72 @@
-/*
-'''
-table VirusList 病毒黑白名单
-id      主键，自动生成
-owner   规则拥有者，用户创建的规则，owner记为该用户的邮件地址；
-                   域管理员创建的规则，owner为该域域名，适用于该域收发的邮件；
-                   网关管理员创建的规则，owner为GLOBAL，适用于全网关收发的邮件
-level   规则层级， 0（用户级），1（域级），2（网关级）
-field   匹配域
-value   匹配值
-type    0（黑）、1（白）
-direction 0（进）、1（出）
+#include "all.h"
+#include "assist.h"
+#include <stdio.h>
 
 
-table NetgateDomain 域名列表
-id      主键，自动生成
-domain  域名
-'''
+int virusEngineCheck(char* virus)
+{
+	return 0;
+}
 
-#跟垃圾邮件的逻辑一模一样
+CheckType virusCheck(char* email,char* owner,int direction)
+{
+	FetchRtePtr user_blist=NULL, user_wlist=NULL;
+    if(checkInGateway(owner))/*owner not in netgate:*/
+        return NONE;
+
+    //#1.user级处理
+    if (direction == 1)// #发出的邮件
+    {
+        //#不处理或只进行黑名单处理
+        //#下面至今进行黑名单处理
+        char command[1024]={0};
+        sprintf(command, "SELECT * FROM VirusList WHERE owner == %s AND level == 0 AND type == 0 AND direction == %d",owner,direction);
+        user_blist = sql_query(command);
+    }
+    else//:#收到的邮件
+    {
+    	char command1[1024]={0},command2[1024]={0};
+        sprintf(command1, "SELECT * FROM VirusList WHERE owner == %s AND level == 0 AND type == 0 AND direction == %d",owner,direction);
+        sprintf(command2, "SELECT * FROM VirusList WHERE owner == %s AND level == 0 AND type == 1 AND direction == %d",owner,direction);
+        user_blist = sql_query(command1);
+        user_wlist = sql_query(command2);
+    }
 
 
-#virusCheck(email, sender, 1)
-#virusCheck(email, receiver, 0)
-def virusCheck(email,owner,direction):
-    
-    if owner not in netgate:
-        return 'None'
-        
-    #1.user级处理
-    if direction == 1: #发出的邮件
-        #不处理或只进行黑名单处理
-        #下面至今进行黑名单处理
-        user_blist = SELECT * FROM VirusList WHERE owner == owner AND level == 0 AND type == 0 AND direction == direction
-        user_wlist = empty
-        
-    else:#收到的邮件
-        user_blist = SELECT * FROM VirusList WHERE owner == owner AND level == 0 AND type == 0 AND direction == direction 
-        user_wlist = SELECT * FROM VirusList WHERE owner == owner AND level == 0 AND type == 1 AND direction == direction
-    
-    if email match user_blist:
-        return 'Confirmed'
-    if email match user_wlist:
-        return 'OK'
-    
-    #2.domain级处理
-    domain = getDomain(owner)
-    
-    domain_blist = SELECT * FROM VirusList WHERE owner == domain AND level == 1 AND type == 0 AND direction == direction
-    domain_wlist = SELECT * FROM VirusList WHERE owner == domain AND level == 1 AND type == 1 AND direction == direction
-    
-    if email match domain_blist:
-        return 'Confirmed'
-    if email match domain_wlist:
-        return 'OK'
-    
-    #3.网关级处理
-    global_blist = SELECT * FROM VirusList WHERE owner == GLOBAL AND level == 2 AND type == 0 AND direction == direction
-    global_wlist = SELECT * FROM VirusList WHERE owner == GLOBAL AND level == 2 AND type == 1 AND direction == direction
-    
-    if email match global_blist:
-        return 'Confirmed'
-    if email match global_wlist:
-        return 'OK'
-        
-    #4.病毒引擎处理
-    result = virusEngineCheck(email)
-    if result == 'Spam':
-        return 'Confirmed'
-    return 'OK'
-*/
+    if(0)/*email match user_blist:*/
+        return CONFIRMED;
+    if(0)/*email match user_wlist:*/
+        return OK;
+
+    //#2.domain级处理
+    char* domain = getDomain(owner);
+    char command_b[1024]={0};
+    char command_w[1024]={0};
+    sprintf(command_b,"SELECT * FROM VirusList WHERE owner == %s AND level == 1 AND type == 0 AND direction == %d",domain,direction);
+    sprintf(command_w,"SELECT * FROM VirusList WHERE owner == %s AND level == 2 AND type == 1 AND direction == %d",domain,direction);
+    FetchRtePtr domain_blist=sql_query(command_b);
+    FetchRtePtr domain_wlist=sql_query(command_w);
+
+    if(0)/*email match domain_blist:*/
+        return CONFIRMED;
+    if(0)/*email match domain_wlist:*/
+        return OK;
+
+    //#3.网关级处理
+    memset(command_b,0,sizeof(command_b));
+    memset(command_w,0,sizeof(command_w));
+    sprintf(command_b,"SELECT * FROM VirusList WHERE owner == %s AND level == 2 AND type == 0 AND direction == %d","GLOBAL",direction);
+    sprintf(command_w,"SELECT * FROM VirusList WHERE owner == %s AND level == 2 AND type == 1 AND direction == %d","GLOBAL",direction);
+   	FetchRtePtr global_blist=sql_query(command_b);
+    FetchRtePtr global_wlist=sql_query(command_w);
+
+    if(0)/*email match global_blist:*/
+        return CONFIRMED;
+    if(0)/*email match global_wlist:*/
+        return OK;
+
+    //#4.垃圾引擎处理
+    if(virusEngineCheck(email))
+        return CONFIRMED;
+    return OK;
+}

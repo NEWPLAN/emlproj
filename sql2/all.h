@@ -9,7 +9,7 @@
 #define SQLS_ALL_H
 typedef enum B
 {
-	NONE,CONFIRMED,OK
+    NO,CONFIRMED,OK
 }CheckType;
 typedef enum A
 {
@@ -17,4 +17,5 @@ typedef enum A
 }strategyType;
 CheckType keywordCheck(char* email,char* owner,int direction);
 CheckType spamCheck(char* email,char* owner,int direction);
+CheckType urlCheck(char* email, char* owner, int direction);
 #endif

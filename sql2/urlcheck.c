@@ -1,3 +1,13 @@
+#include "all.h"
+#include "assist.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+CheckType urlCheck(char* email, char* owner, int direction)
+{
+    return NONE;
+}
 /*'''
 table URLList URL名单
 id      主键，自动生成
@@ -19,44 +29,44 @@ URL URL
 #urlCheck(email, receiver, 0)
 
 def urlCheck(email, owner, direction):
-    
+
     if owner not in netgate:
         return 'None'
-    
+
     #1.user级处理
     user_listids = SELECT list_id FROM URLList WHERE owner == owner AND level == 0 AND direction == direction
     user_urls = set() #空集
-    
+
     for list_id in user_listids:
         urls = SELECT url FROM URLs WHERE list_id == list_id
         user_urls += urls #求并集
-        
+
     if email match user_urls:
         return 'Confirmed'
-        
+
     #2.domain级处理
     domain = getDomain(owner) #domain 在网关下
-    
+
     domain_listids = SELECT list_id FROM URLList WHERE owner == domain AND level == 1 AND direction == direction
     domain_urls = set() #空集
-    
+
     for list_id in domain_listids:
         urls = SELECT url FROM URLs WHERE list_id == list_id
         domain_urls += urls #求并集
-        
+
     if email match domain_urls:
         return 'Confirmed'
-    
+
     #3.网关级处理
     global_listids = SELECT list_id FROM URLList WHERE owner == GLOBAL AND level == 2 AND direction == direction
     global_urls = set() #空集
-    
+
     for list_id in global_listids:
         urls = SELECT url FROM URLs WHERE list_id == list_id
         global_urls += urls #求并集
-    
+
     if email match global_urls:
         return 'Confirmed'
-        
+
     return 'OK'
 */

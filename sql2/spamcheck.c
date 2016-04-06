@@ -1,9 +1,17 @@
 #include "all.h"
+#include <stdio.h>
+#include "assist.h"
+
+
+int spamEngineCheck(char* email)
+{
+	return 0;
+}
 
 CheckType spamCheck(char* email,char* owner,int direction)
 {
-	char ***user_blist=NULL, ***user_wlist=NULL;
-    if(/*owner not in netgate:*/)
+	FetchRtePtr user_blist=NULL, user_wlist=NULL;
+    if(checkInGateway(owner))/*owner not in netgate:*/
         return NONE;
         
     //#1.user级处理
@@ -25,40 +33,40 @@ CheckType spamCheck(char* email,char* owner,int direction)
     }
 
 
-    if(/*email match user_blist:*/)
+    if(0)/*email match user_blist:*/
         return CONFIRMED;
-    if(/*email match user_wlist:*/)
+    if(0)/*email match user_wlist:*/
         return OK;
     
     //#2.domain级处理
     char* domain = getDomain(owner);
     char command_b[1024]={0};
-    char command_W[1024]={0};
-    sprintf(command_b=" SELECT * FROM SpamList WHERE owner == %s AND level == 1 AND type == 0 AND direction == %d",domain,direction);
-    sprintf(command_w=" SELECT * FROM SpamList WHERE owner == %s AND level == 1 AND type == 1 AND direction == %d",domain,direction);
-    domain_blist=sql_query(command_b);
-    domain_wlist=sql_query(command_w);
+    char command_w[1024]={0};
+    sprintf(command_b," SELECT * FROM SpamList WHERE owner == %s AND level == 1 AND type == 0 AND direction == %d",domain,direction);
+    sprintf(command_w," SELECT * FROM SpamList WHERE owner == %s AND level == 1 AND type == 1 AND direction == %d",domain,direction);
+    FetchRtePtr domain_blist=sql_query(command_b);
+    FetchRtePtr domain_wlist=sql_query(command_w);
 
-    if(/*email match domain_blist:*/)
+    if(0)/*email match domain_blist:*/
         return CONFIRMED;
-    if(/*email match domain_wlist:*/)
+    if(0)/*email match domain_wlist:*/
         return OK;
     
     //#3.网关级处理
     memset(command_b,0,sizeof(command_b));
     memset(command_w,0,sizeof(command_w));
-    sprintf(command_b=" SELECT * FROM SpamList WHERE owner == %s AND level == 2 AND type == 0 AND direction == %d",domain,direction);
-    sprintf(command_w=" SELECT * FROM SpamList WHERE owner == %s AND level == 2 AND type == 1 AND direction == %d",domain,direction);
-   	global_blist=sql_query(command_b);
-    global_blist=sql_query(command_w);
+    sprintf(command_b," SELECT * FROM SpamList WHERE owner == %s AND level == 2 AND type == 0 AND direction == %d",domain,direction);
+    sprintf(command_w," SELECT * FROM SpamList WHERE owner == %s AND level == 2 AND type == 1 AND direction == %d",domain,direction);
+   	FetchRtePtr global_blist=sql_query(command_b);
+    FetchRtePtr global_wlist=sql_query(command_w);
     
-    if(/*email match global_blist:*/)
+    if(0)/*email match global_blist:*/
         return CONFIRMED;
-    if(/*email match global_wlist:*/)
+    if(0)/*email match global_wlist:*/
         return OK;
         
     //#4.垃圾引擎处理
-    if(spamEngineCheck(email)=="Spam")
+    if(spamEngineCheck(email))/*确定是否是垃圾*/
         return CONFIRMED;
     return OK;
 }

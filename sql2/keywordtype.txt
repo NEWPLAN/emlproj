@@ -39,3 +39,4 @@ def keywordClassCheck(email, owner, direction):
     
      if email match global_keywordclasses:
         return 'Confirmed'
+     return OK
