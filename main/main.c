@@ -661,7 +661,7 @@ int main(int argc, char* argv[])
 {
 	
 	static int flags=0;
-	int rte = 500;
+	int rte = 1;
 	AllInits();
 	while(rte--)
 	{
