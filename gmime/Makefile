@@ -5,7 +5,8 @@ CC=gcc
 TARGET=gmimelibs.so
 DISABLEWEAR=-fno-stack-protector
 DEBUG=-g
-WERROR= -Wall
+#WERROR= -Wall
+WERROR= -Werror
 
 HEADS= inits.h all.h heads.h messageB.h EnableSwitch.h basicInfo.h messageParser.h DataStructure.h
 OBJS= main.o inits.o heads.o messageB.o basicInfo.o messageParser.o 

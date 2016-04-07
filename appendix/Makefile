@@ -10,6 +10,8 @@ HEAD=all.h getsubstr.h
 OBJS=main.o getsubstr.o
 CC=gcc
 DEBUG=-g
+WARNING= -Werror
+#WARNING= -Wall
 
 all:$(TARGET)
 	@echo 'test for this makefile'
@@ -20,7 +22,7 @@ $(TARGET):$(OBJS) $(JPEGLibs) $(PDFLibs) $(UNZIPSLibs) $(ANTIVIRUSLibs)
 	$(CC) -shared $(OBJS) -o $(TARGET) ./$(JPEGLibs) ./$(PDFLibs) ./$(UNZIPSLibs) ./$(ANTIVIRUSLibs)
  
 %.o:%.c $(HEAD)
-	$(CC) -fPIC -Wall $(DEBUG) -c $< -o $@
+	$(CC) -fPIC $(WARNING) $(DEBUG) -c $< -o $@
 
 $(JPEGLibs):
 	cd jpeg; make;

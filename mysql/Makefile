@@ -1,6 +1,7 @@
 TARGET=sqlDB.so
 
-WARINING=-Wall
+#WARINING=-Wall
+WARINING=-Werror
 
 FPIC=-fPIC
 

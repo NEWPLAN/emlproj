@@ -17,7 +17,8 @@ heads=allhead.h  ACmachine.h cDemoOK.h NLPIR.h hashs.h loadstr.h
 
 
 
-WARNING=-Wall
+#WARNING=-Wall
+WARNING= -Werror
 
 all:$(TARGET3)
 

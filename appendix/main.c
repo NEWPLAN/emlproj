@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <time.h>
+#include<sys/time.h>
 
 #include "../antivirus/virus/antivirus.h"
 
@@ -55,6 +56,7 @@ int main(int argc, char  *argv[])
 
         gettimeofday(&tBeginTime,NULL);/*calculate timer*/
         //if((*argv[2])&(1<<2))/*如果需要扫病毒*/
+#if 0
         if(0)/*注释掉病毒模块*/
         {
             struct antivirusInfo Rteval;
@@ -74,6 +76,7 @@ int main(int argc, char  *argv[])
                 return -2;
             }
         }
+#endif 
         gettimeofday(&tEndTime,NULL);
         fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
         fCostTime /= 1000000;

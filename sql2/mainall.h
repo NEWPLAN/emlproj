@@ -1,7 +1,7 @@
 /*************************************************************************
 	> File Name: all.h
-	> Author: 
-	> Mail: 
+	> Author:
+	> Mail:
 	> Created Time: 2016Äê02ÔÂ17ÈÕ ÐÇÆÚÈý 13Ê±40·Ö52Ãë
  ************************************************************************/
 
@@ -59,15 +59,15 @@ void cleanAll(void);
 
 typedef struct EMALIFLAGS
 {
-	char is_spam:1;
-	char is_virus:1;
-	char is_keywords:1;
-	char is_keyclass:1;
+    char is_spam:1;
+    char is_virus:1;
+    char is_keywords:1;
+    char is_keyclass:1;
 
-	char check_spam:1;
-	char check_virus:1;
-	char check_keywords:1;
-	char check_keyclass:1;
-}EmailFlags,*EmailFlagsPtr;
+    char check_spam:1;
+    char check_virus:1;
+    char check_keywords:1;
+    char check_keyclass:1;
+} EmailFlags,*EmailFlagsPtr;
 
 #endif

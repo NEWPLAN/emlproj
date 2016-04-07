@@ -6,6 +6,10 @@ ADDATIONFOLDE+=running*
 ABSPATH=`pwd`
 DISABLEWEAR=-fno-stack-protector
 
+#WARNING= -Wall
+WARNING= -Werror
+
+
 GMIMELibs=gmimelibs.so
 NLPIRLibs=libNLPIR.so
 REGEXLibs=libregex.so
@@ -32,7 +36,7 @@ $(TARGET):$(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
 		./$(PDFLibs) ./$(SPAMLibs) ./$(VIRUSLibs) ./$(SQLDBLibs) -ldl
 
 %.o:%.c
-	gcc -c $(DISABLEWEAR) $(DEBUG) $< -o $@
+	gcc -c $(WARNING) $(DISABLEWEAR) $(DEBUG) $< -o $@
 
 $(GMIMELibs):
 	cd ../gmime; 		make;

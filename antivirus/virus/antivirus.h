@@ -1,7 +1,8 @@
 //
 //  antivirus.h
+//  cTEST
 //
-//  Created by tsinghua476 on 16/1/20.
+//  Created by tsinghua476 on 16/4/5.
 //  Copyright © 2016年 tsinghua476. All rights reserved.
 //
 
@@ -9,32 +10,19 @@
 #define antivirus_h
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <assert.h>
-#include <clamav.h>
-//#include "clamav.h"
+#include <stdlib.h>
+#include<unistd.h>
 
-#define NO_ERROR 0
-#define OPEN_FILE_ERROR 1
-#define INIT_LIBCLAMAV_ERROR 4
-#define CREATE_ENGINE_ERROR 8
-#define LOAD_DATABASE_ERROR 16
-#define DATABASE_INIT_ERROR 32
-#define DETECT_VIRUS_ERROR 64
+#define BUFFSIZE 1024
+#define DEFAULTCOMMANDPATH "/usr/local/clamav/bin"
+#define STARTCOMMANDPATH "/usr/local/clamav/sbin"
 
-//反病毒函数返回的结构体
-struct antivirusInfo
-{
-    int isVirus;
-    int errorInfo;
-    long double fileSize;
-    char virusInfo[128];
-};
+int antivirus(const char *path); //检测病毒  返回0代表不是  返回1代表是病毒
+void startClamd(); //开启防毒服务器 默认设置开机自启动即可，并不需要调用
+void updateDB(); //保证网络情况良好，并且clamav病毒库文件夹及里面文件的权限可修改
+
+
 
 struct antivirusInfo antiVirus(const char *filePath, int flags);
 
@@ -44,5 +32,9 @@ void autoUpdate();//默认一天一次
 
 int AntiVirusInit(void);
 
-#endif /* antivirus_h */
 
+
+
+
+
+#endif /* antivirus_h */

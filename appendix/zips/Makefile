@@ -1,7 +1,11 @@
+
+#WARNING= -Wall
+WARNING= -Werror
+
 TARGET=unzips.so
 DEBUG=-g
 all:
-	gcc $(DEBUG) -fPIC -shared  main.c -o $(TARGET) -lpthread
+	gcc $(DEBUG) $(WARNING) -fPIC -shared  main.c -o $(TARGET) -lpthread
 
 
 .PHONY:clean

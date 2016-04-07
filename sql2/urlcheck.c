@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-CheckType urlCheck(char* email, char* owner, int direction)
+CheckType urlCheck(mimePtr email, char* owner, int direction)
 {
     return NONE;
 }

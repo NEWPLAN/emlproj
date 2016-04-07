@@ -29,9 +29,7 @@ extern "C"
     printf("shortpath here sorry\n");
     return 0;
 #else
-    int flags=0;
-    if(argc==3)
-        flags=1;
+    int index=0;
     char *q=NULL;
     clock_t A=clock();
     int NumPatt=0;
@@ -48,7 +46,7 @@ extern "C"
         if(!(d=opendir(argv[1])))
         {
             printf("error in open dir : %s\n",argv[1]);
-            return -1;
+            return 0;
         }
         while((file=readdir(d))!=NULL)
         {
@@ -72,32 +70,32 @@ extern "C"
             strcat(filepath,file->d_name);
             
             
-            q=testImportUserDict(flags,&NumPatt,filepath);
+            q=testImportUserDict(1,&NumPatt,filepath);
             printf("\n------using brute match methods---------\n");
-            if(HashMach(q,pp,NumPatt))/*匹配到结果，可以返回垃圾*/
+            index=HashMach(q,pp,NumPatt);
+            if(index)/*匹配到结果，可以返回垃圾*/
                 *argv[2]|=1<<4;
 
             RelasePage();
-            //free(q);
-            flags=0;
         }
         closedir(d);
-        return 0;
+        return index;
     }
     /*
     printf("\n-------using ACmachine methods----------\n");
     ACStart(q,pp,NumPatt);
     */
 last_para:
-    q=testImportUserDict(flags,&NumPatt,argv[1]);
+    q=testImportUserDict(1,&NumPatt,argv[1]);
     printf("\n------using brute match methods---------\n");
     //HashMach(q,pp,NumPatt);
-    if(HashMach(q,pp,NumPatt))/*匹配到结果，可以返回垃圾*/
+    index=HashMach(q,pp,NumPatt);
+    if(index)/*匹配到结果，可以返回垃圾*/
         *argv[2]|=1<<4;
     free(q);
     clock_t B=clock();
     printf("System Executing Time :%f(Second)\n",((double)B-A)/CLOCKS_PER_SEC);
-    return 0;
+    return index;
 #endif
 }
 #ifdef  EML__SYSTEMS__

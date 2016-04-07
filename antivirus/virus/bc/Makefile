@@ -6,8 +6,7 @@ TARGET=test.exe
 DEBUG=-g
 FPIC=-fPIC
 SHAREDLIBS=-shared
-WERROR= -Werror
-#WERROR= -Wall
+WERROR= -Wall
 
 HEADS= antivirus.h
 OBJS=  antivirus.o 

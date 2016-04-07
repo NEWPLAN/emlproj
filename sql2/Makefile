@@ -20,19 +20,24 @@ SQLDBLibs=sqlDB.so
 
 ALLLIBS+=main.o kmp.o 
 ALLCFILE+=main.c kmp.c 
-ALLHEADS+=all.h mainall.h
+ALLHEADS+=all.h mainall.h kmp.h
 
 
 INCLUDE +=	-I/usr/include/mysql
 LINKS	+=	-lmysqlclient -L/usr/lib/mysql
 TARGET=test
 CC=gcc
-WALL=
+WALL=-Werror 
+
+#WALL=-Wall
 LIBS=keywordtype.o keywordcheck.o main.o spamcheck.o urlcheck.o virus.o assist.o dboperate.o kmp.o
 CFILES=keywordtype.c keywordcheck.c main.c spamcheck.c urlcheck.c virus.c assist.c dboperate.c kmp.c
 HEADS=all.h assist.h dboperate.h kmp.h mainall.h
 
-all:$(LIBS) $(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
+all:$(TARGET)
+	@echo 'make done';
+	
+$(TARGET):$(LIBS) $(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
 	$(APPENDIXLibs) $(UNZIPSLibs) $(JPEGLibs) $(PDFLibs)\
 	$(SPAMLibs) $(VIRUSLibs)  $(ALLLIBS)
 	$(CC) $(LIBS) -o $(TARGET) ./$(GMIMELibs)\
@@ -40,8 +45,15 @@ all:$(LIBS) $(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
 		./$(APPENDIXLibs) ./$(UNZIPSLibs) ./$(JPEGLibs)\
 		./$(PDFLibs) ./$(SPAMLibs) ./$(VIRUSLibs) \
 		 $(LINKS) -ldl
-%.o:%.c $(CFILES)
+
+
+%.o:%.c $(CFILES) $(ALLHEADS)
 	$(CC) $(DEBUG) $(WALL) -c $(INCLUDE) $< -o $@
+
+
+debug:$(TARGET)
+	gdb --args $(TARGET) ../main/testdata/6666.eml
+
 
 $(GMIMELibs):
 	cd ../gmime;  make;
@@ -87,7 +99,18 @@ clean:
 	-rm $(TARGET) $(ALLLIBS);
 	-rm -r $(ADDATION);
 	-rm $(ADDATIONFILE);
+	-rm -rf $(ADDATIONFOLDE);
 	-rm $(GMIMELibs) $(REGEXLibs) $(SPLITERLibs)\
 		$(APPENDIXLibs) $(UNZIPSLibs) $(JPEGLibs)\
 		$(PDFLibs) $(SPAMLibs) $(VIRUSLibs) ;
+	cd ../gmime; 		make clean;
+	cd ../regex; 		make clean;
+	cd ../spliter;	 	make clean;
+	cd ../appendix;	 	make clean;
+	cd ../appendix/zips; 	make clean;
+	cd ../appendix/pdf;  	make clean;
+	cd ../appendix/jpeg; 	make clean;
+	cd ../antivirus/spam; 	make clean;
+	cd ../antivirus/virus; 	make clean;
 	clear;
+	@echo 'all clean done!'

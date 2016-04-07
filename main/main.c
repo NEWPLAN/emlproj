@@ -594,6 +594,7 @@ static int AllInits(void)
 		printf("init spliter failed");
 		return 0;
 	}
+#if 0
 	if(AntiVirusInit())
 		printf("init AntiVirus successfully\n");
 	else
@@ -601,6 +602,7 @@ static int AllInits(void)
 		printf("init AntiVirus failed");
 		return 0;
 	}
+#endif
     return 1;
 }
 

@@ -57,7 +57,7 @@ int main(int argc,char* argv[])
         -bankcard---idcard-----mobphone---emailadd---urls-------ip_address-
         --------07---------06---------05---------04---------03---------02--
         */
-        char ss=0xffff;
+        char ss=255;
         argv[2]=(char*)(&ss);
         if((*argv[2])&(1<<4))
         {
@@ -125,4 +125,18 @@ BYSBYE:
     chdir(oldpath);
     closedir(d);
     return 0;
+}
+
+#include <assert.h>
+int checkInclass(char * file, char* pattern)
+{
+    assert(file!=NULL && pattern!=NULL);
+    if(LoadTxtPage(file)<0)
+    {
+        printf("error in LoadTxtPage \n");
+        return -1;
+    }
+    int rte= compliemain(pattern,txtstr);
+    RelasePage();
+    return rte;
 }

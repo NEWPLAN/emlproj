@@ -6,7 +6,8 @@ OUTlib=test.o
 Cfile=antispam.c basicControl.c handleconf.c handleWhiteBlackList.c test.c
 objs=antispam.o basicControl.o handleconf.o handleWhiteBlackList.o
 headers=antispam.h handleconf.h handleWhiteBlackList.h mystruct.h
-WARNING=-Wall
+#WARNING=-Wall
+WARNING=-Werror 
 
 all:$(libs) $(OUTlib) 
 	$(CXX) $(OUTlib) -o $(TARGET) ./$(libs)
