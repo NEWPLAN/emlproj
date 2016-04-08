@@ -7,12 +7,13 @@
 
 #ifndef EML_EMAILHEAD_H
 #define EML_EMAILHEAD_H
+#include <netinet/in.h>
 typedef struct Emails{
     char* filePath;
     char* sender;
     char* receiver;
-    char* srcIP;
-    char* destip;
+    struct sockaddr srcIP;
+    struct sockaddr destip;
     void* Ptr;
     int*  retvals;
 }EmailType,*EmailTypePtr;
