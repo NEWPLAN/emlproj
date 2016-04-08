@@ -8,6 +8,8 @@
 #ifndef SQL_ASSIST_H
 #define SQL_ASSIST_H
 
+
+
 #include "dboperate.h"
 
 int checkInGateway(char* owner);

@@ -19,6 +19,7 @@ GmimeDataPtr GetBasicInfo(GMimeMessage * pMessage)
         fprintf(fptr,"date:%s\n",g_mime_message_get_date_as_string(pMessage) );/*get date of e-mail*/
         fclose(fptr);
     }
+#if __DEBUG    
     printf("sender:%s\n",g_mime_message_get_sender(pMessage));/*get sender*/
     printf("Reply-to:%s\n",g_mime_message_get_reply_to (pMessage));/*get reply to*/
     //printf("all recipients:%s\n", internet_address_list_to_string(g_mime_message_get_all_recipients(pMessage),TRUE));/*all receiver*/
@@ -26,6 +27,7 @@ GmimeDataPtr GetBasicInfo(GMimeMessage * pMessage)
     printf("subject:%s\n",g_mime_message_get_subject (pMessage));/*get subject*/
     printf("message ID:%s\n",g_mime_message_get_message_id(pMessage));/*get message ID*/
     printf("date:%s\n",g_mime_message_get_date_as_string(pMessage) );/*get date of e-mail*/
+#endif    
     {
         /*write to memory*/
         const char *temps=NULL;

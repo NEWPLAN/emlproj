@@ -95,7 +95,9 @@ int HashMach(char* objs, SpiPtr pattern,int numpatt)
     }
     strcpy(p,objs);
     char *before=p;
+#if __DEBUG
     printf("location\tpattern\n");
+#endif
     while(*p)
     {
         if(*p==' ')
@@ -107,7 +109,9 @@ int HashMach(char* objs, SpiPtr pattern,int numpatt)
             {
                 if(!strcmp(nptr->str,before))
                 {
+#if __DEBUG                	
                     printf("%-8d\t%s\n",(int)(before-Links),before);
+#endif                    
                     matchres=1;
                     break;
                 }

@@ -17,6 +17,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
+#include "assist.h"
 
 static int strategy_flags=0x0f;
 //static DataPtr sqldatas=NULL;
@@ -219,11 +220,17 @@ int ParseEML(char* filename,GmimeDataPtr* rtevalPtr)
 
 
     gettimeofday(&tBeginTime,NULL);
+#if __DEBUG
     printf("hello in ParseEML \n");
+#endif
     handle=dlopen("./gmimelibs.so",RTLD_LAZY);
+#if __DEBUG
     printf("in open libs\n");
+#endif
     dlfunc=dlsym(handle,"GmimeMain");
+#if __DEBUG
     printf("in geting mainenter\n");
+#endif
     if(!(handle&&dlfunc))
     {
         printf("error in open dynamic libs %s\n",dlerror());
@@ -232,7 +239,7 @@ int ParseEML(char* filename,GmimeDataPtr* rtevalPtr)
 
     A=dlfunc(2,inputs);
 
-#if DEBUG
+#if __DEBUG
     if(A)
     {
         printf("sender:%s\n",A->from );
@@ -247,7 +254,9 @@ int ParseEML(char* filename,GmimeDataPtr* rtevalPtr)
     gettimeofday(&tEndTime,NULL);
     fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
     fCostTime /= 1000000;
+#if __DEBUG
     printf("\033[31m the execute time for decoding EML is = %f(Second)\n\033[0m",fCostTime);
+#endif
     return 1;
 }
 
@@ -275,9 +284,13 @@ int ParseKeyChs(char* filename)
 
     char * inputs[3]= {NULL,workpath,&Ate};
     gettimeofday(&tBeginTime,NULL);/*calculate timer*/
+#if __DEBUG
     printf("hello in ParseKeyChs\n");
+#endif
     handle=dlopen("./spliter.so",RTLD_LAZY);
+#if __DEBUG
     printf("in open libs\n");
+#endif
     dlfunc=dlsym(handle,"SpliterMain");
     if(!(handle&&dlfunc))
     {
@@ -294,8 +307,10 @@ int ParseKeyChs(char* filename)
     gettimeofday(&tEndTime,NULL);
     fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
     fCostTime /= 1000000;
+#if __DEBUG
     printf("\033[31m the execute time for parsing key characters is = %f(Second)\n\033[0m",
            fCostTime);
+#endif
     flags=0;
     return 1;
 }
@@ -313,9 +328,13 @@ int ParseKeyClass(char* filename)
     sprintf(oldpath,"%s/%s",workspace,filename);
     inputs[1]=oldpath;
     gettimeofday(&tBeginTime,NULL);/*calculate timer*/
+#if __DEBUG
     printf("hello in ParseKeyClass\n");
+#endif
     handle=dlopen("./libregex.so",RTLD_LAZY);
+#if __DEBUG
     printf("in open libs\n");
+#endif
     dlfunc=dlsym(handle,"RegexMain");
     if(!(handle&&dlfunc))
     {
@@ -328,8 +347,10 @@ int ParseKeyClass(char* filename)
     gettimeofday(&tEndTime,NULL);
     fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
     fCostTime /= 1000000;
+#if __DEBUG
     printf("\033[31m the execute time for parsing key class is = %f(Second)\n\033[0m",
            fCostTime);
+#endif
     return 1;
 }
 
@@ -344,11 +365,15 @@ int ParseAppendix(char* filedirname)
 
     sprintf(oldpath,"%s/%s",workspace,filedirname);
     ins[1]=oldpath;
+#if __DEBUG
     printf("hello in ParseAppendix\n");
+#endif
     handle=dlopen("./appendix.so",RTLD_LAZY);
     if (!handle)
         return 1;
+#if __DEBUG
     printf("in open libs\n");
+#endif
     dlfunc=dlsym(handle,"AppendixMain");
     if(!(handle&&dlfunc))
     {
@@ -455,7 +480,7 @@ exit:/*退出，结束*/
 int main(int argc, char* argv[])
 {
 
-    int rte = 400;
+    int rte = 1;
     AllInits();
     while(rte--)
     {
@@ -468,28 +493,23 @@ int main(int argc, char* argv[])
             sprintf(runningFiles,"runningFiles_%d",getpid());
             sprintf(newpath_temps,"%s/temps",runningFiles);
             sprintf(newpath_appendix,"%s/appendix",runningFiles);
-            if(mkdir(runningFiles, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)==0)/*success*/
-            {
-                printf("%s\n",runningFiles);
-            }
-            if(mkdir(newpath_temps, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)==0)/*success*/
-            {
-                printf("%s\n",newpath_temps);
-            }
-            if(mkdir(newpath_appendix, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)==0)/*success*/
-            {
-                printf("%s\n",newpath_appendix);
-            }
+            if(mkdir(runningFiles, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)!=0)/*success*/
+                goto exits;
+            if(mkdir(newpath_temps, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)!=0)/*success*/
+                goto exits;
+            if(mkdir(newpath_appendix, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)!=0)/*success*/
+                goto exits;
+
             mimeCy->workspace=runningFiles;
             mimeCy->filepath=argv[1];
-            //return 0;
-            //chdir(runningFiles);
+
             printf("%d\t%d\n",getpid(),ParseAEmail(argv[1],runningFiles));
 
             if(remove(runningFiles)==0)
                 printf("remove done\n");
             else
                 printf("can't delete this fold\n");
+exits:
             sprintf(command,"rm -rf %s",runningFiles);
             sleep(1);
             system(command);

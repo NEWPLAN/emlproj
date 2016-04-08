@@ -58,7 +58,9 @@ extern "C"
                 stat(file->d_name,&info);
                 if(S_ISDIR(info.st_mode))
                 {
+#if __DEBUG                	
                     printf("This is a directory\n");
+#endif                    
                     continue;
                 }
             }
@@ -71,7 +73,9 @@ extern "C"
             
             
             q=testImportUserDict(1,&NumPatt,filepath);
+#if __DEBUG            
             printf("\n------using brute match methods---------\n");
+#endif            
             index=HashMach(q,pp,NumPatt);
             if(index)/*匹配到结果，可以返回垃圾*/
                 *argv[2]|=1<<4;
@@ -87,14 +91,18 @@ extern "C"
     */
 last_para:
     q=testImportUserDict(1,&NumPatt,argv[1]);
+#if __DEBUG    
     printf("\n------using brute match methods---------\n");
+#endif    
     //HashMach(q,pp,NumPatt);
     index=HashMach(q,pp,NumPatt);
     if(index)/*匹配到结果，可以返回垃圾*/
         *argv[2]|=1<<4;
     free(q);
     clock_t B=clock();
+#if __DEBUG    
     printf("System Executing Time :%f(Second)\n",((double)B-A)/CLOCKS_PER_SEC);
+#endif    
     return index;
 #endif
 }

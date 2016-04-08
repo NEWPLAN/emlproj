@@ -38,8 +38,10 @@ int main(int argc,char *argv[])
     strcpy(filePath,"../temps/");
     strcat(filePath,argv[1]);
     strcat(filePath,".txt");
+#if __DEBUG    
     printf("===========extract text from a pdf(write to %s)============\n\n",
            strcmp(argv[2],"-")?argv[2]:"stdout");
+#endif    
     if((childs=fork())==0)
     {
         if(execlp("pdftotext","pdftotext",argv[1],filePath,(void*)0)==-1)
@@ -49,7 +51,9 @@ int main(int argc,char *argv[])
         }
     }
     waitpid(childs);
+#if __DEBUG    
     printf("=========show pdf extra info (write to 666.txt)=============\n\n");
+#endif    
     strcat(command,"pdfinfo ");
     strcat(command,argv[1]);
     strcat(command," >> ");

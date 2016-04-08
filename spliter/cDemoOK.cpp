@@ -60,15 +60,18 @@ char* testImportUserDict(int flags, int *NumPtr, char* filename)
     ///sRst=(char*)NLPIR_ParagraphProcess(sSentence,0);
     //printf("--------添加用户字典前分词结果--------\n%s\n\n",sRst);
     //free(sRst);
-
+#if __DEBUG
     printf("---------------添加词典---------------\n");
+#endif    
     const char* pszDictBuffer="userdict.txt"; //字符串形式导入用户词典
     /*int nLen=strlen(pszDictBuffer);*/
     unsigned int nItems=NLPIR_ImportUserDict(pszDictBuffer);
     *NumPtr = (int)nItems;
     //也可以将用户词汇写入文件，词语之间用换行符隔开
     //unsigned int nItems=NLPIR_ImportUserDictFile("userdict.txt",CODE_TYPE_UNKNOWN);
+#if __DEBUG    
     printf("\n添加了%d 个用户词\n\n",nItems); //文件形式导入用户字典
+#endif    
 /*
     char* sRst1=0;
     sRst1=(char *)malloc(nPaLen*6);
@@ -90,7 +93,9 @@ char* testImportUserDict(int flags, int *NumPtr, char* filename)
         printf("error in load test file\n");
         return NULL;
     }
+#if __DEBUG    
     printf("分词结果:\n%s\n",txtstr);
+#endif    
     //释放资源退出
     //NLPIR_Exit();
     return txtstr;

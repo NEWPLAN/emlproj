@@ -14,13 +14,10 @@ int compliemain(char* pattern , char* src)
     int rcCM;
 	int nums=0;
     int ovector[30];
-    /*匹配的目标串*/
-	//char src[]="my ip is y 1.1.1.1 and 192.168.2.33  do you know?";
 
-    /*规则*/
-
-    //printf("String : %s\n", src);
+#if __DEBUG    
     printf("Pattern: \"%s\"\n", pattern);
+#endif    
 
     reCM=pcre_compile(pattern, 0, &error, &erroffset, NULL);
 
@@ -39,13 +36,17 @@ again:
     {
     	if(flags)
     	{
+#if __DEBUG    		
     		printf("match done!\n");
+#endif    		
     		return 1;
     	}
     	else/*没有匹配到结果，返回0*/
     	{
+#if __DEBUG    		
     	    printf("error in match this string\n");
         	printf("can't match this pattern \n");
+#endif        	
         	return 0;
         }
         
@@ -53,7 +54,9 @@ again:
 	{
         char *substring_start = src + ovector[2*0];
         int substring_length = ovector[2*0+1] - ovector[2*0];
+#if __DEBUG        
         printf("$%2d: %.*s\n", ++nums, substring_length, substring_start);
+#endif        
     }
 	
     //printf("Pattern_CM: \"%s\"\n", pattern);

@@ -342,9 +342,9 @@ void ac_automata_display (AC_NODE_t * root)
     {
         return;
     }
-
+#if __DEBUG
     printf("---------------------------------\n");
-
+#endif
     queue<AC_NODE_t*> myqueue;
     myqueue.push( pCur_node );
 
@@ -352,22 +352,36 @@ void ac_automata_display (AC_NODE_t * root)
     {
         pCur_node = myqueue.front();
         myqueue.pop();
-
+#if __DEBUG
         printf("NODE(%3d)/----fail----> NODE(%3d)\n", pCur_node->id, (pCur_node->failure_node)?pCur_node->failure_node->id:0);
-
+#endif
         for (i = 0; i < pCur_node->outgoing_num; i++)
         {
             myqueue.push (pCur_node->outgoing_edge[i].next);
 
             pEdge = &pCur_node->outgoing_edge[i];
+#if __DEBUG            
             printf("         |----(");
+#endif            
             if(isgraph(pEdge->alpha))
+            {
+#if __DEBUG            	
                 printf("%c)---", pEdge->alpha);
+#endif                
+            }
             else
+            {
+#if __DEBUG            	
                 printf("0x%x)", pEdge->alpha);
+#endif                
+            }
+#if __DEBUG            
             printf("--> NODE(%3d)\n", pEdge->next->id);
+#endif            
         }
+#if __DEBUG        
         printf("---------------------------------\n");
+#endif        
     }
 }
 

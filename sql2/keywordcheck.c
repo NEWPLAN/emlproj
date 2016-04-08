@@ -47,10 +47,13 @@ static int match_email(char* workspace,FetchRtePtr keyworlds)
     }
 
     fclose(fptr);
-
+#ifdef __DEBUG
     printf("hello in ParseKeyChs\n");
+#endif
     handle=dlopen("./spliter.so",RTLD_LAZY);
+#ifdef __DEBUG
     printf("in open libs\n");
+#endif
     dlfunc=dlsym(handle,"SpliterMain");
     if(!(handle&&dlfunc))
     {

@@ -44,7 +44,9 @@ void read_exif_content(ExifContent *ec, void *user_data)
     ExifIfd ifd = exif_content_get_ifd(ec);  
     if (ifd == EXIF_IFD_COUNT)  
         fprintf(stderr, "exif_content_get_ifd error");  
+#if __DEBUG    
     printf("======IFD: %d %s======\n", ifd, exif_ifd_get_name(ifd));  
+#endif    
     exif_content_foreach_entry(ec, read_exif_entry, &ifd);  
 }  
 #define EML__SYSTEMS__
@@ -61,7 +63,8 @@ void read_exif_content(ExifContent *ec, void *user_data)
         return 0;
     }
     strcpy(filePath,"../temps/");
-    strcat(filePath,argv[1]);
+    //strcat(filePath,argv[1]);
+    strcat(filePath,"jpeg");
     strcat(filePath,".txt");
     fileptr=fopen(filePath,"ab");
     ExifData* ed = exif_data_new_from_file(argv[1]);  
