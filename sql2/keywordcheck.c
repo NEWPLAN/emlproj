@@ -23,12 +23,14 @@ static int match_email(char* workspace,FetchRtePtr keyworlds)
     void *handle;
     char command2[1024]={0};
     char workpath[1024]= {0};
+    char dictpath[1024]={0};
+    sprintf(dictpath,"%s/userdict.txt",workspace);
 
     sprintf(workpath,"%s/temps",workspace);
 
-    char * inputs[3]= {NULL,workpath,&Ate};
+    char * inputs[4]= {NULL,workpath,&Ate,dictpath};
 
-    FILE* fptr=fopen("userdict.txt","wb");
+    FILE* fptr=fopen(dictpath,"wb");
     for(index=0; index<keyworlds->row; index++)
     {
         memset(command2,0,sizeof(command2));
@@ -60,7 +62,7 @@ static int match_email(char* workspace,FetchRtePtr keyworlds)
         printf("error in open dynamic libs %s\n",dlerror());
         return 0;
     }
-    return dlfunc(3,inputs);
+    return dlfunc(4,inputs);
 }
 
 CheckType keywordCheck(mimePtr email,char* owner,int direction)

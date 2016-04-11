@@ -38,11 +38,6 @@ int ParseEML(char* filename,GmimeDataPtr* rtevalPtr);
 /*parsing URL module*/
 int ParseURL(char* filename);
 
-/*parsing key words module*/
-int ParseKeyChs(char* filename);
-/*parsing key words class */
-int ParseKeyClass(char* filename);
-
 /*parsing appendix module*/
 int ParseAppendix(char* filedirname);
 

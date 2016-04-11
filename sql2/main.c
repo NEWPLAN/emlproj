@@ -20,8 +20,6 @@
 #include "assist.h"
 #include "moduleswitch.h"
 
-static int strategy_flags=0x0f;
-//static DataPtr sqldatas=NULL;
 static GmimeDataPtr mimedata=NULL;
 
 static char workspace[1024]= {0};
@@ -82,18 +80,18 @@ static void overall_check_single_side(mimePtr email,char* owner,int direction, s
     //#1.垃圾检测
     if(rts&SPAM_SWITCH)
     	spam_result = spamCheck(email,owner,direction);
-    //#2.病毒检测
+    //#2.url检测
+	if(rts&URL_SWITCH)
+    	url_result = urlCheck(email,owner,direction);
+    //#3.病毒检测
 	if(rts&VIRUS_SWITCH)
     	virus_result = virusCheck(email,owner,direction);
-    //#3.关键字检测
-	if(rts&KEYWORDS_SWITCH)
-    	keyword_result = keywordCheck(email,owner,direction);
     //#4.关键字类检测
 	if(rts&KEYCLASS_SWITCH)
     	keywordclass_result = keywordClassCheck(email,owner,direction);
-    //#5.url检测
-	if(rts&URL_SWITCH)
-    	url_result = urlCheck(email,owner,direction);
+    //#5.关键字检测
+	if(rts&KEYWORDS_SWITCH)
+    	keyword_result = keywordCheck(email,owner,direction);
 
     memset(notify_info,0,strlen(notify_info));
 
@@ -275,98 +273,10 @@ int ParseURL(char* filename)
     return 1;
 }
 
-int ParseKeyChs(char* filename)
-{
-    static int flags=1;
-
-    char Ate=(char)(strategy_flags&0xff);
-    int backval;
-    int (*dlfunc)(int argc, char* argv[]);
-    void *handle;
-    struct timeval tBeginTime, tEndTime;
-    float fCostTime;
-
-    char workpath[1024]= {0};
-
-    sprintf(workpath,"%s/%s",workspace,filename);
-
-    char * inputs[3]= {NULL,workpath,&Ate};
-    gettimeofday(&tBeginTime,NULL);/*calculate timer*/
-#if __DEBUG
-    printf("hello in ParseKeyChs\n");
-#endif
-    handle=dlopen("./spliter.so",RTLD_LAZY);
-#if __DEBUG
-    printf("in open libs\n");
-#endif
-    dlfunc=dlsym(handle,"SpliterMain");
-    if(!(handle&&dlfunc))
-    {
-        printf("error in open dynamic libs %s\n",dlerror());
-        return 0;
-    }
-    dlfunc(flags? 3:1,inputs);
-
-    backval=(int)Ate;
-    backval=backval&0xf0;/*只需要取得结果就可以了*/
-    strategy_flags&=0xffffff0f;
-    strategy_flags|=backval;
-
-    gettimeofday(&tEndTime,NULL);
-    fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
-    fCostTime /= 1000000;
-#if __DEBUG
-    printf("\033[31m the execute time for parsing key characters is = %f(Second)\n\033[0m",
-           fCostTime);
-#endif
-    flags=0;
-    return 1;
-}
-
-int ParseKeyClass(char* filename)
-{
-    int (*dlfunc)(int argc, char* argv[]);
-    void *handle;
-    char oldpath[1024]= {0};
-    char Ate=(char)((strategy_flags>>8)&0xff);
-    char *inputs[3]= {NULL,filename,&Ate};
-    struct timeval tBeginTime, tEndTime;
-    float fCostTime;
-
-    sprintf(oldpath,"%s/%s",workspace,filename);
-    inputs[1]=oldpath;
-    gettimeofday(&tBeginTime,NULL);/*calculate timer*/
-#if __DEBUG
-    printf("hello in ParseKeyClass\n");
-#endif
-    handle=dlopen("./libregex.so",RTLD_LAZY);
-#if __DEBUG
-    printf("in open libs\n");
-#endif
-    dlfunc=dlsym(handle,"RegexMain");
-    if(!(handle&&dlfunc))
-    {
-        printf("error in open dynamic libs %s\n",dlerror());
-        return 0;
-    }
-    dlfunc(2,inputs);
-    if(Ate)
-        strategy_flags|=1<<5;
-    gettimeofday(&tEndTime,NULL);
-    fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
-    fCostTime /= 1000000;
-#if __DEBUG
-    printf("\033[31m the execute time for parsing key class is = %f(Second)\n\033[0m",
-           fCostTime);
-#endif
-    return 1;
-}
 
 int ParseAppendix(char* filedirname)
 {
-    char Ate=(char)(strategy_flags&0xff);
-    int backval;
-    char * ins[3]= {NULL,filedirname,&Ate};
+    char * ins[2]= {NULL,filedirname};
     int (*dlfunc)(int argc, char* argv[]);
     void *handle;
     char oldpath[1024]= {0};
@@ -389,13 +299,7 @@ int ParseAppendix(char* filedirname)
         return 0;
     }
     dlfunc(2,ins);
-
-
-    backval=(int)Ate;
-    backval=backval&0xf0;/*只需要取得结果就可以了*/
-    strategy_flags&=0xffffff0f;
-    strategy_flags|=backval;
-
+    
     return 1;
 }
 
@@ -413,15 +317,6 @@ static int AllInits(void)
         printf("init spliter failed");
         return 0;
     }
-#if 0
-    if(AntiVirusInit())
-        printf("init AntiVirus successfully\n");
-    else
-    {
-        printf("init AntiVirus failed");
-        return 0;
-    }
-#endif
     return 1;
 }
 
@@ -449,36 +344,8 @@ static int ParseAEmail(char*filepath,char*workpath)
         goto  exit;
     }
     overall_check(mimeCy);
-#if 0
-//ANITSPAM:/*反病毒*/
-    if(AntiSpams(filepath)==0)
-    {
-        strcat(errorinfo,"Antispams");
-        goto  exit;
-    }
-//PARSEAPPENDIX:/*分析附件*/
-    if(ParseAppendix("appendix")==0)
-    {
-        strcat(errorinfo,"Appendix");
-        goto  exit;
-    }
-//PARSEKEYCLASS:/*分析关键字类*/
-    if(ParseKeyClass("temps")==0)
-    {
-        strcat(errorinfo,"ParseKeyClass");
-        goto  exit;
-    }
-//PARSEKEYWORDS:/*分析关键字*/
-    if(ParseKeyChs("temps")==0)
-    {
-        strcat(errorinfo,"ParseKeyWords");
-        goto  exit;
-    }
-    return 0;
-#endif
 exit:/*退出，结束*/
     //cleanAll();
-    //printf("error in module %s\n",errorinfo);
     printf("done for parsing an single email %s in workspace %s\n",filepath,workpath);
     return 0;
 }
@@ -489,7 +356,7 @@ exit:/*退出，结束*/
 int main(int argc, char* argv[])
 {
 
-    int rte = 1;
+    int rte = 1000;
     AllInits();
     while(rte--)
     {
@@ -502,30 +369,25 @@ int main(int argc, char* argv[])
             sprintf(runningFiles,"runningFiles_%d",getpid());
             sprintf(newpath_temps,"%s/temps",runningFiles);
             sprintf(newpath_appendix,"%s/appendix",runningFiles);
-            if(mkdir(runningFiles, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)!=0)/*success*/
+            if(mkdir(runningFiles, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)!=0)/*! success*/
                 goto exits;
-            if(mkdir(newpath_temps, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)!=0)/*success*/
+            if(mkdir(newpath_temps, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)!=0)/*! success*/
                 goto exits;
-            if(mkdir(newpath_appendix, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)!=0)/*success*/
+            if(mkdir(newpath_appendix, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)!=0)/*! success*/
                 goto exits;
 
             mimeCy->workspace=runningFiles;
             mimeCy->filepath=argv[1];
 
             printf("%d\t%d\n",getpid(),ParseAEmail(argv[1],runningFiles));
-/*
-            if(remove(runningFiles)==0)
-                printf("remove done\n");
-            else
-                printf("can't delete this fold\n");
-*/
 exits:
             sprintf(command,"rm -rf %s",runningFiles);
             usleep(1);
-            //system(command);
+#if 1
             	if(fork()==0)
             		execlp("rm","rm","-rf",runningFiles,NULL);
             wait(NULL);
+#endif
             return 0;
         }
     }

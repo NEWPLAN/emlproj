@@ -57,28 +57,6 @@ int main(int argc, char  *argv[])
         float fCostTime;
 
         gettimeofday(&tBeginTime,NULL);/*calculate timer*/
-        //if((*argv[2])&(1<<2))/*如果需要扫病毒*/
-#if 0
-        if(0)/*注释掉病毒模块*/
-        {
-            struct antivirusInfo Rteval;
-            Rteval=antiVirus(file->d_name,flags==0?0:1);
-            flags=1;
-            if(Rteval.errorInfo==0)
-            {
-                (*(argv[2]))|=((char)Rteval.isVirus<<6);/*标志病毒*/
-                printf("this detect result 0s %d [1-->>Virus, 0-->>NotVirus]\n\
-                        the size of file is %2.2Lf MB\n\
-                        this detail of virus is : %s\n",
-                       Rteval.isVirus,Rteval.fileSize,Rteval.virusInfo);
-            }
-            else
-            {
-                printf("error in detect virus for this file\n");
-                return -2;
-            }
-        }
-#endif 
         gettimeofday(&tEndTime,NULL);
         fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
         fCostTime /= 1000000;
@@ -127,19 +105,29 @@ void DealFile(char* filename)
     switch(FileType)
     {
     case DOC:
+#if __DEBUG
         printf("deal with doc file\n");
+#endif
         break;
     case DOCX:
+#if __DEBUG    
         printf("deal with docx file\n");
+#endif        
         break;
     case PPT:
+#if __DEBUG    
         printf("deal with ppt file\n");
+#endif        
         break;
     case PPTX:
+#if __DEBUG    
         printf("deal with pptx file\n");
+#endif        
         break;
     case XLS:
+#if __DEBUG    
         printf("deal with xls file\n");
+#endif        
         break;
     case PDF:
 #if __DEBUG

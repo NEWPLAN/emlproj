@@ -13,10 +13,11 @@
 #define EML__SYSTEMS__
 #include <assert.h>
 char* workspace=NULL;
+char* dicpath=NULL;
 
 typedef char (*SpiPtr)[255];
 extern int  RelasePage(void);
-static SpiPtr ImportDic(void);
+static SpiPtr ImportDic();
 #ifndef EML__SYSTEMS__
 int main(int argc, char *argv[])
 #else
@@ -33,6 +34,10 @@ extern "C"
     char *q=NULL;
     clock_t A=clock();
     int NumPatt=0;
+
+    if(argc>=4)
+        dicpath=argv[3];
+
     SpiPtr pp=ImportDic();
     {
         char filepath[1024];
@@ -57,12 +62,7 @@ extern "C"
                 struct stat info;
                 stat(file->d_name,&info);
                 if(S_ISDIR(info.st_mode))
-                {
-#if __DEBUG                	
-                    printf("This is a directory\n");
-#endif                    
                     continue;
-                }
             }
             workspace=argv[1];
             assert(workspace!=NULL);
@@ -70,12 +70,12 @@ extern "C"
             strcat(filepath,argv[1]);
             filepath[strlen(filepath)]='/';
             strcat(filepath,file->d_name);
-            
-            
+
+
             q=testImportUserDict(1,&NumPatt,filepath);
-#if __DEBUG            
+#if __DEBUG
             printf("\n------using brute match methods---------\n");
-#endif            
+#endif
             index=HashMach(q,pp,NumPatt);
             if(index)/*匹配到结果，可以返回垃圾*/
                 *argv[2]|=1<<4;
@@ -91,18 +91,18 @@ extern "C"
     */
 last_para:
     q=testImportUserDict(1,&NumPatt,argv[1]);
-#if __DEBUG    
+#if __DEBUG
     printf("\n------using brute match methods---------\n");
-#endif    
+#endif
     //HashMach(q,pp,NumPatt);
     index=HashMach(q,pp,NumPatt);
     if(index)/*匹配到结果，可以返回垃圾*/
         *argv[2]|=1<<4;
     free(q);
     clock_t B=clock();
-#if __DEBUG    
+#if __DEBUG
     printf("System Executing Time :%f(Second)\n",((double)B-A)/CLOCKS_PER_SEC);
-#endif    
+#endif
     return index;
 #endif
 }
@@ -121,7 +121,7 @@ extern "C"
         }
         else
         {
-            printf("------------Init ok!--------------\n\n");
+            printf("------------Init ok!--------in spliter------\n\n");
         }
         return 1;
     }
@@ -134,13 +134,17 @@ extern "C"
 }
 
 
-static SpiPtr ImportDic(void)
+static SpiPtr ImportDic()
 {
     int i=0;
+    FILE *filPtr=NULL;
     SpiPtr p=(SpiPtr)malloc(300*255);
     if(!p)
         return NULL;
-    FILE *filPtr=fopen("userdict.txt","rb");
+    if(!dicpath)
+        filPtr=fopen("userdict.txt","rb");
+    else
+        filPtr=fopen(dicpath,"rb");
     if(!filPtr)
     {
         free(p);

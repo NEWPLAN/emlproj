@@ -23,22 +23,12 @@ History    :
 
 extern char * txtstr;
 extern char* workspace;
+extern char* dicpath;
 char* testImportUserDict(int flags, int *NumPtr, char* filename)
 {
     //初始化分词组件。
     //必须调用此接口后，才能调用其它接口！
-    if(0)
-    {
-        if(!NLPIR_Init(0,1))
-        {
-            printf("NLPIR INIT FAILED!\n");  //初始化失败，退出。
-            return NULL;
-        }
-        else
-        {
-            printf("------------Init ok!--------------\n\n");
-        }
-    }
+
 
     /*if(LoadTxtPage(filename)<0)
     {
@@ -50,8 +40,8 @@ char* testImportUserDict(int flags, int *NumPtr, char* filename)
         sSentence=txtstr;
     printf("%s\n",txtstr);
     int nPaLen=strlen(sSentence);*/
-    
-    
+
+
     /*int nRstLen=0;*/
     //char* sRst=0;//用户自行分配空间，用于保存结果；
 
@@ -62,16 +52,16 @@ char* testImportUserDict(int flags, int *NumPtr, char* filename)
     //free(sRst);
 #if __DEBUG
     printf("---------------添加词典---------------\n");
-#endif    
-    const char* pszDictBuffer="userdict.txt"; //字符串形式导入用户词典
+#endif
+    const char* pszDictBuffer=dicpath; //字符串形式导入用户词典
     /*int nLen=strlen(pszDictBuffer);*/
     unsigned int nItems=NLPIR_ImportUserDict(pszDictBuffer);
     *NumPtr = (int)nItems;
     //也可以将用户词汇写入文件，词语之间用换行符隔开
     //unsigned int nItems=NLPIR_ImportUserDictFile("userdict.txt",CODE_TYPE_UNKNOWN);
-#if __DEBUG    
+#if __DEBUG
     printf("\n添加了%d 个用户词\n\n",nItems); //文件形式导入用户字典
-#endif    
+#endif
 /*
     char* sRst1=0;
     sRst1=(char *)malloc(nPaLen*6);
@@ -85,7 +75,7 @@ char* testImportUserDict(int flags, int *NumPtr, char* filename)
     strncpy(pt,sRst1,NumPt);
 */
 	char tempth[1024]={0};
-	
+
 	sprintf(tempth,"%s/%s",workspace,"qqqqqqqqqq");
     NLPIR_FileProcess(filename,tempth,0);
     if(LoadTxtPage(tempth)<0)
@@ -93,9 +83,9 @@ char* testImportUserDict(int flags, int *NumPtr, char* filename)
         printf("error in load test file\n");
         return NULL;
     }
-#if __DEBUG    
+#if __DEBUG
     printf("分词结果:\n%s\n",txtstr);
-#endif    
+#endif
     //释放资源退出
     //NLPIR_Exit();
     return txtstr;
