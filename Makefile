@@ -26,6 +26,7 @@ $(PART5):
 
 $(PART6):
 	cd appendix/zips;make
+
 run:
 	@echo 'test for heres'
 	cd main/; make test;

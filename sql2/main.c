@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "assist.h"
+#include "moduleswitch.h"
 
 static int strategy_flags=0x0f;
 //static DataPtr sqldatas=NULL;
@@ -73,19 +74,26 @@ static strategyType get_valid_strategy(char* field,char* owner,int direction)
     return IGNORE;
 }
 
+
 static void overall_check_single_side(mimePtr email,char* owner,int direction, strategyType *final_strategy,char* notify_info)/*:#final_strategy和notify_info传引用*/
 {
-    CheckType spam_result,virus_result,keyword_result,keywordclass_result,url_result;
+    CheckType spam_result=NO,virus_result=NO,keyword_result=NO,keywordclass_result=NO,url_result=NO;
+    int rts=loadmodule();
     //#1.垃圾检测
-    spam_result = spamCheck(email,owner,direction);
+    if(rts&SPAM_SWITCH)
+    	spam_result = spamCheck(email,owner,direction);
     //#2.病毒检测
-    virus_result = virusCheck(email,owner,direction);
+	if(rts&VIRUS_SWITCH)
+    	virus_result = virusCheck(email,owner,direction);
     //#3.关键字检测
-    keyword_result = keywordCheck(email,owner,direction);
+	if(rts&KEYWORDS_SWITCH)
+    	keyword_result = keywordCheck(email,owner,direction);
     //#4.关键字类检测
-    keywordclass_result = keywordClassCheck(email,owner,direction);
+	if(rts&KEYCLASS_SWITCH)
+    	keywordclass_result = keywordClassCheck(email,owner,direction);
     //#5.url检测
-    url_result = urlCheck(email,owner,direction);
+	if(rts&URL_SWITCH)
+    	url_result = urlCheck(email,owner,direction);
 
     memset(notify_info,0,strlen(notify_info));
 
@@ -470,7 +478,8 @@ static int ParseAEmail(char*filepath,char*workpath)
 #endif
 exit:/*退出，结束*/
     //cleanAll();
-    printf("error in module %s\n",errorinfo);
+    //printf("error in module %s\n",errorinfo);
+    printf("done for parsing an single email %s in workspace %s\n",filepath,workpath);
     return 0;
 }
 
@@ -504,21 +513,23 @@ int main(int argc, char* argv[])
             mimeCy->filepath=argv[1];
 
             printf("%d\t%d\n",getpid(),ParseAEmail(argv[1],runningFiles));
-
+/*
             if(remove(runningFiles)==0)
                 printf("remove done\n");
             else
                 printf("can't delete this fold\n");
+*/
 exits:
             sprintf(command,"rm -rf %s",runningFiles);
-            sleep(1);
-            system(command);
-            //	if(fork()==0)
-            //		execlp("rm","rm","-rf",runningFiles,NULL);
+            usleep(1);
+            //system(command);
+            	if(fork()==0)
+            		execlp("rm","rm","-rf",runningFiles,NULL);
+            wait(NULL);
             return 0;
         }
     }
-//	wait(NULL);
+	wait(NULL);
     AllFree();
     printf("done\n");
     return 0;

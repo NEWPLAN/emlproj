@@ -5,7 +5,7 @@
 	> Created Time: 2016年04月06日 星期三 10时19分01秒
  ************************************************************************/
 
-#include<stdio.h>
+#include <stdio.h>
 #include "assist.h"
 #include "dboperate.h"
 #include "kmp.h"
