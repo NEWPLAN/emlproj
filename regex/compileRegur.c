@@ -5,6 +5,7 @@
 
 extern char* txtstr;
 
+
 int compliemain(char* pattern , char* src)
 {
 	int flags=0;
@@ -15,7 +16,7 @@ int compliemain(char* pattern , char* src)
 	int nums=0;
     int ovector[30];
 
-#if __DEBUG    
+#ifdef __DEBUG    
     printf("Pattern: \"%s\"\n", pattern);
 #endif    
 
@@ -36,14 +37,14 @@ again:
     {
     	if(flags)
     	{
-#if __DEBUG    		
+#ifdef __DEBUG    		
     		printf("match done!\n");
 #endif    		
     		return 1;
     	}
     	else/*没有匹配到结果，返回0*/
     	{
-#if __DEBUG    		
+#ifdef __DEBUG    		
     	    printf("error in match this string\n");
         	printf("can't match this pattern \n");
 #endif        	
@@ -54,7 +55,7 @@ again:
 	{
         char *substring_start = src + ovector[2*0];
         int substring_length = ovector[2*0+1] - ovector[2*0];
-#if __DEBUG        
+#ifdef __DEBUG        
         printf("$%2d: %.*s\n", ++nums, substring_length, substring_start);
 #endif        
     }

@@ -9,7 +9,6 @@
 #include "assist.h"
 #include "dboperate.h"
 #include "kmp.h"
-static int rowNum=0;
 
 int checkInGateway(char* owner)
 {
@@ -29,6 +28,9 @@ int checkInGateway(char* owner)
             if(check_sub(domain, strlen(domain), (rteval->dataPtr)[index][1], strlen((rteval->dataPtr)[index][1]))!=0)/*is the subs*/
                 return 1;
     }
+    if(rteval)
+    	free_memory(rteval);
+  	rteval=NULL;
     return 0;
 }
 
@@ -40,9 +42,6 @@ FetchRtePtr sql_query(char* command)
         printf("error in loading table spamlist \n");
         return NULL;
     }
-    rowNum=val->row;
-    //free_memory(val);
-    //val=NULL;
     return val;
 }
 

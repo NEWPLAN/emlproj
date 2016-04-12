@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include "allhead.h"
 
 typedef struct Node
 {
@@ -95,7 +96,7 @@ int HashMach(char* objs, SpiPtr pattern,int numpatt)
     }
     strcpy(p,objs);
     char *before=p;
-#if __DEBUG
+#ifdef __DEBUG
     printf("location\tpattern\n");
 #endif
     while(*p)
@@ -109,11 +110,11 @@ int HashMach(char* objs, SpiPtr pattern,int numpatt)
             {
                 if(!strcmp(nptr->str,before))
                 {
-#if __DEBUG                	
+#ifdef __DEBUG                	
                     printf("%-8d\t%s\n",(int)(before-Links),before);
 #endif                    
-                    matchres=1;
-                    break;
+                    matchres++;
+//                    break;
                 }
                 nptr=nptr->next;
             }

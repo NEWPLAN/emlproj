@@ -30,7 +30,7 @@ static int match_email(char* workspace,FetchRtePtr keyworlds)
 
     char * inputs[4]= {NULL,workpath,&Ate,dictpath};
 
-    FILE* fptr=fopen(dictpath,"wb");
+    FILE* fptr=fopen(dictpath,"wb");/*write to dictionary*/
     for(index=0; index<keyworlds->row; index++)
     {
         memset(command2,0,sizeof(command2));
@@ -45,7 +45,8 @@ static int match_email(char* workspace,FetchRtePtr keyworlds)
                 sprintf(key,"%s\n",(listids->dataPtr)[index2][0]);
                 fwrite(key,sizeof(char),strlen(key),fptr);
             }
-        }  
+        }
+        free_memory(listids); 
     }
 
     fclose(fptr);
@@ -68,8 +69,8 @@ static int match_email(char* workspace,FetchRtePtr keyworlds)
 CheckType keywordCheck(mimePtr email,char* owner,int direction)
 {
     int index=0,index2;
-    if(checkInGateway(owner))
-    ;//    return NONE;
+    if(!checkInGateway(owner))
+    	return NONE;
     char command[1024];
 
     //#1.user级处理

@@ -53,9 +53,8 @@ int spamEngineCheck(char* email)
 CheckType spamCheck(mimePtr email,char* owner,int direction)
 {
     FetchRtePtr user_blist=NULL, user_wlist=NULL;
-    if(checkInGateway(owner))/*owner not in netgate:*/
-        //return NONE;
-        ;
+    if(!checkInGateway(owner))/*owner not in netgate:*/
+        return NONE;
     //#1.user级处理
     if (direction == 1)// #发出的邮件
     {

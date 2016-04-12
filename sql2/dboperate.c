@@ -110,9 +110,7 @@ static int mysql_update(const char *sql)
         return 0;
     }
     else
-    {
         return 1;
-    }
 }
 /**************************************
 *获取数据库的数据信息
@@ -211,9 +209,8 @@ static void* mysql_get(const char *sql)
         }
     }
     else
-    {
-        printf("Connection failed\n");
-    }
+        printf("SQL Connection failed\n");
+
     mysql_close(conn_ptr);
     {
 
@@ -347,17 +344,22 @@ int database_connect_local(const char *password)
 void free_memory(FetchRtePtr memptr)
 {
     int rowindex,colindex;
+    if(!memptr)
+    	return ;
     for(rowindex=0; rowindex<memptr->row; rowindex++)
     {
         for(colindex=0; colindex<memptr->col; colindex++)
         {
-            free(memptr->dataPtr[rowindex][colindex]);
+        	if(memptr->dataPtr[rowindex][colindex])
+            	free(memptr->dataPtr[rowindex][colindex]);
             memptr->dataPtr[rowindex][colindex]=NULL;
         }
-        free(memptr->dataPtr[rowindex]);
+        if(memptr->dataPtr[rowindex])
+        	free(memptr->dataPtr[rowindex]);
         memptr->dataPtr[rowindex]=NULL;
     }
-    free(memptr->dataPtr);
-    memptr->dataPtr=NULL;
+    if(memptr->dataPtr)
+    	free(memptr->dataPtr);
+    memptr->dataPtr=NULL;    
     free(memptr);
 }

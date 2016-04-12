@@ -20,7 +20,7 @@
 #include "assist.h"
 #include "moduleswitch.h"
 
-static GmimeDataPtr mimedata=NULL;
+//static GmimeDataPtr mimedata=NULL;
 
 static char workspace[1024]= {0};
 /*黑白名单*/
@@ -32,10 +32,6 @@ static char workspace[1024]= {0};
 #define SOURCE    '0'
 
 #include "dboperate.h"
-#include "assist.h"
-
-
-
 
 mimePtr mimeCy=NULL;
 
@@ -51,6 +47,7 @@ static strategyType combine_strategy(strategyType strategy_A, strategyType strat
 
 static void notify_sender(char* sender,char* notify_info)//通知发件人
 {
+//	printf("the %s has sended an illegal email, and detail info is %s\n",sender,notify_info);
     return;
 }
 
@@ -61,15 +58,46 @@ static strategyType get_valid_strategy(char* field,char* owner,int direction)
     char*domain=NULL;
     sprintf(command1,"SELECT %s FROM strategy_strategy WHERE owner='%s' AND level=0 AND direction=%d",field,owner, direction);
     if((rteval=sql_query(command1))!=NULL)/*user_strategy*/
-        return IGNORE/**rteval*/;
+    {
+        if(rteval->row)
+            goto  RTE;
+    }
     domain = getDomain(owner);
     sprintf(command2,"SELECT %s FROM strategy_strategy WHERE owner='%s' AND level=1 AND direction=%d",field,domain, direction);
     if((rteval=sql_query(command2))!=NULL)/*domain_strategy*/
-        return IGNORE/**rteval*/;
+    {
+        if(rteval->row)
+            goto  RTE;
+    }
     sprintf(command3,"SELECT %s FROM strategy_strategy WHERE owner='%s' AND level=2 AND direction=%d",field,"GLOBAL", direction);
     if((rteval=sql_query(command3))!=NULL)/*global_strategy*/
-        return IGNORE/**rteval*/;
-    return IGNORE;
+    {
+        if(rteval->row)
+            goto  RTE;
+    }
+    free_memory(rteval);
+    return -1;
+RTE:
+    if((rteval->dataPtr)[0][0]!=NULL)
+    {
+        if(strcmp((rteval->dataPtr)[0][0],"IGNORE")==0)
+        {
+            free_memory(rteval);
+            return IGNORE;
+        }
+        if(strcmp((rteval->dataPtr)[0][0],"TRASH")==0)
+        {
+            free_memory(rteval);
+            return TRASH;
+        }
+        if(strcmp((rteval->dataPtr)[0][0],"BLOCK")==0)
+        {
+            free_memory(rteval);
+            return BLOCK;
+        }
+    }
+    else
+        return -1;
 }
 
 
@@ -136,12 +164,12 @@ static void overall_check_single_side(mimePtr email,char* owner,int direction, s
 static char* getSender(char* email)
 {
     char *sender=NULL;
-    if(mimedata)
+    if(mimeCy->mimedata)
     {
         char *ptr=NULL;
-        sender=(char*)malloc(strlen(mimedata->from)+12);
-        memset(sender,0,strlen(mimedata->from)+12);
-        if((ptr=strchr(mimedata->from,'<'))!=NULL)
+        sender=(char*)malloc(strlen(mimeCy->mimedata->from)+12);
+        memset(sender,0,strlen(mimeCy->mimedata->from)+12);
+        if((ptr=strchr(mimeCy->mimedata->from,'<'))!=NULL)
             strcat(sender,++ptr);
         if((ptr=strchr(sender,'>'))!=NULL)
             *ptr=0;
@@ -154,8 +182,8 @@ static char* getReceiver(char* email)
 {
     char *sender=NULL;
     char *temps=NULL;
-    if(mimedata)
-        temps=mimedata->to!=NULL?mimedata->to:mimedata->replayto;
+    if(mimeCy->mimedata)
+        temps=mimeCy->mimedata->to!=NULL?mimeCy->mimedata->to:mimeCy->mimedata->replayto;
     if(temps)
     {
         char *ptr=NULL;
@@ -186,7 +214,18 @@ static int overall_check(mimePtr email)
             notify_sender(sender,notify_info);//通知发件人
     }
 
-
+	{/**争议的地方**/
+		if(sender_final_strategy ==BLOCK)
+        {
+        	printf("堵截\n");
+            return 1;//#堵截
+        }
+        else if (sender_final_strategy == TRASH)
+        {
+        	printf("发送到垃圾箱\n");
+            return 2;//#发送到垃圾箱
+        }
+	}
 
     strategyType receiver_final_strategy =IGNORE;
 
@@ -198,11 +237,20 @@ static int overall_check(mimePtr email)
         overall_check_single_side(email,receiver,0,&receiver_final_strategy,notify_info);
 
         if(receiver_final_strategy ==BLOCK)
+        {
+        	printf("堵截\n");
             return 1;//#堵截
+        }
         else if (receiver_final_strategy == TRASH)
+        {
+        	printf("发送到垃圾箱\n");
             return 2;//#发送到垃圾箱
+        }
         else if (receiver_final_strategy == IGNORE)
+        {
+        	printf("直接发送\n");
             return 0;//#直接发送
+        }
     }
     return 0;/*??*/
 }
@@ -226,15 +274,15 @@ int ParseEML(char* filename,GmimeDataPtr* rtevalPtr)
 
 
     gettimeofday(&tBeginTime,NULL);
-#if __DEBUG
+#ifdef __DEBUG
     printf("hello in ParseEML \n");
 #endif
     handle=dlopen("./gmimelibs.so",RTLD_LAZY);
-#if __DEBUG
+#ifdef __DEBUG
     printf("in open libs\n");
 #endif
     dlfunc=dlsym(handle,"GmimeMain");
-#if __DEBUG
+#ifdef __DEBUG
     printf("in geting mainenter\n");
 #endif
     if(!(handle&&dlfunc))
@@ -245,7 +293,7 @@ int ParseEML(char* filename,GmimeDataPtr* rtevalPtr)
 
     A=dlfunc(2,inputs);
 
-#if __DEBUG
+#ifdef __DEBUG
     if(A)
     {
         printf("sender:%s\n",A->from );
@@ -256,11 +304,11 @@ int ParseEML(char* filename,GmimeDataPtr* rtevalPtr)
     }
 #endif
     *rtevalPtr=A;
-    mimeCy->mimedata;
+    //mimeCy->mimedata=A;
     gettimeofday(&tEndTime,NULL);
     fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
     fCostTime /= 1000000;
-#if __DEBUG
+#ifdef __DEBUG
     printf("\033[31m the execute time for decoding EML is = %f(Second)\n\033[0m",fCostTime);
 #endif
     return 1;
@@ -283,13 +331,13 @@ int ParseAppendix(char* filedirname)
 
     sprintf(oldpath,"%s/%s",workspace,filedirname);
     ins[1]=oldpath;
-#if __DEBUG
+#ifdef __DEBUG
     printf("hello in ParseAppendix\n");
 #endif
     handle=dlopen("./appendix.so",RTLD_LAZY);
     if (!handle)
         return 1;
-#if __DEBUG
+#ifdef __DEBUG
     printf("in open libs\n");
 #endif
     dlfunc=dlsym(handle,"AppendixMain");
@@ -322,6 +370,20 @@ static int AllInits(void)
 
 static int AllFree(void)
 {
+    if(mimeCy->sender)
+    {
+    	free(mimeCy->sender);
+    	mimeCy->sender=NULL;
+    }
+    if(mimeCy->receiver)
+    {
+    	free(mimeCy->receiver);
+    	mimeCy->receiver=NULL;
+    }
+    return 0;
+}
+static int AllRelease(void)
+{
     SpliterExit();
     return 0;
 }
@@ -332,7 +394,7 @@ static int ParseAEmail(char*filepath,char*workpath)
     strcat(workspace,workpath);
 
 //GMIMEPARSE:/*邮件解析*/
-    if(ParseEML(filepath,&mimedata)==0)
+    if(ParseEML(filepath,&(mimeCy->mimedata))==0)
     {
         strcat(errorinfo,"ParseEML");
         goto  exit;
@@ -360,7 +422,9 @@ int main(int argc, char* argv[])
     AllInits();
     while(rte--)
     {
+#if 1
         	if(fork()==0)
+#endif
         {
             char runningFiles[1024]= {0};
             char newpath_temps[1024]= {0};
@@ -381,6 +445,7 @@ int main(int argc, char* argv[])
 
             printf("%d\t%d\n",getpid(),ParseAEmail(argv[1],runningFiles));
 exits:
+			AllFree();
             sprintf(command,"rm -rf %s",runningFiles);
             usleep(1);
 #if 1
@@ -391,8 +456,10 @@ exits:
             return 0;
         }
     }
+#if 1
 	wait(NULL);
-    AllFree();
+#endif
+    AllRelease();
     printf("done\n");
     return 0;
 }
