@@ -19,6 +19,7 @@
 #include <assert.h>
 #include "assist.h"
 #include "moduleswitch.h"
+#include "../api/emailhead.h"
 
 //static GmimeDataPtr mimedata=NULL;
 
@@ -387,12 +388,14 @@ static int AllRelease(void)
     SpliterExit();
     return 0;
 }
-static int ParseAEmail(char*filepath,char*workpath)
+int ParseAEmail(char*filepath,char*workpath)
 {
     char errorinfo[1024]= {0};/*错误处理*/
     assert(filepath!=NULL && workpath!=NULL);
     strcat(workspace,workpath);
-
+	
+	mimeCy->workspace=workpath;
+	mimeCy->filepath=filepath;
 //GMIMEPARSE:/*邮件解析*/
     if(ParseEML(filepath,&(mimeCy->mimedata))==0)
     {
@@ -415,7 +418,7 @@ exit:/*退出，结束*/
 
 
 
-int main(int argc, char* argv[])
+int main1(int argc, char* argv[])
 {
 
     int rte = 1000;
@@ -439,9 +442,6 @@ int main(int argc, char* argv[])
                 goto exits;
             if(mkdir(newpath_appendix, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)!=0)/*! success*/
                 goto exits;
-
-            mimeCy->workspace=runningFiles;
-            mimeCy->filepath=argv[1];
 
             printf("%d\t%d\n",getpid(),ParseAEmail(argv[1],runningFiles));
 exits:

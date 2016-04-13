@@ -91,7 +91,7 @@ exits:{}
     FILE* fileptr=fopen(emailpath,"ab");
     if(fileptr==NULL)
     {
-        printf("can't open files\n");
+        printf("can't open files %s\n",emailpath);
         return ;
     }
     GMimeStream *stream;

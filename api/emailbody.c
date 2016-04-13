@@ -9,8 +9,18 @@
 #include "../sql2/all.h"
 int Email_InitAll(void)
 {
-	return 1;
-	return SCANNER_RET_ERR;/*error in return vals*/
+	mimeCy=(mimePtr)malloc(sizeof(mimeType));
+    assert(mimeCy!=NULL);
+    memset(mimeCy,0,sizeof(mimeType));
+
+    if(SpliterInit())
+        printf("init spliter successfully\n");
+    else
+    {
+        printf("init spliter failed");
+        return SCANNER_RET_ERR;
+    }
+    return 1;
 }
 int Email_FreeAll(void)
 {
@@ -41,16 +51,19 @@ int Email_ParseFile(EmailTypePtr parasPtr)
                 goto exits;
 
             mimeCy->workspace=runningFiles;
-            mimeCy->filepath=argv[1];
+            mimeCy->filepath=parasPtr->filePath;
 
-            ParseAEmail(argv[1],runningFiles);
+            rtevals=ParseAEmail(parasPtr->filePath,runningFiles);
 exits:
             sprintf(command,"rm -rf %s",runningFiles);
             usleep(1);
             	if(fork()==0)
             		execlp("rm","rm","-rf",runningFiles,NULL);
             wait(NULL);
-            return 0;
+            if(rtevals==0)
+            	return SCANNER_RET_OK;
+           	else
+           		return SCANNER_RET_VIRUS;
 		}
 	}
 	return SCANNER_RET_OK;

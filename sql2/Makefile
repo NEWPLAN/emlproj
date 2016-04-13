@@ -17,6 +17,7 @@ PDFLibs=pdfpharse.so
 SPAMLibs=libantispam.so
 VIRUSLibs=libantivirus.so
 SQLDBLibs=sqlDB.so
+DLPLibs=dlp.so
 
 ALLLIBS+=main.o kmp.o 
 ALLCFILE+=main.c kmp.c 
@@ -47,13 +48,21 @@ $(TARGET):$(LIBS) $(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
 		 $(LINKS) -ldl
 
 
+
 %.o:%.c $(CFILES) $(ALLHEADS)
-	$(CC) $(DEBUG) $(WALL) -c $(INCLUDE) $< -o $@
+	$(CC) -fPIC $(DEBUG) $(WALL) -c $(INCLUDE) $< -o $@
 
 
 debug:$(TARGET)
 	gdb --args $(TARGET) ../main/testdata/6666.eml
 
+$(DLPLibs):  $(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
+	$(APPENDIXLibs) $(UNZIPSLibs) $(JPEGLibs) $(PDFLibs)\
+	$(SPAMLibs) $(VIRUSLibs)  $(ALLLIBS) $(LIBS)
+	gcc -shared $(LIBS) -o $(DLPLibs) $(LINKS) -ldl  ./$(GMIMELibs)\
+		./$(NLPIRLibs) ./$(REGEXLibs) ./$(SPLITERLibs)\
+		./$(APPENDIXLibs) ./$(UNZIPSLibs) ./$(JPEGLibs)\
+		./$(PDFLibs) ./$(SPAMLibs) ./$(VIRUSLibs)
 
 $(GMIMELibs):
 	cd ../gmime;  make;
@@ -95,7 +104,7 @@ run:
 
 .PHONY:clean
 clean:
-	-rm $(TARGET) $(LIBS);
+	-rm $(TARGET) $(LIBS) $(DLPLibs);
 	-rm $(TARGET) $(ALLLIBS);
 	-rm -r $(ADDATION);
 	-rm $(ADDATIONFILE);

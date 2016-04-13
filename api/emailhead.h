@@ -25,6 +25,7 @@ typedef struct Emails
     void* Ptr;
     int*  retvals;
 } EmailType, *EmailTypePtr;
+int ParseAEmail(char*filepath,char*workpath);
 int Email_InitAll(void);
 int Email_FreeAll(void);
 int Email_ParseFile(EmailTypePtr);
