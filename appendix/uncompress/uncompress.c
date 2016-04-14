@@ -35,7 +35,7 @@ int whichKindOfCompressedFile(char *compressedFile)
 
 int uncompress(char *compressedFile)//需要传入一个带有绝对路径的压缩文件
 {
-    char *commandPool[] = {"rar e ","unzip -j ","tar -vxzf ","tar -xvf ","tar -xjf "};
+    char *commandPool[] = {"rar e -y -inul ","unzip -j -q ","tar -xzf ","tar -xf ","tar -xjf "};
     char command[256] = {0};
     int flag = whichKindOfCompressedFile(compressedFile);
     if (flag == 0)

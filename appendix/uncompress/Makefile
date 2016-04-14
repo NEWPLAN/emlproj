@@ -26,7 +26,7 @@ $(dyLIBS):$(COBJS)
 .PHONY:clean
 
 clean:
-	-rm $(COBJS) $(TARGET) $(dyLIBS);
+	-rm $(COBJS) $(TARGET) $(dyLIBS) $(testOBJS);
 	-rm -rf temp;
 	@echo 'clean done!';
 	clear

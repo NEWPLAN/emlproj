@@ -390,6 +390,7 @@ static int AllRelease(void)
 }
 int ParseAEmail(char*filepath,char*workpath)
 {
+	int vals=0;
     char errorinfo[1024]= {0};/*错误处理*/
     assert(filepath!=NULL && workpath!=NULL);
     strcat(workspace,workpath);
@@ -408,17 +409,17 @@ int ParseAEmail(char*filepath,char*workpath)
         strcat(errorinfo,"Appendix");
         goto  exit;
     }
-    overall_check(mimeCy);
+    vals=overall_check(mimeCy);
 exit:/*退出，结束*/
     //cleanAll();
     printf("done for parsing an single email %s in workspace %s\n",filepath,workpath);
-    return 0;
+    return vals;
 }
 
 
 
 
-int main1(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
 
     int rte = 1000;
