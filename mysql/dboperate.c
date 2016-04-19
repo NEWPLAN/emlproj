@@ -236,6 +236,17 @@ int database_insert(const char *tableName,char *parameter)
     sprintf(sql, "insert into %s values(%s)",tableName,parameter);
     return mysql_insert(sql);
 }
+/***************************************************************
+* 插入数据信息
+* 插入格式：insert into TABLENAME(items) values(VAL1,VAL2,...,VALN)
+* tableName const char* : 数据表名称
+****************************************************************/
+int database_insert_withcond(const char *tableName,char* items,char *parameter)
+{
+    char sql[MAX_BUF] = {0};
+    sprintf(sql, "insert into %s(%s) values(%s)",tableName,items,parameter);
+    return mysql_insert(sql);
+}
 /****************************************************************
  * 数据库删除
  * tableName const char* 数据库表名

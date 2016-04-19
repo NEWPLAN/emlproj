@@ -20,6 +20,7 @@
 #include "assist.h"
 #include "moduleswitch.h"
 #include "../api/emailhead.h"
+#include "statistic.h"
 
 //static GmimeDataPtr mimedata=NULL;
 
@@ -49,6 +50,7 @@ static strategyType combine_strategy(strategyType strategy_A, strategyType strat
 static void notify_sender(char* sender,char* notify_info)//通知发件人
 {
 //	printf("the %s has sended an illegal email, and detail info is %s\n",sender,notify_info);
+//	insertLogs(NULL,NULL);
     return;
 }
 
@@ -201,6 +203,7 @@ static char* getReceiver(char* email)
 
 static int overall_check(mimePtr email)
 {
+	char commands[1024]={0};
     //#发送端检测
     char* sender = getSender(NULL);
     char* receiver = getReceiver(NULL);
@@ -214,15 +217,18 @@ static int overall_check(mimePtr email)
         if(sender_final_strategy!=IGNORE)
             notify_sender(sender,notify_info);//通知发件人
     }
-
 	{/**争议的地方**/
 		if(sender_final_strategy ==BLOCK)
         {
+        	sprintf(commands,"now(),'pop3', 'BLOCK', 'sender matters', '%s', '192.168.1.1', '192.168.1.2', '%s', '%s'",notify_info,sender,receiver);
+        	insertLogs(commands);
         	printf("堵截\n");
             return 1;//#堵截
         }
         else if (sender_final_strategy == TRASH)
         {
+        	sprintf(commands,"now(),'pop3', 'TRASH', 'sender matters', '%s', '192.168.1.1', '192.168.1.2', '%s', '%s'",notify_info,sender,receiver);
+        	insertLogs(commands);
         	printf("发送到垃圾箱\n");
             return 2;//#发送到垃圾箱
         }
@@ -239,21 +245,29 @@ static int overall_check(mimePtr email)
 
         if(receiver_final_strategy ==BLOCK)
         {
+        	sprintf(commands,"now(),'pop3', 'BLOCK', 'receiver matters', '%s', '192.168.1.1', '192.168.1.2', '%s', '%s'",notify_info,sender,receiver);
+        	insertLogs(commands);
         	printf("堵截\n");
             return 1;//#堵截
         }
         else if (receiver_final_strategy == TRASH)
         {
         	printf("发送到垃圾箱\n");
+        	sprintf(commands,"now(),'pop3', 'TRASH', 'receiver matters', '%s', '192.168.1.1', '192.168.1.2', '%s', '%s'",notify_info,sender,receiver);
+        	insertLogs(commands);
             return 2;//#发送到垃圾箱
         }
         else if (receiver_final_strategy == IGNORE)
         {
         	printf("直接发送\n");
-            return 0;//#直接发送
+            //return 0;//#直接发送
+            goto SENDNOW;
         }
     }
-    return 0;/*??*/
+SENDNOW:
+    sprintf(commands,"now(),'pop3', 'IGNORE', 'sender directly', 'not in gate way', '192.168.1.1', '192.168.1.2', '%s', '%s'",sender,receiver);
+    insertLogs(commands);
+    return 0;/*not in mailgateway*/
 }
 
 
@@ -393,8 +407,10 @@ int ParseAEmail(char*filepath,char*workpath)
 	int vals=0;
     char errorinfo[1024]= {0};/*错误处理*/
     assert(filepath!=NULL && workpath!=NULL);
+    memset(workspace,0,sizeof(workspace));
     strcat(workspace,workpath);
-	
+    
+    
 	mimeCy->workspace=workpath;
 	mimeCy->filepath=filepath;
 //GMIMEPARSE:/*邮件解析*/
@@ -422,7 +438,7 @@ exit:/*退出，结束*/
 int main(int argc, char* argv[])
 {
 
-    int rte = 1000;
+    int rte = 1;
     AllInits();
     while(rte--)
     {

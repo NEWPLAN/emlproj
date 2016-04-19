@@ -10,7 +10,7 @@
 int main(int argc, char* argv[])
 {
 
-    int rte = 1000;
+    int rte = 100;
     Email_InitAll();
     while(rte--)
     {
@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
         	A.filePath=argv[1];
         	Email_ParseFile(&A);
         	printf("done in fork process\n");
-        	return 0;
+        	//return 0;
         }
     }
 	wait(NULL);

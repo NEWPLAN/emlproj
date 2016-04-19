@@ -31,9 +31,9 @@ CC=gcc
 WALL=-Werror 
 
 #WALL=-Wall
-LIBS=keywordtype.o keywordcheck.o main.o spamcheck.o urlcheck.o virus.o assist.o dboperate.o kmp.o moduleswitch.o
-CFILES=keywordtype.c keywordcheck.c main.c spamcheck.c urlcheck.c virus.c assist.c dboperate.c kmp.c moduleswitch.c
-HEADS=all.h assist.h dboperate.h kmp.h mainall.h moduleswitch.h
+LIBS=keywordtype.o keywordcheck.o main.o spamcheck.o urlcheck.o virus.o assist.o dboperate.o kmp.o moduleswitch.o statistic.o
+CFILES=keywordtype.c keywordcheck.c main.c spamcheck.c urlcheck.c virus.c assist.c dboperate.c kmp.c moduleswitch.c statistic.c
+HEADS=all.h assist.h dboperate.h kmp.h mainall.h moduleswitch.h statistic.h
 
 all:$(TARGET)
 	@echo 'make done';

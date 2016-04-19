@@ -45,6 +45,7 @@ int Email_ParseFile(EmailTypePtr parasPtr)
             char newpath_temps[1024]= {0};
             char newpath_appendix[1024]= {0};
             char command[1024]= {0};
+            //memset(runningFiles,0,sizeof(runningFiles));
             sprintf(runningFiles,"runningFiles_%d",getpid());
             sprintf(newpath_temps,"%s/temps",runningFiles);
             sprintf(newpath_appendix,"%s/appendix",runningFiles);
@@ -61,6 +62,10 @@ exits:
             usleep(1);
             	if(fork()==0)
             		execlp("rm","rm","-rf",runningFiles,NULL);
+            
+            memset(runningFiles,0,sizeof(runningFiles));
+            memset(newpath_temps,0,sizeof(newpath_temps));
+            memset(newpath_appendix,0,sizeof(newpath_appendix));
             wait(NULL);
             if(rtevals==0)
             	return SCANNER_RET_OK;

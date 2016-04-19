@@ -40,7 +40,7 @@ int database_update(const char *tableName,char *parameter);
 void* database_query_withConditions(const char *tableName,char *condition);
 void* database_query (const char *tableName);
 void free_memory(FetchRtePtr memptr);
-
+int database_insert_withcond(const char *tableName,char* items,char *parameter);
 
 /********************************************************
 ***flags
