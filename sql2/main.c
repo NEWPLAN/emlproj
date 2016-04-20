@@ -194,6 +194,8 @@ static char* getReceiver(char* email)
         memset(sender,0,strlen(temps)+12);
         if((ptr=strchr(temps,'<'))!=NULL)
             strcat(sender,++ptr);
+        else
+        	strcat(sender,temps);
         if((ptr=strchr(sender,'>'))!=NULL)
             *ptr=0;
     }
@@ -260,10 +262,10 @@ static int overall_check(mimePtr email)
         else if (receiver_final_strategy == IGNORE)
         {
         	printf("直接发送\n");
-            //return 0;//#直接发送
             goto SENDNOW;
         }
     }
+    printf("不在网关中，可以直接发送\n");
 SENDNOW:
     sprintf(commands,"now(),'pop3', 'IGNORE', 'sender directly', 'not in gate way', '192.168.1.1', '192.168.1.2', '%s', '%s'",sender,receiver);
     insertLogs(commands);

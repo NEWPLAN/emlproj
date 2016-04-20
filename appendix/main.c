@@ -12,9 +12,9 @@
 #include <time.h>
 #include<sys/time.h>
 
-//#include "../antivirus/virus/antivirus.h"
 
-static void DealFile(char* filename);
+
+static void DealFile(char* filename,char* tpaths);
 static int uncompress(char *compressedFile,char* paths);
 
 static char * worksp=NULL;
@@ -27,6 +27,7 @@ int AppendixMain(int argc, char* argv[])
     getcwd(oldpath,sizeof(oldpath));
     struct dirent *file;
     worksp=argv[0];
+    char ptptptp[1024]="appendix";
     
     if(!(d=opendir(argv[1])))
     {
@@ -51,11 +52,8 @@ int AppendixMain(int argc, char* argv[])
                 continue;
             }
         } 
-        /**
-		char ppppppp[1024]={0};
-		getcwd(ppppppp,sizeof(ppppppp));
-		uncompress(file->d_name, ppppppp);
-        /*/DealFile(file->d_name);        
+ //       DealFile(file->d_name,ptptptp); 
+        uncompress(file->d_name,ptptptp);       
     }
     closedir(d);
     return 0;
@@ -65,7 +63,7 @@ extern int JpegMain(int argc, char * argv[]);
 extern int ZipsMain(int argc, char * argv[]);
 
 #define __DEBUG
-static void DealFile(char* filename)
+static void DealFile(char* filename,char* tpaths)
 {
     char *supports[]= {"doc","docx","ppt","pptx","xls","pdf","jpeg","jpg","zip"};
     enum supportType {DOC,DOCX,PPT,PPTX,XLS,PDF,JPEG,JPG,ZIP,OTHERS} FileType;
@@ -119,7 +117,7 @@ static void DealFile(char* filename)
 #ifdef __DEBUG
         printf("deal with pdf file\n");
 #endif  	
-		PdfParse(filename,worksp);        
+		PdfParse(filename,worksp,tpaths);        
         break;
     case JPEG:
 #ifdef __DEBUG    
@@ -128,10 +126,8 @@ static void DealFile(char* filename)
     case JPG:
 #ifdef __DEBUG    
         printf("deal with jpg file\n");
-#endif        
-        inputs[1]=filename;
-        inputNum=2;
-        JpegMain(inputNum,inputs);
+#endif
+       	JpegParse(filename, worksp, tpaths);/*worksp/tpaths/filename tpaths=appendix?*/
         break;
     case ZIP:
 #ifdef __DEBUG    
@@ -184,15 +180,23 @@ static int uncompress(char *compressedFile,char* paths)//需要传入一个带�
 {
     char *commandPool[] = {"rar e -y -inul ","unzip -j -q ","tar -xzf ","tar -xf ","tar -xjf "};
     char command[1024] = {0};
-    int flag = whichKindOfCompressedFile(compressedFile);
-//    printf("filename is %s and workpath %s\n",compressedFile,worksp);
+    int flag = whichKindOfCompressedFile(compressedFile);/*获取文件绝对路径*/
     if (flag == 0)
     {
-    	DealFile(compressedFile);
+    	DealFile(compressedFile,"appendix");
         return 1;//源文件不是压缩文件
     }
     strncpy(command, commandPool[flag-1], strlen(commandPool[flag-1]));
 
+	char ziptemp[1024]={0};
+	
+	sprintf(ziptemp,"%s/%s",worksp,"ziptemps");
+	if(mkdir(ziptemp,S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)!=0)
+	{
+		printf("error in mkdir %s\n",ziptemp);
+		return -1;
+	}
+	
     char oldPath[1024]= {0};
     char exePath[1024]= {0};
     char curPath[1024]= {0};
@@ -206,8 +210,9 @@ static int uncompress(char *compressedFile,char* paths)//需要传入一个带�
     strcat(command, exePath);
     if(flag == 1 )
     {
-        strcat(command, " ./");
+        strcat(command, " -C %s",ziptemp);
     }
+    printf("command %s \n",command);
     system(command);
 
     struct dirent *file;
@@ -231,7 +236,7 @@ static int uncompress(char *compressedFile,char* paths)//需要传入一个带�
         	char papapa[1024]={0};
         	getcwd(papapa,sizeof(papapa));
             printf("decode this file with name :%s/%s\n",papapa,file->d_name);
-            DealFile(file->d_name);
+            DealFile(file->d_name,NULL);
         }
     }
     chdir(oldPath);

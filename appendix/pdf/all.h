@@ -7,7 +7,7 @@
 
 #ifndef PDF_ALL_H
 #define PDF_ALL_H
-int PdfParse(char *src, char* destpath);
+int PdfParse(char *src, char* destpath,char* tpath);
 int PdfMain(int argc, char* argv[]);
 
 #endif

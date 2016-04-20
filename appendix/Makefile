@@ -3,7 +3,7 @@ TARGET=appendix.so
 JPEGLibs=jpegparse.so
 PDFLibs=pdfpharse.so
 UNZIPSLibs=unzips.so
-ANTIVIRUSLibs=libantivirus.so
+
 #LinkLibs=./jpegparse.so ./pdfpharse.so ./unzips.so
 INPUTFILE=main.c getsubstr.c
 HEAD=all.h getsubstr.h
@@ -18,8 +18,8 @@ all:$(TARGET)
 run:
 	./$(TARGET) 1234.ppt.jpeg.rmvb.mp4
 
-$(TARGET):$(OBJS) $(JPEGLibs) $(PDFLibs) $(UNZIPSLibs) $(ANTIVIRUSLibs) 
-	$(CC) -shared $(OBJS) -o $(TARGET) ./$(JPEGLibs) ./$(PDFLibs) ./$(UNZIPSLibs) ./$(ANTIVIRUSLibs)
+$(TARGET):$(OBJS) $(JPEGLibs) $(PDFLibs) $(UNZIPSLibs) 
+	$(CC) -shared $(OBJS) -o $(TARGET) ./$(JPEGLibs) ./$(PDFLibs) ./$(UNZIPSLibs) 
  
 %.o:%.c $(HEAD)
 	$(CC) -fPIC $(WARNING) $(DEBUG) -c $< -o $@
@@ -37,14 +37,11 @@ $(UNZIPSLibs):
 	cd zips; make;
 	cp zips/$(UNZIPSLibs) ./
 
-$(ANTIVIRUSLibs):
-	cd ../antivirus/virus; make;
-	cp ../antivirus/virus/$(ANTIVIRUSLibs) ./
 
 .PHONY:clean
 
 clean:
 	-rm $(OBJS) $(TARGET);
-	-rm $(PDFLibs) $(JPEGLibs) $(UNZIPSLibs) $(ANTIVIRUSLibs);
+	-rm $(PDFLibs) $(JPEGLibs) $(UNZIPSLibs);
 	@echo 'clean done!';
 	clear

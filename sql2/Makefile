@@ -100,7 +100,7 @@ $(VIRUSLibs):
 	cp ../antivirus/virus/$(VIRUSLibs) 	./
 
 run:
-	./$(TARGET) ./../main/testdata/9999.eml
+	./$(TARGET) ./../main/testdata/3344.eml
 
 .PHONY:clean
 clean:

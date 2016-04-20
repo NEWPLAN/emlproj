@@ -16,14 +16,14 @@ void usages(void)
     printf("you must input your pdf files at least\n");
 }
 
-int PdfParse(char *src, char* destpath)
+int PdfParse(char *src, char* destpath,char* tpath)
 {
 	char command[1024]={0};
 	char command2[1024]={0};
 	char paths[1024]={0};
 	getcwd(paths,sizeof(paths));
-	sprintf(command,"pdftotext %s/appendix/%s - >> %s/temps/PDF.txt",destpath,src,destpath);
-	sprintf(command2,"pdfinfo %s/appendix/%s >> %s/temps/PDF.txt",destpath,src,destpath);
+	sprintf(command,"pdftotext %s/%s/%s - >> %s/temps/PDF.txt",destpath,tpath,src,destpath);
+	sprintf(command2,"pdfinfo %s/%s/%s >> %s/temps/PDF.txt",destpath,tpath,src,destpath);
 	system(command2);
 	system(command);
 	return 0;
