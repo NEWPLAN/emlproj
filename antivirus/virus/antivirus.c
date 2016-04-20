@@ -10,17 +10,14 @@
 
 int antivirus(const char *path)
 {
-	char oldpath[1024]={0};
-	char abspath[1024]={0};
+	//char oldpath[1024]={0};
+	//char abspath[1024]={0};
 	
-	char command[128] = "./clamdscan ";
+	char command[1024] = "/usr/local/clamav/bin/clamdscan ";
 	
-	getcwd(oldpath,sizeof(oldpath));
-	
+    strcat(command,path);
     
-    sprintf(command,"./clamdscan %s/%s",oldpath,path);
-    
-    chdir(DEFAULTCOMMANDPATH);
+   // chdir(DEFAULTCOMMANDPATH);
     FILE *f = popen(command, "r");
     
     if (f == NULL)
@@ -42,18 +39,15 @@ int antivirus(const char *path)
         {
             if (strcmp(result, found) == 0)
             {
-            	chdir(oldpath);
                 return 1;
             }
             else if (strcmp(result, ok) == 0)
             {
-            	chdir(oldpath);
                 return 0;
             }
             result = strtok( NULL, token);
         }
     }
-    chdir(oldpath);
     return 2;
 }
 
@@ -82,14 +76,14 @@ void startClamd()
 //        memset(temp, 0, sizeof(temp));
 //    }
 //    return 0;
-    chdir(STARTCOMMANDPATH);
-    system("./clamd");
+   // chdir(STARTCOMMANDPATH);
+    system("/usr/local/clamav/sbin/clamd");
 }
 
 void updateDB()
 {
-    chdir(DEFAULTCOMMANDPATH);
-    system("./freshclam");
+   // chdir(DEFAULTCOMMANDPATH);
+    system("/usr/local/clamav/bin/freshclam");
 }
 
 

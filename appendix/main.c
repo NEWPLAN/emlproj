@@ -12,31 +12,29 @@
 #include <time.h>
 #include<sys/time.h>
 
-#include "../antivirus/virus/antivirus.h"
+//#include "../antivirus/virus/antivirus.h"
 
-void DealFile(char* filename);
-#ifdef EML__SYSTEMS__
+static void DealFile(char* filename);
+static int uncompress(char *compressedFile,char* paths);
+
+static char * worksp=NULL;
+
 int AppendixMain(int argc, char* argv[])
-#else
-int main(int argc, char  *argv[])
-#endif
 {
     static int flags=0;
-    char oldpath[80]= {0};
+    char oldpath[1024]= {0};
     DIR* d;
     getcwd(oldpath,sizeof(oldpath));
     struct dirent *file;
-    if(argc<2)
-    {
-        printf("error in input format!\n");
-        return -1;
-    }
+    worksp=argv[0];
+    
     if(!(d=opendir(argv[1])))
     {
         printf("error in open dir : %s\n",argv[1]);
         return -1;
     }
-    chdir(argv[1]);/*change into new path*/
+    printf("oldpath %s\n",oldpath);
+    
     while((file=readdir(d))!=NULL)
     {
         if(strncmp(file->d_name,".",1)==0)
@@ -47,31 +45,18 @@ int main(int argc, char  *argv[])
             stat(file->d_name,&info);
             if(S_ISDIR(info.st_mode))
             {
-#if __DEBUG            
+#ifdef __DEBUG            
                 printf("This is a directory\n");
 #endif                
                 continue;
             }
-        }
-        struct timeval tBeginTime, tEndTime;
-        float fCostTime;
-
-        gettimeofday(&tBeginTime,NULL);/*calculate timer*/
-        gettimeofday(&tEndTime,NULL);
-        fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
-        fCostTime /= 1000000;
-#if __DEBUG        
-        printf("\033[31m the execute time for detect whether %s can be virus  is = %f(Second)\n\033[0m",file->d_name,fCostTime);
-#endif        
-        DealFile(file->d_name);
-        gettimeofday(&tBeginTime,NULL);
-        fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
-        fCostTime /= 1000000;
-#if __DEBUG        
-        printf("\033[31m the execute time for decoding %s is %lf(Second)\n\033[0m",file->d_name,-fCostTime);
-#endif        
+        } 
+        /**
+		char ppppppp[1024]={0};
+		getcwd(ppppppp,sizeof(ppppppp));
+		uncompress(file->d_name, ppppppp);
+        /*/DealFile(file->d_name);        
     }
-    chdir(oldpath);
     closedir(d);
     return 0;
 }
@@ -79,14 +64,15 @@ extern int PdfMain(int argc, char * argv[]);
 extern int JpegMain(int argc, char * argv[]);
 extern int ZipsMain(int argc, char * argv[]);
 
-void DealFile(char* filename)
+#define __DEBUG
+static void DealFile(char* filename)
 {
     char *supports[]= {"doc","docx","ppt","pptx","xls","pdf","jpeg","jpg","zip"};
     enum supportType {DOC,DOCX,PPT,PPTX,XLS,PDF,JPEG,JPG,ZIP,OTHERS} FileType;
     int index, NType;
     char *suffix=NULL;
     char *inputs[5]= {0};
-    int inputNum=0/*,RteVal*/;
+    int inputNum=0;
     NType=sizeof(supports)/sizeof(supports[0]);
     suffix=GetSuffix(filename);
     if(suffix)
@@ -105,64 +91,152 @@ void DealFile(char* filename)
     switch(FileType)
     {
     case DOC:
-#if __DEBUG
+#ifdef __DEBUG
         printf("deal with doc file\n");
 #endif
         break;
     case DOCX:
-#if __DEBUG    
+#ifdef __DEBUG    
         printf("deal with docx file\n");
 #endif        
         break;
     case PPT:
-#if __DEBUG    
+#ifdef __DEBUG    
         printf("deal with ppt file\n");
 #endif        
         break;
     case PPTX:
-#if __DEBUG    
+#ifdef __DEBUG    
         printf("deal with pptx file\n");
 #endif        
         break;
     case XLS:
-#if __DEBUG    
+#ifdef __DEBUG    
         printf("deal with xls file\n");
 #endif        
         break;
     case PDF:
-#if __DEBUG
+#ifdef __DEBUG
         printf("deal with pdf file\n");
-#endif        
-        inputs[1]=filename;
-        inputs[2]="linux.txt";
-        inputNum=3;
-        /*RteVal=*/PdfMain(inputNum,inputs);
+#endif  	
+		PdfParse(filename,worksp);        
         break;
     case JPEG:
-#if __DEBUG    
+#ifdef __DEBUG    
         printf("deal with jpeg file\n");
 #endif        
     case JPG:
-#if __DEBUG    
+#ifdef __DEBUG    
         printf("deal with jpg file\n");
 #endif        
         inputs[1]=filename;
         inputNum=2;
-        /*RteVal=*/JpegMain(inputNum,inputs);
+        JpegMain(inputNum,inputs);
         break;
     case ZIP:
-#if __DEBUG    
+#ifdef __DEBUG    
         printf("deal with zip file\n");
 #endif        
         inputs[1]=filename;
         inputNum=2;
-        /*RteVal=*/ZipsMain(inputNum,inputs);
+        ZipsMain(inputNum,inputs);
         break;
     case OTHERS:
     default:
-#if __DEBUG    
+#ifdef __DEBUG
+		printf("file name %s\n",filename);
         printf("unknow file type, make sure it valid\n");
 #endif        
         break;
     }
 }
+
+
+static int whichKindOfCompressedFile(char *compressedFile)
+//0->不是压缩文件   1 ->rar  2->zip  3->tar.gz 4->tar 5->tar.bz2
+{
+    char *supportsKindOfCompress[] = {"rar","zip","gz","tar","bz2"};
+    int NumberOfType = sizeof(supportsKindOfCompress)/sizeof(supportsKindOfCompress[0]);
+    char *p = NULL;
+    int isCompressed = 0;
+    p = GetSuffix(compressedFile);
+    if (p)
+    {
+        int i = 0;
+        while (i < NumberOfType)
+        {
+            if (!strcmp(supportsKindOfCompress[i], p))
+            {
+                isCompressed = i + 1;
+                break;
+            }
+            i++;
+        }
+    }
+    if (isCompressed == 0)
+    {
+        return 0;
+    }
+    return isCompressed;
+}
+
+static int uncompress(char *compressedFile,char* paths)//需要传入一个带有绝对路径的压缩文件
+{
+    char *commandPool[] = {"rar e -y -inul ","unzip -j -q ","tar -xzf ","tar -xf ","tar -xjf "};
+    char command[1024] = {0};
+    int flag = whichKindOfCompressedFile(compressedFile);
+//    printf("filename is %s and workpath %s\n",compressedFile,worksp);
+    if (flag == 0)
+    {
+    	DealFile(compressedFile);
+        return 1;//源文件不是压缩文件
+    }
+    strncpy(command, commandPool[flag-1], strlen(commandPool[flag-1]));
+
+    char oldPath[1024]= {0};
+    char exePath[1024]= {0};
+    char curPath[1024]= {0};
+    char tempFile[1024] = "temp";
+    getcwd(oldPath, sizeof(oldPath));
+    strcpy(curPath, oldPath);
+    strcat(curPath, "/temp");
+    mkdir(tempFile, 0777);
+    chdir(tempFile);
+    sprintf(exePath, "%s/%s",oldPath,compressedFile);
+    strcat(command, exePath);
+    if(flag == 1 )
+    {
+        strcat(command, " ./");
+    }
+    system(command);
+
+    struct dirent *file;
+    DIR *d;
+    if(!(d=opendir(curPath)))
+    {
+        printf("error in open dir : %s\n",curPath);
+        return -1;
+    }
+    while ((file = readdir(d)) != NULL)
+    {
+        if(strncmp(file->d_name,".",1)==0)
+            continue;
+        int tempFlag = whichKindOfCompressedFile(file->d_name);
+        if (tempFlag > 0)
+        {
+            uncompress(file->d_name,paths);
+        }
+        else
+        {
+        	char papapa[1024]={0};
+        	getcwd(papapa,sizeof(papapa));
+            printf("decode this file with name :%s/%s\n",papapa,file->d_name);
+            DealFile(file->d_name);
+        }
+    }
+    chdir(oldPath);
+    closedir(d);
+    return EXIT_SUCCESS;
+}
+
+

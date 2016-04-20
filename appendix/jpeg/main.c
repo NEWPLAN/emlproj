@@ -44,17 +44,14 @@ void read_exif_content(ExifContent *ec, void *user_data)
     ExifIfd ifd = exif_content_get_ifd(ec);  
     if (ifd == EXIF_IFD_COUNT)  
         fprintf(stderr, "exif_content_get_ifd error");  
-#if __DEBUG    
+#ifdef __DEBUG    
     printf("======IFD: %d %s======\n", ifd, exif_ifd_get_name(ifd));  
 #endif    
     exif_content_foreach_entry(ec, read_exif_entry, &ifd);  
 }  
-#define EML__SYSTEMS__
-#ifdef  EML__SYSTEMS__
-    int JpegMain(int argc, char* argv[])
-#else
-    int main(int argc, char** argv)  
-#endif
+
+
+int JpegMain(int argc, char* argv[])
 {
     char filePath[1024]={0};
     if(argc<2)
@@ -70,7 +67,7 @@ void read_exif_content(ExifContent *ec, void *user_data)
     ExifData* ed = exif_data_new_from_file(argv[1]);  
     if (!ed) 
     {  
-        fprintf(stderr, "An error occur");  
+        fprintf(stderr, "An error occur\n");  
         return 1;  
     }  
     if(!fileptr)

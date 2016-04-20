@@ -8,8 +8,8 @@ while(rte--)
 {
 	if(fork()==0)
 	{
-	int flag = antivirus("/home/host1/new/clam.ppt");
-	int flag1 = antivirus("/home/host1/new/word.doc");
+	int flag = antivirus("/home/host1/test");
+	int flag1 = antivirus("/home/host1/test");
 	printf("%d\n%d\n",flag,flag1);
 	return 0;
 	}

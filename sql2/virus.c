@@ -79,7 +79,7 @@ int virusEngineCheck(char* filepath)
                 continue;
         }
         
-        memset(abspath,0,sizeof(filepath));
+        memset(abspath,0,sizeof(abspath));
         sprintf(abspath,"%s/%s",appendixapth,file->d_name);
         if(antivirus(abspath))
             return 1;

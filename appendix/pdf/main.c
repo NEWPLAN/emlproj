@@ -15,12 +15,21 @@ void usages(void)
 {
     printf("you must input your pdf files at least\n");
 }
-#define EML__SYSTEMS__
-#ifdef  EML__SYSTEMS__
+
+int PdfParse(char *src, char* destpath)
+{
+	char command[1024]={0};
+	char command2[1024]={0};
+	char paths[1024]={0};
+	getcwd(paths,sizeof(paths));
+	sprintf(command,"pdftotext %s/appendix/%s - >> %s/temps/PDF.txt",destpath,src,destpath);
+	sprintf(command2,"pdfinfo %s/appendix/%s >> %s/temps/PDF.txt",destpath,src,destpath);
+	system(command2);
+	system(command);
+	return 0;
+}
+
 int PdfMain(int argc, char* argv[])
-#else
-int main(int argc,char *argv[])
-#endif
 {
     pid_t childs;
 
@@ -53,27 +62,13 @@ int main(int argc,char *argv[])
     waitpid(childs);
 #if __DEBUG    
     printf("=========show pdf extra info (write to 666.txt)=============\n\n");
-#endif    
+#endif
+	sprintf(command,"pdfinfo %s >> ../temps/pdf.txt",argv[1]);
+	/*
     strcat(command,"pdfinfo ");
     strcat(command,argv[1]);
     strcat(command," >> ");
-    strcat(command,filePath);
+    strcat(command,filePath);*/
     system(command);
-    return 0;
-    if((childs=fork())==0)
-    {
-        /*
-        char fileinpus[80]={0};
-        strcat(fileinpus,"pdfinfo linux.pdf >> 666.txt");
-        system(fileinpus);
-        return 0;
-        */
-        if(execlp("pdfinfo","pdfinfo",argv[1],">>pdfinfo.txt",(void*)0)==-1)
-        {
-            printf("error in deal with  show pdf info\n");
-            return 0;
-        }
-    }
-    waitpid(childs);
     return 0;
 }

@@ -7,9 +7,7 @@
 
 #ifndef APPENDIX_ALL_H
 #define APPENDIX_ALL_H
-#define EML__SYSTEMS__
-#ifdef  EML__SYSTEMS__
+
     int AppendixMain(int argc, char* argv[]);
-#endif
 
 #endif

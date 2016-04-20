@@ -284,7 +284,7 @@ int ParseEML(char* filename,GmimeDataPtr* rtevalPtr)
     struct timeval tBeginTime, tEndTime;
     float fCostTime;
 
-    strcat(oldpath,workspace);// add new workspace
+    strcat(oldpath,mimeCy->workspace);// add new workspace
     inputs[2]=oldpath;
 
 
@@ -339,12 +339,12 @@ int ParseURL(char* filename)
 
 int ParseAppendix(char* filedirname)
 {
-    char * ins[2]= {NULL,filedirname};
+    char * ins[2]= {mimeCy->workspace,filedirname};
     int (*dlfunc)(int argc, char* argv[]);
     void *handle;
     char oldpath[1024]= {0};
 
-    sprintf(oldpath,"%s/%s",workspace,filedirname);
+    sprintf(oldpath,"%s/%s",mimeCy->workspace,filedirname);
     ins[1]=oldpath;
 #ifdef __DEBUG
     printf("hello in ParseAppendix\n");
@@ -425,6 +425,7 @@ int ParseAEmail(char*filepath,char*workpath)
         strcat(errorinfo,"Appendix");
         goto  exit;
     }
+    printf("done\n");
     vals=overall_check(mimeCy);
 exit:/*退出，结束*/
     //cleanAll();
