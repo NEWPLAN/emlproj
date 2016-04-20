@@ -6,11 +6,12 @@ extern "C"
 {
 #endif
 //成功返回0，失败返回-1，均有相关提示信息
-int docmain(int argc, char* argv[]);
 
-int xlsmain(int argc, char* argv[]);
+int docmain(char* src, char* workspace,char *curpath);
 
-int pptmain(int argc, char* argv[]);
+int xlsmain(char* src, char* workspace,char *curpath);
+
+int pptmain(char* src, char* workspace,char *curpath);
 
 #ifdef __cplusplus
 }

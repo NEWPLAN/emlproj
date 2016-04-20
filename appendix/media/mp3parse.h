@@ -12,7 +12,9 @@ extern "C"
 	srcfile为要解析的音频或视频文件名，resfile为存储解析结果的文件名。
 	可支持MP3, MPC, FLAC, MP4, ASF, AIFF, WAV, TrueAudio, WavPack, Ogg FLAC, Ogg Vorbis, Speex and Opus file formats.
 */
-int id3tag_extractor(char srcfile[], char resfile[]);
+
+
+int audiopaser(char *srcfile, char* workspace, char *destpath);
 
 #ifdef __cplusplus
 }

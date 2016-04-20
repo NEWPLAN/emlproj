@@ -14,25 +14,32 @@ extern "C"
 {
 #endif
 
-int video_extractor(char srcfile[], char resfile[])
+int videoparser(char *srcfile, char* workspace, char *destpath)
 {
+
+	char srcpath[1024]={0};
+	char respath[1024]={0};
+	
+	sprintf(respath,"%s/temps/mp4.txt",workspace);
+	sprintf(srcpath,"%s/%s/%s",workspace,destpath,srcfile);
+	
 	setlocale(LC_ALL, "");
 
 	wchar_t wfilename[1024];
-	mbstowcs(wfilename, srcfile, 1024);
+	mbstowcs(wfilename, srcpath, 1024);
 
 	MediaInfo temp;
 	if(temp.Open(wfilename) == 0)
 	{
-		cout << "src error: can't open " << srcfile << endl;
+		cout << "src error: can't open " << srcpath << endl;
 		return 0;
 	}
 	temp.Option(__T("Complete"));
 
-	ofstream fout(resfile);
+	ofstream fout(respath,ios::app);
 	if(!fout)
 	{
-		cout << "res error: can't open " << resfile << endl;
+		cout << "res error: can't open " << respath << endl;
 		temp.Close();
 		return 0;
 	}

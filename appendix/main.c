@@ -11,11 +11,13 @@
 #include <sys/stat.h>
 #include <time.h>
 #include<sys/time.h>
-
+#include "media/mp3parse.h"
+#include "media/mp4parse.h"
+#include "office/office_extract.h"
 
 
 static void DealFile(char* filename,char* tpaths);
-static int uncompress(char *compressedFile,char* paths);
+static int uncompress(char *compressedFile,char* srcpath,char* paths);
 
 static char * worksp=NULL;
 
@@ -34,8 +36,11 @@ int AppendixMain(int argc, char* argv[])
         printf("error in open dir : %s\n",argv[1]);
         return -1;
     }
-    printf("oldpath %s\n",oldpath);
     
+#ifdef __DEBUG    
+    printf("oldpath %s\n",oldpath);
+#endif
+
     while((file=readdir(d))!=NULL)
     {
         if(strncmp(file->d_name,".",1)==0)
@@ -53,7 +58,7 @@ int AppendixMain(int argc, char* argv[])
             }
         } 
  //       DealFile(file->d_name,ptptptp); 
-        uncompress(file->d_name,ptptptp);       
+        uncompress(file->d_name,ptptptp,"ziptemps");       
     }
     closedir(d);
     return 0;
@@ -65,8 +70,8 @@ extern int ZipsMain(int argc, char * argv[]);
 #define __DEBUG
 static void DealFile(char* filename,char* tpaths)
 {
-    char *supports[]= {"doc","docx","ppt","pptx","xls","pdf","jpeg","jpg","zip"};
-    enum supportType {DOC,DOCX,PPT,PPTX,XLS,PDF,JPEG,JPG,ZIP,OTHERS} FileType;
+    char *supports[]= {"doc","docx","ppt","pptx","xls","pdf","jpeg","jpg","mp3","mp4"};
+    enum supportType {DOC,DOCX,PPT,PPTX,XLS,PDF,JPEG,JPG,MP3,MP4,OTHERS} FileType;
     int index, NType;
     char *suffix=NULL;
     char *inputs[5]= {0};
@@ -92,26 +97,29 @@ static void DealFile(char* filename,char* tpaths)
 #ifdef __DEBUG
         printf("deal with doc file\n");
 #endif
-        break;
+ //       break;
     case DOCX:
 #ifdef __DEBUG    
         printf("deal with docx file\n");
-#endif        
+#endif   
+		docmain(filename,worksp,tpaths);  
         break;
     case PPT:
 #ifdef __DEBUG    
         printf("deal with ppt file\n");
 #endif        
-        break;
+//        break;
     case PPTX:
 #ifdef __DEBUG    
         printf("deal with pptx file\n");
-#endif        
+#endif  
+		pptmain(filename,worksp,tpaths);       
         break;
     case XLS:
 #ifdef __DEBUG    
         printf("deal with xls file\n");
-#endif        
+#endif  
+		xlsmain(filename,worksp,tpaths);        
         break;
     case PDF:
 #ifdef __DEBUG
@@ -129,13 +137,17 @@ static void DealFile(char* filename,char* tpaths)
 #endif
        	JpegParse(filename, worksp, tpaths);/*worksp/tpaths/filename tpaths=appendix?*/
         break;
-    case ZIP:
+    case MP3:
 #ifdef __DEBUG    
-        printf("deal with zip file\n");
+        printf("deal with mp3 file\n");
+        audiopaser(filename,worksp,tpaths);
+        break;
 #endif        
-        inputs[1]=filename;
-        inputNum=2;
-        ZipsMain(inputNum,inputs);
+    case MP4:
+#ifdef __DEBUG    
+        printf("deal with mp4 file\n");
+#endif        
+        videoparser(filename,worksp,tpaths);       
         break;
     case OTHERS:
     default:
@@ -176,50 +188,39 @@ static int whichKindOfCompressedFile(char *compressedFile)
     return isCompressed;
 }
 
-static int uncompress(char *compressedFile,char* paths)//需要传入一个带有绝对路径的压缩文件
+static int uncompress(char *compressedFile,char* srcpath,char* paths)//需要传入一个带有绝对路径的压缩文件
 {
     char *commandPool[] = {"rar e -y -inul ","unzip -j -q ","tar -xzf ","tar -xf ","tar -xjf "};
+    char *secondcommand[]={" "," -d "," -C "," -C "," -C "};
     char command[1024] = {0};
-    int flag = whichKindOfCompressedFile(compressedFile);/*获取文件绝对路径*/
-    if (flag == 0)
+    int flag = whichKindOfCompressedFile(compressedFile);/*获取文件的压缩格式*/
+    if (flag == 0)//源文件不是压缩文件
     {
     	DealFile(compressedFile,"appendix");
-        return 1;//源文件不是压缩文件
+        return 1;
     }
-    strncpy(command, commandPool[flag-1], strlen(commandPool[flag-1]));
+    strncpy(command, commandPool[flag-1], strlen(commandPool[flag-1]));/*拷贝命令*/
 
 	char ziptemp[1024]={0};
-	
-	sprintf(ziptemp,"%s/%s",worksp,"ziptemps");
+	char exes[1024]={0};
+	sprintf(ziptemp,"%s/%s",worksp,paths);
 	if(mkdir(ziptemp,S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)!=0)
 	{
 		printf("error in mkdir %s\n",ziptemp);
 		return -1;
 	}
 	
-    char oldPath[1024]= {0};
-    char exePath[1024]= {0};
-    char curPath[1024]= {0};
-    char tempFile[1024] = "temp";
-    getcwd(oldPath, sizeof(oldPath));
-    strcpy(curPath, oldPath);
-    strcat(curPath, "/temp");
-    mkdir(tempFile, 0777);
-    chdir(tempFile);
-    sprintf(exePath, "%s/%s",oldPath,compressedFile);
-    strcat(command, exePath);
-    if(flag == 1 )
-    {
-        strcat(command, " -C %s",ziptemp);
-    }
-    printf("command %s \n",command);
-    system(command);
-
-    struct dirent *file;
+	sprintf(exes,"%s %s/%s/%s %s %s/%s",commandPool[flag-1],worksp,srcpath,compressedFile,secondcommand[flag-1],worksp,paths);
+	
+	printf("%s\n",exes);
+	system(exes);
+	struct dirent *file;
     DIR *d;
-    if(!(d=opendir(curPath)))
+    char curpath[1024]={0};
+    sprintf(curpath,"%s/%s",worksp,paths);
+    if(!(d=opendir(curpath)))
     {
-        printf("error in open dir : %s\n",curPath);
+        printf("error in open dir : %s\n",curpath);
         return -1;
     }
     while ((file = readdir(d)) != NULL)
@@ -229,19 +230,21 @@ static int uncompress(char *compressedFile,char* paths)//需要传入一个带�
         int tempFlag = whichKindOfCompressedFile(file->d_name);
         if (tempFlag > 0)
         {
-            uncompress(file->d_name,paths);
+        	char secondpath[1024]={0};
+        	char firstpath[1024]={0};
+        	strcat(firstpath,paths);
+        	sprintf(secondpath,"%s/ziptemps",paths);
+            uncompress(file->d_name,firstpath,secondpath);
         }
         else
         {
-        	char papapa[1024]={0};
-        	getcwd(papapa,sizeof(papapa));
-            printf("decode this file with name :%s/%s\n",papapa,file->d_name);
-            DealFile(file->d_name,NULL);
+        	//char papapa[1024]={0};
+        	//getcwd(papapa,sizeof(papapa));
+            printf("decode this file with name :%s/%s\n",paths,file->d_name);
+            DealFile(file->d_name,paths);
         }
     }
-    chdir(oldPath);
     closedir(d);
     return EXIT_SUCCESS;
 }
-
 

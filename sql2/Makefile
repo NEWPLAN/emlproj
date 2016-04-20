@@ -18,6 +18,9 @@ SPAMLibs=libantispam.so
 VIRUSLibs=libantivirus.so
 SQLDBLibs=sqlDB.so
 DLPLibs=dlp.so
+MP3Libs=MP3libs.so
+MP4Libs=MP4libs.so
+OfficeLibs=OfficeLibs.so
 
 ALLLIBS+=main.o kmp.o 
 ALLCFILE+=main.c kmp.c 
@@ -40,11 +43,11 @@ all:$(TARGET)
 	
 $(TARGET):$(LIBS) $(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
 	$(APPENDIXLibs) $(UNZIPSLibs) $(JPEGLibs) $(PDFLibs)\
-	$(SPAMLibs) $(VIRUSLibs)  $(ALLLIBS)
+	$(SPAMLibs) $(VIRUSLibs)  $(ALLLIBS) $(MP3Libs) $(MP4Libs) $(OfficeLibs)
 	$(CC) $(LIBS) -o $(TARGET) ./$(GMIMELibs)\
 		./$(NLPIRLibs) ./$(REGEXLibs) ./$(SPLITERLibs)\
 		./$(APPENDIXLibs) ./$(UNZIPSLibs) ./$(JPEGLibs)\
-		./$(PDFLibs) ./$(SPAMLibs) ./$(VIRUSLibs) \
+		./$(PDFLibs) ./$(SPAMLibs) ./$(VIRUSLibs) ./$(OfficeLibs) ./$(MP3Libs) ./$(MP4Libs) \
 		 $(LINKS) -ldl
 
 
@@ -54,14 +57,14 @@ $(TARGET):$(LIBS) $(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
 
 
 debug:$(TARGET)
-	gdb --args $(TARGET) ../main/testdata/9999.eml
+	gdb --args $(TARGET) ../main/testdata/3344.eml
 
 $(DLPLibs):  $(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
 	$(APPENDIXLibs) $(UNZIPSLibs) $(JPEGLibs) $(PDFLibs)\
-	$(SPAMLibs) $(VIRUSLibs)  $(ALLLIBS) $(LIBS)
+	$(SPAMLibs) $(VIRUSLibs)  $(ALLLIBS) $(LIBS) $(MP3Libs) $(MP4Libs) $(OfficeLibs)
 	gcc -shared $(LIBS) -o $(DLPLibs) $(LINKS) -ldl  ./$(GMIMELibs)\
 		./$(NLPIRLibs) ./$(REGEXLibs) ./$(SPLITERLibs)\
-		./$(APPENDIXLibs) ./$(UNZIPSLibs) ./$(JPEGLibs)\
+		./$(APPENDIXLibs) ./$(UNZIPSLibs) ./$(JPEGLibs) ./$(OfficeLibs) ./$(MP3Libs) ./$(MP4Libs) \
 		./$(PDFLibs) ./$(SPAMLibs) ./$(VIRUSLibs)
 
 $(GMIMELibs):
@@ -99,8 +102,21 @@ $(VIRUSLibs):
 	cd ../antivirus/virus; 	make $(VIRUSLibs);
 	cp ../antivirus/virus/$(VIRUSLibs) 	./
 
+$(MP3Libs):
+	cd ../appendix/media; make $(MP3Libs);
+	cp ../appendix/media/$(MP3Libs) ./
+	
+$(MP4Libs):
+	cd ../appendix/media; make $(MP4Libs);
+	cp ../appendix/media/$(MP4Libs) ./
+	
+$(OfficeLibs):
+	cd ../appendix/office; make $(OfficeLibs);
+	cp ../appendix/office/$(OfficeLibs) ./
+
+
 run:
-	./$(TARGET) ./../main/testdata/3344.eml
+	./$(TARGET) ./../main/testdata/5566.eml
 
 .PHONY:clean
 clean:
@@ -111,7 +127,8 @@ clean:
 	-rm -rf $(ADDATIONFOLDE);
 	-rm $(GMIMELibs) $(REGEXLibs) $(SPLITERLibs)\
 		$(APPENDIXLibs) $(UNZIPSLibs) $(JPEGLibs)\
-		$(PDFLibs) $(SPAMLibs) $(VIRUSLibs) ;
+		$(PDFLibs) $(SPAMLibs) $(VIRUSLibs) \
+		$(MP3Libs) $(MP4Libs) $(OfficeLibs);
 	cd ../gmime; 		make clean;
 	cd ../regex; 		make clean;
 	cd ../spliter;	 	make clean;
@@ -121,5 +138,7 @@ clean:
 	cd ../appendix/jpeg; 	make clean;
 	cd ../antivirus/spam; 	make clean;
 	cd ../antivirus/virus; 	make clean;
+	cd ../appendix/media;  	make clean;
+	cd ../appendix/office; 	make clean;
 	clear;
 	@echo 'all clean done!'

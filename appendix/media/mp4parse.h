@@ -11,7 +11,7 @@ extern "C"
 	成功返回0;失败返回-1，均有相关提示信息
 	srcfile为要解析的视频文件名，resfile为存储解析结果的文件名。
 */
-int video_extractor(char srcfile[], char resfile[]);
+int videoparser(char *srcfile, char* workspace, char *destpath);
 
 #ifdef __cplusplus
 }
