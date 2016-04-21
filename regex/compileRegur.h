@@ -6,4 +6,12 @@
 #define BUFLEN 1024
 
 int compliemain(char* pattern , char* src);
+
+typedef struct URTLLIST
+{
+	char * data;
+	struct  URTLLIST * next;
+}urltype, *urlptr;
+
+urlptr rteStr(char* pattern , char* src);
 #endif

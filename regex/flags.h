@@ -1,12 +1,13 @@
 /*************************************************************************
 	> File Name: flags.h
-	> Author: 
-	> Mail: 
-	> Created Time: 2016Äê03ÔÂ03ÈÕ ÐÇÆÚËÄ 19Ê±33·Ö10Ãë
+	> Author:
+	> Mail:
+	> Created Time: 2016ï¿½ï¿½03ï¿½ï¿½03ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 19Ê±33ï¿½ï¿½10ï¿½ï¿½
  ************************************************************************/
 
 #ifndef _FLAGS_H
 #define _FLAGS_H
 extern int      flags;
 extern char*    txtstr;
+#define __DEBUG
 #endif

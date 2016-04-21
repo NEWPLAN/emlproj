@@ -1,4 +1,5 @@
 TARGET=libregex.so
+TEST=test.exe
 CC=gcc
 CPP=g++
 LINKS=-lpcre
@@ -19,11 +20,15 @@ all:$(TARGET)
 $(TARGET):$(objs)
 	$(CC) -shared $(objs) -o $(TARGET) $(LINKS)
 
-run:
-	./$(TARGET)
-
+run:  $(TARGET) $(TEST)
+	./$(TEST)
+	
+$(TEST):test.o $(HeadF)
+	$(CC)  test.o -o $(TEST) ./$(TARGET)
+	
+	
 .PHONY:clean
 clean:
-	-rm $(TARGET) $(objs);
+	-rm $(TARGET) $(objs) $(TEST) test.o;
 	clear;
 	@echo "clean done"

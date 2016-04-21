@@ -43,9 +43,9 @@ int main(int argc,char* argv[])
             stat(file->d_name,&info);
             if(S_ISDIR(info.st_mode))
             {
-#if __DEBUG            	
+#if __DEBUG
                 printf("This is a directory\n");
-#endif                
+#endif
                 continue;
             }
         }
@@ -54,9 +54,9 @@ int main(int argc,char* argv[])
             printf("error in LoadTxtPage \n");
             return -1;
         }
-#if __DEBUG        
+#if __DEBUG
         printf("\033[35m this page can be descrribed as follow:\n%s\n\033[0m",txtstr);
-#endif        
+#endif
         /*
         -bankcard---idcard-----mobphone---emailadd---urls-------ip_address-
         --------07---------06---------05---------04---------03---------02--
@@ -65,9 +65,9 @@ int main(int argc,char* argv[])
         argv[2]=(char*)(&ss);
         if((*argv[2])&(1<<4))
         {
-#if __DEBUG        	
+#if __DEBUG
         	printf("in Matching email\n");
-#endif        	
+#endif
             //EmlMatch();
             if(EmlMatch())
             {
@@ -77,9 +77,9 @@ int main(int argc,char* argv[])
         }
         if((*argv[2])&(1<<6))
         {
-#if __DEBUG        	
+#if __DEBUG
         	printf("in matching id card\n");
-#endif        	
+#endif
             //idCardMatch();
             if(idCardMatch())
             {
@@ -89,9 +89,9 @@ int main(int argc,char* argv[])
         }
         if((*argv[2])&(1<<5))
         {
-#if __DEBUG        	
+#if __DEBUG
         	printf("in matching mobile phone\n");
-#endif        	
+#endif
             //mobileMatch();
             if(mobileMatch())
             {
@@ -101,9 +101,9 @@ int main(int argc,char* argv[])
         }
         if((*argv[2])&(1<<7))
         {
-#if __DEBUG        	
+#if __DEBUG
         	printf("in matching bank card\n");
-#endif        	
+#endif
             //bankCardMatch();
             if(bankCardMatch())
             {
@@ -113,9 +113,9 @@ int main(int argc,char* argv[])
         }
         if((*argv[2])&(1<<3))
         {
-#if __DEBUG        	
+#if __DEBUG
         	printf("in matching urls\n");
-#endif        	
+#endif
             //UrlMatch();
             if(UrlMatch())
             {
@@ -125,9 +125,9 @@ int main(int argc,char* argv[])
         }
         if((*argv[2])&(1<<2))
         {
-#if __DEBUG        	
+#if __DEBUG
         	printf("in matching IP address\n");
-#endif        	
+#endif
             //IPMatch();
             if(IPMatch())
             {
@@ -155,4 +155,11 @@ int checkInclass(char * file, char* pattern)
     int rte= compliemain(pattern,txtstr);
     RelasePage();
     return rte;
+}
+
+
+int main(int argc, char* argv[])
+{
+    UrlMatch();
+    return;
 }

@@ -435,7 +435,7 @@ exit:/*退出，结束*/
     return vals;
 }
 
-
+#define __FORKS
 
 
 int main(int argc, char* argv[])
@@ -445,7 +445,7 @@ int main(int argc, char* argv[])
     AllInits();
     while(rte--)
     {
-#if 0
+#ifdef  __FORKS
         	if(fork()==0)
 #endif
         {
@@ -468,7 +468,7 @@ exits:
 			AllFree();
             sprintf(command,"rm -rf %s",runningFiles);
             usleep(1);
-#if 0
+#ifdef __FORKS
             	if(fork()==0)
             		execlp("rm","rm","-rf",runningFiles,NULL);
             wait(NULL);
@@ -476,7 +476,7 @@ exits:
             return 0;
         }
     }
-#if 0
+#ifdef __FORKS
 	wait(NULL);
 #endif
     AllRelease();

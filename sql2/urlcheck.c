@@ -3,25 +3,89 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "../regex/compileRegur.h"
+#include <dirent.h>
+#include <unistd.h>
+#include <sys/stat.h>
+
+static urlptr loadUrl(char* filepath)
+{
+	char * regURL="(^|\\b)(((https|http|ftp|rtsp|mms)?\\:\\/\\/)[^\\s]+)($|\\b)";
+	urlptr heads=NULL;
+	if(filepath==NULL)
+		return NULL;		
+	urlptr A= rteStr(regURL , filepath);
+	urlptr b=A->next;
+	return b;
+}
+
+static int compareUrl(char* workspace,char*** src, int num)
+{
+	int index=0,second=0;
+	DIR* d;
+    struct dirent *file;
+    
+    char abspath[1024]={0};
+    sprintf(abspath,"%s/temps",workspace);	
+    if(!(d=opendir(abspath)))
+    {
+        printf("error in open dir : %s\n",abspath);
+        return 0;
+    }
+    while((file=readdir(d))!=NULL)
+    {
+        if(strncmp(file->d_name,".",1)==0)
+            continue;
+        {
+            /*判断是文件夹处理下一个*/
+            struct stat info;
+            stat(file->d_name,&info);
+            if(S_ISDIR(info.st_mode))
+            {                
+                continue;
+            }
+        } 
+        char filepaths[1024]={0};
+		sprintf(filepaths,"%s/temps/%s",workspace,file->d_name);
+		urlptr temps=NULL,hhh=loadUrl(filepaths);
+		if(hhh==NULL)
+			continue;
+		for(index=0;index<num;index++)
+		{
+			temps=hhh;
+			while(temps)
+			{
+				if(strcmp(temps->data,src[index][0])==0)
+					return 1;
+				temps=temps->next;
+			}
+		}              
+    }
+    closedir(d);
+    return 0;
+}
 
 int matchUrl(mimePtr email,FetchRtePtr* vals)
 {
 	FetchRtePtr urlitems=NULL,sqlval=*vals;
 	char command[1024]={0};
+	int index=0,rteval=0;
 	if(sqlval==NULL||sqlval->row==0)
-		return 0;
+		return rteval;
 	sprintf(command,"SELECT URL FROM strategy_urls WHERE list_id = %s",sqlval->dataPtr[0][0]);
 	urlitems=sql_query(command);
-	if(urlitems==NULL||urlitems->row==0)
-		return 0;
+	if(urlitems==NULL)
+		return rteval;
+	printf("url check\n");
+	rteval=compareUrl(email->workspace,urlitems->dataPtr,urlitems->row);
+	if(!rteval)
 	{
-		/*add pasring url module here and return values*/
-		
+		printf("不要拦我，马上联网查你了！！！\n");
 	}
 	free_memory(urlitems);
 	free_memory(sqlval);
 	*vals=NULL;
-	return 0;
+	return rteval;
 
 }
 

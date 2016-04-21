@@ -76,6 +76,9 @@ static void DealFile(char* filename,char* tpaths)
     char *suffix=NULL;
     char *inputs[5]= {0};
     int inputNum=0;
+    char abspath[1024]={0};
+    getcwd(abspath,sizeof(abspath));
+    sprintf(abspath,"%s/%s",abspath,worksp);
     NType=sizeof(supports)/sizeof(supports[0]);
     suffix=GetSuffix(filename);
     if(suffix)
@@ -102,7 +105,7 @@ static void DealFile(char* filename,char* tpaths)
 #ifdef __DEBUG    
         printf("deal with docx file\n");
 #endif   
-		docmain(filename,worksp,tpaths);  
+		docmain(filename,abspath,tpaths);  
         break;
     case PPT:
 #ifdef __DEBUG    
@@ -113,13 +116,13 @@ static void DealFile(char* filename,char* tpaths)
 #ifdef __DEBUG    
         printf("deal with pptx file\n");
 #endif  
-		pptmain(filename,worksp,tpaths);       
+		pptmain(filename,abspath,tpaths);       
         break;
     case XLS:
 #ifdef __DEBUG    
         printf("deal with xls file\n");
 #endif  
-		xlsmain(filename,worksp,tpaths);        
+		xlsmain(filename,abspath,tpaths);        
         break;
     case PDF:
 #ifdef __DEBUG

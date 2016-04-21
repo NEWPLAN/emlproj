@@ -9,8 +9,8 @@
 #include "office_extract.h"
 int main(int argc, char * argv[])
 {
-    docmain("test.docx",".",".");
-    pptmain("test.pptx",".",".");
-    xlsmain("test.xlsx",".",".");
+    docmain("test.docx","/home/host1/git/emlproj/appendix","office");
+    pptmain("test.pptx","/home/host1/git/emlproj/appendix","office");
+    xlsmain("test.xlsx","/home/host1/git/emlproj/appendix","office");
     return 0;
 }
