@@ -4,7 +4,7 @@
 #include "emailhead.h"
 
 extern struct GatewayConfiguration *g_gateway_config;
-static volatile loop = 0;
+static volatile int loop = 0;
 
 /* p->ismail legend:
    ismail=0 not processing a message - parsing client commands

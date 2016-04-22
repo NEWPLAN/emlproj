@@ -19,6 +19,9 @@ typedef struct Emails
     char* filePath;
     char* sender;
     char* receiver;
+    char* srcfrom;
+    char* ipto;
+    char* protocol;
 
     struct sockaddr_in* srcIP;
     struct sockaddr_in* destip;

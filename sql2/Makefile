@@ -57,7 +57,7 @@ $(TARGET):$(LIBS) $(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
 
 
 debug:$(TARGET)
-	gdb --args $(TARGET) ../main/testdata/6666.eml
+	gdb --args $(TARGET) ../main/testdata/7777.eml
 
 $(DLPLibs):  $(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
 	$(APPENDIXLibs) $(UNZIPSLibs) $(JPEGLibs) $(PDFLibs)\

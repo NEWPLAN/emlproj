@@ -57,6 +57,7 @@ static int compareUrl(char* workspace,char*** src, int num)
 			{
 				if(strcmp(temps->data,src[index][0])==0)
 					return 1;
+				printf("%s\n%s\n",temps->data,src[index][0]);
 				temps=temps->next;
 			}
 		}              

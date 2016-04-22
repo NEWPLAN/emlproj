@@ -26,6 +26,7 @@ typedef struct MIMEDATASTRUCT
     char* receiver;
     char* srcIP;
     char* destIP;
+    char* protocol;
 } mimeType,*mimePtr;
 
 CheckType spamCheck(mimePtr email, char* owner, int direction);

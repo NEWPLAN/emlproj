@@ -19,19 +19,12 @@
 #include <assert.h>
 #include "assist.h"
 #include "moduleswitch.h"
-#include "../api/emailhead.h"
+#include "../protocol/emailhead.h"
 #include "statistic.h"
 
 //static GmimeDataPtr mimedata=NULL;
 
 static char workspace[1024]= {0};
-/*黑白名单*/
-#define WHITELIST '1'
-#define BLACKLIST '0'
-
-/*针对源地址和目的地址*/
-#define TERMINAL  '1'
-#define SOURCE    '0'
 
 #include "dboperate.h"
 
@@ -128,35 +121,35 @@ static void overall_check_single_side(mimePtr email,char* owner,int direction, s
 
     if(spam_result==CONFIRMED)
     {
-        strcat(notify_info,"垃圾邮件\t");// #类似的信息
+        strcat(notify_info,"check for spam\t");// #类似的信息
         strategyType spam_strategy = get_valid_strategy("spam", owner, direction);
         *final_strategy=combine_strategy(*final_strategy, spam_strategy);
     }
 
     if(virus_result==CONFIRMED)
     {
-        strcat(notify_info,"您的邮件中含有病毒\t");// #类似的信息
+        strcat(notify_info,"check for virus\t");// #类似的信息
         strategyType virus_strategy = get_valid_strategy("virus", owner, direction);
         *final_strategy=combine_strategy(*final_strategy, virus_strategy);
     }
 
     if(keyword_result==CONFIRMED)
     {
-        strcat(notify_info,"您的邮件中含有关键字\t");// #类似的信息
+        strcat(notify_info,"check for key words\t");// #类似的信息
         strategyType keyword_strategy = get_valid_strategy("keyword", owner, direction);
         *final_strategy=combine_strategy(*final_strategy, keyword_strategy);
     }
 
     if(keywordclass_result==CONFIRMED)
     {
-        strcat(notify_info,"您的邮件中含有关键字类\t");// #类似的信息
+        strcat(notify_info,"check for key words class\t");// #类似的信息
         strategyType keywordclass_strategy = get_valid_strategy("keywordClass", owner, direction);
         *final_strategy=combine_strategy(*final_strategy, keywordclass_strategy);
     }
 
     if(url_result==CONFIRMED)
     {
-        strcat(notify_info,"您的邮件中含有URL\t");// #类似的信息
+        strcat(notify_info,"check for urls\t");// #类似的信息
         strategyType url_strategy = get_valid_strategy("url", owner, direction);
         *final_strategy=combine_strategy(*final_strategy, url_strategy);
     }
@@ -222,14 +215,16 @@ static int overall_check(mimePtr email)
 	{/**争议的地方**/
 		if(sender_final_strategy ==BLOCK)
         {
-        	sprintf(commands,"now(),'pop3', 'BLOCK', 'sender matters', '%s', '192.168.1.1', '192.168.1.2', '%s', '%s'",notify_info,sender,receiver);
+        	sprintf(commands,"now(),'%s', 'BLOCK', 'sender matters', '%s', '%s', '%s', '%s', '%s'",
+        	mimeCy->protocol,notify_info,mimeCy->srcIP,mimeCy->destIP,sender,receiver);
         	insertLogs(commands);
         	printf("堵截\n");
             return 1;//#堵截
         }
         else if (sender_final_strategy == TRASH)
         {
-        	sprintf(commands,"now(),'pop3', 'TRASH', 'sender matters', '%s', '192.168.1.1', '192.168.1.2', '%s', '%s'",notify_info,sender,receiver);
+        	sprintf(commands,"now(),'%s', 'TRASH', 'sender matters', '%s', '%s', '%s', '%s', '%s'",
+        	mimeCy->protocol,notify_info,mimeCy->srcIP,mimeCy->destIP,sender,receiver);
         	insertLogs(commands);
         	printf("发送到垃圾箱\n");
             return 2;//#发送到垃圾箱
@@ -238,8 +233,7 @@ static int overall_check(mimePtr email)
 
     strategyType receiver_final_strategy =IGNORE;
 
-    if((receiver_final_strategy!=BLOCK) && checkInGateway(receiver))/*final_strategy != 'block' and receiver in netgate*///: #邮件能从发送端网关发出
-        //#接收端检测
+    if((receiver_final_strategy!=BLOCK) && checkInGateway(receiver)) //#接收端检测
     {
         memset(notify_info, 0, sizeof(notify_info));
 
@@ -247,7 +241,8 @@ static int overall_check(mimePtr email)
 
         if(receiver_final_strategy ==BLOCK)
         {
-        	sprintf(commands,"now(),'pop3', 'BLOCK', 'receiver matters', '%s', '192.168.1.1', '192.168.1.2', '%s', '%s'",notify_info,sender,receiver);
+        	sprintf(commands,"now(),'%s', 'BLOCK', 'receiver matters', '%s', '%s', '%s', '%s', '%s'",
+        	mimeCy->protocol,notify_info,mimeCy->srcIP,mimeCy->destIP,sender,receiver);
         	insertLogs(commands);
         	printf("堵截\n");
             return 1;//#堵截
@@ -255,7 +250,8 @@ static int overall_check(mimePtr email)
         else if (receiver_final_strategy == TRASH)
         {
         	printf("发送到垃圾箱\n");
-        	sprintf(commands,"now(),'pop3', 'TRASH', 'receiver matters', '%s', '192.168.1.1', '192.168.1.2', '%s', '%s'",notify_info,sender,receiver);
+        	sprintf(commands,"now(),'%s', 'TRASH', 'receiver matters', '%s', '%s', '%s', '%s', '%s'",
+        	mimeCy->protocol,notify_info,mimeCy->srcIP,mimeCy->destIP,sender,receiver);
         	insertLogs(commands);
             return 2;//#发送到垃圾箱
         }
@@ -267,7 +263,8 @@ static int overall_check(mimePtr email)
     }
     printf("不在网关中，可以直接发送\n");
 SENDNOW:
-    sprintf(commands,"now(),'pop3', 'IGNORE', 'sender directly', 'not in gate way', '192.168.1.1', '192.168.1.2', '%s', '%s'",sender,receiver);
+    sprintf(commands,"now(),'%s', 'IGNORE', 'check ok', 'email is ok!', '%s', '%s', '%s', '%s'",
+        	mimeCy->protocol,mimeCy->srcIP,mimeCy->destIP,sender,receiver);
     insertLogs(commands);
     return 0;/*not in mailgateway*/
 }
@@ -321,7 +318,6 @@ int ParseEML(char* filename,GmimeDataPtr* rtevalPtr)
     }
 #endif
     *rtevalPtr=A;
-    //mimeCy->mimedata=A;
     gettimeofday(&tEndTime,NULL);
     fCostTime = 1000000*(tEndTime.tv_sec-tBeginTime.tv_sec)+(tEndTime.tv_usec-tBeginTime.tv_usec);
     fCostTime /= 1000000;
@@ -404,7 +400,7 @@ static int AllRelease(void)
     SpliterExit();
     return 0;
 }
-int ParseAEmail(char*filepath,char*workpath)
+int ParseAEmail(char*filepath,char*workpath,EmailTypePtr emailptr)
 {
 	int vals=0;
     char errorinfo[1024]= {0};/*错误处理*/
@@ -415,6 +411,12 @@ int ParseAEmail(char*filepath,char*workpath)
     
 	mimeCy->workspace=workpath;
 	mimeCy->filepath=filepath;
+	if(emailptr)
+	{
+		mimeCy->srcIP=emailptr->ipfrom;
+		mimeCy->destIP=emailptr->ipto;
+		mimeCy->protocol=emailptr->protocol;
+    }
 //GMIMEPARSE:/*邮件解析*/
     if(ParseEML(filepath,&(mimeCy->mimedata))==0)
     {
@@ -453,6 +455,10 @@ int main(int argc, char* argv[])
             char newpath_temps[1024]= {0};
             char newpath_appendix[1024]= {0};
             char command[1024]= {0};
+            EmailTypePtr eeeee=(EmailTypePtr)malloc(sizeof(EmailType));
+            eeeee->ipto="0.0.0.0";
+            eeeee->ipfrom="1.1.1.1";
+            eeeee->protocol="hahaha";
             sprintf(runningFiles,"runningFiles_%d",getpid());
             sprintf(newpath_temps,"%s/temps",runningFiles);
             sprintf(newpath_appendix,"%s/appendix",runningFiles);
@@ -463,7 +469,7 @@ int main(int argc, char* argv[])
             if(mkdir(newpath_appendix, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)!=0)/*! success*/
                 goto exits;
 
-            printf("%d\t%d\n",getpid(),ParseAEmail(argv[1],runningFiles));
+            printf("%d\t%d\n",getpid(),ParseAEmail(argv[1],runningFiles,eeeee));
 exits:
 			AllFree();
             sprintf(command,"rm -rf %s",runningFiles);

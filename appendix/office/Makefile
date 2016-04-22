@@ -1,7 +1,7 @@
 OfficeLibs=OfficeLibs.so
 TESTRTE=test.exe
 
-WARNING= -Wall
+WARNING= -Werror
 
 DEBUG=-g
 CC=gcc

@@ -280,7 +280,7 @@ int pptmain(char* src, char* workspace,char *curpath)
         {
             Reference<XShape> rShape;
             slide->getByIndex(i) >>= rShape;
-            OUString shapeType = rShape->getShapeType();
+            //OUString shapeType = rShape->getShapeType();
             //printf("        Shape%d's type is : %s\n", i+1, OUStringToOString(shapeType,RTL_TEXTENCODING_UTF8).pData->buffer);
 
             Reference<XText> rText(rShape, UNO_QUERY);

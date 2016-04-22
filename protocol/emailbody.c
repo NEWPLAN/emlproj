@@ -46,6 +46,11 @@ int Email_ParseFile(EmailTypePtr parasPtr)
             char newpath_temps[1024]= {0};
             char newpath_appendix[1024]= {0};
             char command[1024]= {0};
+            EmailTypePtr eeeee=(EmailTypePtr)malloc(sizeof(EmailType));
+            assert(eeeee!=NULL);
+            eeeee->ipto="0.0.0.0";
+            eeeee->ipfrom="1.1.1.1";
+            eeeee->protocol="hahaha";
             sprintf(runningFiles,"runningFiles_%d",getpid());
             sprintf(newpath_temps,"%s/temps",runningFiles);
             sprintf(newpath_appendix,"%s/appendix",runningFiles);
@@ -56,7 +61,8 @@ int Email_ParseFile(EmailTypePtr parasPtr)
             if(mkdir(newpath_appendix, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)!=0)/*!success*/
                 goto exits;
             printf("runningFiles %s\n",runningFiles);
-            rtevals=ParseAEmail(parasPtr->filePath,runningFiles);
+            rtevals=ParseAEmail(parasPtr->filePath,runningFiles,eeeee);
+            free(eeeee);
 exits:
             sprintf(command,"rm -rf %s",runningFiles);
             usleep(1);
