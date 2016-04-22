@@ -105,7 +105,7 @@ static void DealFile(char* filename,char* tpaths)
 #ifdef __DEBUG    
         printf("deal with docx file\n");
 #endif   
-		docmain(filename,abspath,tpaths);  
+//		docmain(filename,abspath,tpaths);  
         break;
     case PPT:
 #ifdef __DEBUG    
@@ -122,7 +122,7 @@ static void DealFile(char* filename,char* tpaths)
 #ifdef __DEBUG    
         printf("deal with xls file\n");
 #endif  
-		xlsmain(filename,abspath,tpaths);        
+//		xlsmain(filename,abspath,tpaths);        
         break;
     case PDF:
 #ifdef __DEBUG

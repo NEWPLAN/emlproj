@@ -12,7 +12,7 @@
 #include <sys/stat.h>
 #include <assert.h>
 
-int matchRegex(char* filepath,FetchRtePtr vals)
+int matchRegex(char* filepath,FetchRtePtr* valsPtr)
 {
     char abspath[1024]={0};
     char appendixapth[1024]={0};
@@ -20,6 +20,7 @@ int matchRegex(char* filepath,FetchRtePtr vals)
     struct dirent *file;
     assert(filepath!=NULL);
     int index=0;
+    FetchRtePtr vals=*valsPtr;
 
     sprintf(appendixapth,"%s/%s",filepath,"temps");    
     if(!(d=opendir(appendixapth)))
@@ -47,6 +48,8 @@ int matchRegex(char* filepath,FetchRtePtr vals)
                 return 1;
         }
     }
+    free_memory(vals);
+    *valsPtr=NULL;
     return 0;
 }
 
@@ -62,7 +65,7 @@ CheckType keywordClassCheck(mimePtr email,char* owner,int direction)
 
     FetchRtePtr user_keywordclasses=sql_query(command);
 
-    if(matchRegex(email->workspace,user_keywordclasses))/*email match user_keywordclasses*/
+    if(matchRegex(email->workspace,&user_keywordclasses))/*email match user_keywordclasses*/
         return CONFIRMED;
 
     //#2.domain级处理
@@ -71,7 +74,7 @@ CheckType keywordClassCheck(mimePtr email,char* owner,int direction)
     sprintf(command,"SELECT * FROM strategy_keywordclasslist WHERE owner = '%s' AND level = 1  AND direction = %d",ownerDomain,direction);
     FetchRtePtr domain_keywordclasses=sql_query(command);
 
-    if(matchRegex(email->workspace,domain_keywordclasses))/*email match domain_keywordclasses*/
+    if(matchRegex(email->workspace,&domain_keywordclasses))/*email match domain_keywordclasses*/
         return CONFIRMED;
 
     //#3.网关级处理
@@ -79,7 +82,7 @@ CheckType keywordClassCheck(mimePtr email,char* owner,int direction)
     sprintf(command,"SELECT * FROM strategy_keywordclasslist WHERE owner = '%s' AND level = 2  AND direction = %d","GLOBAL",direction);
     FetchRtePtr global_keywordclasses=sql_query(command);
 
-    if(matchRegex(email->workspace,global_keywordclasses))/*email match global_keywordclasses:*/
+    if(matchRegex(email->workspace,&global_keywordclasses))/*email match global_keywordclasses:*/
         return CONFIRMED;
     return OK;
 }

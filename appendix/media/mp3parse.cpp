@@ -20,13 +20,12 @@ extern "C"
 //解析音视频文件的id3 tag（如标题、艺术家、唱片集等信息），成功则返回0，失败则输出失败信息并返回-1。
 int audiopaser(char *srcfile, char* workspace, char *destpath) 
 {	
-	cout << "******************** \"" << workspace << srcfile << "\" ********************" << endl;
-
 	char srcpath[1024]={0};
 	char respath[1024]={0};
 	
 	sprintf(respath,"%s/temps/mp3.txt",workspace);
 	sprintf(srcpath,"%s/%s/%s",workspace,destpath,srcfile);
+	printf("********************%s********************\n",srcpath);
 	TagLib::FileRef f(srcpath);
 	if(f.isNull())
 	{

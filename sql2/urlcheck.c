@@ -40,10 +40,8 @@ static int compareUrl(char* workspace,char*** src, int num)
             /*判断是文件夹处理下一个*/
             struct stat info;
             stat(file->d_name,&info);
-            if(S_ISDIR(info.st_mode))
-            {                
+            if(S_ISDIR(info.st_mode))           
                 continue;
-            }
         } 
         char filepaths[1024]={0};
 		sprintf(filepaths,"%s/temps/%s",workspace,file->d_name);
@@ -57,7 +55,7 @@ static int compareUrl(char* workspace,char*** src, int num)
 			{
 				if(strcmp(temps->data,src[index][0])==0)
 					return 1;
-				printf("%s\n%s\n",temps->data,src[index][0]);
+				printf("%s\n%s\n",temps->data,src[index][0]);/*has match for this url*/
 				temps=temps->next;
 			}
 		}              

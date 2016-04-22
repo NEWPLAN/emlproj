@@ -32,6 +32,7 @@ extern "C"
 		    dicpath=argv[3];
 
 		SpiPtr pp=ImportDic();
+		if(pp)
 		{
 		    char filepath[1024];
 		    DIR* d;
@@ -66,6 +67,7 @@ extern "C"
 		        printf("\n------using brute match methods---------\n");
 	#endif
 		        index=HashMach(q,pp,NumPatt);
+		        free(pp);
 		        RelasePage();
 		        if(index)
 		        {
@@ -76,6 +78,7 @@ extern "C"
 		    closedir(d);
 		    return index;
 		}
+		return 0;
 	}
 }	
 	
@@ -110,7 +113,10 @@ static SpiPtr ImportDic()
     FILE *filPtr=NULL;
     SpiPtr p=(SpiPtr)malloc(300*255);
     if(!p)
+    {
+    	printf("fatal error!, can't malloc memory for dictionary, will return NULL\n");
         return NULL;
+    }   
     if(!dicpath)
         filPtr=fopen("userdict.txt","rb");
     else
@@ -123,11 +129,18 @@ static SpiPtr ImportDic()
     while (!feof(filPtr))
     {
         memset(p[i],0,255);
-        int nu=fscanf(filPtr, "%s",p[i++]);
+        int nu=fscanf(filPtr, "%s",p[i]);
         if(nu<0)
             continue;
+        i++;
 //		printf("the add dict is %s\n",p[i-1]);
     }
     fclose(filPtr);
+    if(i==0)
+    {
+    	printf("dic is empty, will go back directly\n");
+    	free(p);
+    	return NULL;
+    }
     return p;
 }

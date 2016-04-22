@@ -4,13 +4,14 @@
 #include "mainall.h"
 #include <assert.h>
 
-static int matchGateway(mimePtr email,FetchRtePtr sqlval)
+static int matchGateway(mimePtr email,FetchRtePtr *sqlvalPtr)
 {
     assert(email!=NULL);
+    FetchRtePtr sqlval=*sqlvalPtr;
     char* sender=email->sender, *receiver=email->receiver,*srcip=email->srcIP, *destip=email->destIP;
     if((sender==NULL && receiver ==NULL && srcip==NULL && destip==NULL) || sqlval==NULL)
         return 0;
-    int index=0;
+    int index=0,rte=0;
     for(index=0; index<sqlval->row; index++)
     {
         if((sqlval->dataPtr)[index][3]!=NULL)/*field*/
@@ -19,29 +20,43 @@ static int matchGateway(mimePtr email,FetchRtePtr sqlval)
             {
                 if((sqlval->dataPtr)[index][4]!=NULL && srcip)
 		            if(strcmp((sqlval->dataPtr)[index][4],srcip)==0)
-		                return 1;
+		            {
+		             	rte=1;
+		             	break;
+		            }
             }
             else if(strcmp((sqlval->dataPtr)[index][3],"destIP")==0)
             {
                 if((sqlval->dataPtr)[index][4]!=NULL && destip)
                     if(strcmp((sqlval->dataPtr)[index][4],destip)==0)
-                        return 1;
+                    {
+		             	rte=1;
+		             	break;
+		            }
             }
             else if(strcmp((sqlval->dataPtr)[index][3],"receiver")==0)
             {
                 if((sqlval->dataPtr)[index][4]!=NULL && receiver)
                     if(strcmp((sqlval->dataPtr)[index][4],receiver)==0)
-                        return 1;
+                    {
+		             	rte=1;
+		             	break;
+		            }
             }
             else if(strcmp((sqlval->dataPtr)[index][3],"sender")==0)/*sender or ewcwicewr*/
             {
                 if((sqlval->dataPtr)[index][4]!=NULL && sender)
                     if(strcmp((sqlval->dataPtr)[index][4],sender)==0)
-                        return 1;
+                    {
+		             	rte=1;
+		             	break;
+		            }
             }
         }
     }
-    return 0;
+    free_memory(sqlval);
+    *sqlvalPtr=NULL;
+    return rte;
 }
 
 int spamEngineCheck(char* email)
@@ -74,9 +89,9 @@ CheckType spamCheck(mimePtr email,char* owner,int direction)
     }
 
 
-    if(matchGateway(email,user_blist))/*email match user_blist:*/
+    if(matchGateway(email,&user_blist))/*email match user_blist:*/
         return CONFIRMED;
-    if(matchGateway(email,user_wlist))/*email match user_wlist:*/
+    if(matchGateway(email,&user_wlist))/*email match user_wlist:*/
         return OK;
 
     //#2.domain级处理
@@ -88,9 +103,9 @@ CheckType spamCheck(mimePtr email,char* owner,int direction)
     FetchRtePtr domain_blist=sql_query(command_b);
     FetchRtePtr domain_wlist=sql_query(command_w);
 
-    if(matchGateway(email,domain_blist))/*email match domain_blist:*/
+    if(matchGateway(email,&domain_blist))/*email match domain_blist:*/
         return CONFIRMED;
-    if(matchGateway(email,domain_wlist))/*email match domain_wlist:*/
+    if(matchGateway(email,&domain_wlist))/*email match domain_wlist:*/
         return OK;
 
     //#3.网关级处理
@@ -101,9 +116,9 @@ CheckType spamCheck(mimePtr email,char* owner,int direction)
     FetchRtePtr global_blist=sql_query(command_b);
     FetchRtePtr global_wlist=sql_query(command_w);
 
-    if(matchGateway(email,global_blist))/*email match global_blist:*/
+    if(matchGateway(email,&global_blist))/*email match global_blist:*/
         return CONFIRMED;
-    if(matchGateway(email,global_wlist))/*email match global_wlist:*/
+    if(matchGateway(email,&global_wlist))/*email match global_wlist:*/
         return OK;
 
     //#4.垃圾引擎处理

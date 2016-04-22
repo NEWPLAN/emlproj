@@ -43,10 +43,10 @@ extern "C"
 
 int docmain(char* src, char* workspace,char *curpath)
 {
-    
+
     OUString sDocAddr, sDocUrl;
-    char srcpath[1024]={0};
-    char destpath[1024]={0};
+    char srcpath[1024]= {0};
+    char destpath[1024]= {0};
     sprintf(srcpath,"%s/%s/%s",workspace,curpath,src);
     sprintf(destpath,"%s/temps/doc.txt",workspace);
     FILE *fp;
@@ -144,11 +144,11 @@ int docmain(char* src, char* workspace,char *curpath)
 
 int xlsmain(char* src, char* workspace,char *curpath)
 {
-    char srcpath[1024]={0};
-    char destpath[1024]={0};
+    char srcpath[1024]= {0};
+    char destpath[1024]= {0};
     sprintf(srcpath,"%s/%s/%s",workspace,curpath,src);
     sprintf(destpath,"%s/temps/xls.txt",workspace);
-    
+
     OUString sDocAddr, sDocUrl;
     FILE *fp;
     fp = fopen(destpath,"ab");
@@ -225,11 +225,11 @@ int xlsmain(char* src, char* workspace,char *curpath)
 
 int pptmain(char* src, char* workspace,char *curpath)
 {
-    char srcpath[1024]={0};
-    char destpath[1024]={0};
+    char srcpath[1024]= {0};
+    char destpath[1024]= {0};
     sprintf(srcpath,"%s/%s/%s",workspace,curpath,src);
     sprintf(destpath,"%s/temps/ppt.txt",workspace);
-    
+
     OUString sDocAddr, sDocUrl;
     FILE *fp;
     fp = fopen(destpath,"ab");

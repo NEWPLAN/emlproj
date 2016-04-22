@@ -22,7 +22,6 @@
 #include "../protocol/emailhead.h"
 #include "statistic.h"
 
-//static GmimeDataPtr mimedata=NULL;
 
 static char workspace[1024]= {0};
 
@@ -121,35 +120,35 @@ static void overall_check_single_side(mimePtr email,char* owner,int direction, s
 
     if(spam_result==CONFIRMED)
     {
-        strcat(notify_info,"check for spam\t");// #类似的信息
+        strcat(notify_info,"check for spam  ");// #类似的信息
         strategyType spam_strategy = get_valid_strategy("spam", owner, direction);
         *final_strategy=combine_strategy(*final_strategy, spam_strategy);
     }
 
     if(virus_result==CONFIRMED)
     {
-        strcat(notify_info,"check for virus\t");// #类似的信息
+        strcat(notify_info,"check for virus  ");// #类似的信息
         strategyType virus_strategy = get_valid_strategy("virus", owner, direction);
         *final_strategy=combine_strategy(*final_strategy, virus_strategy);
     }
 
     if(keyword_result==CONFIRMED)
     {
-        strcat(notify_info,"check for key words\t");// #类似的信息
+        strcat(notify_info,"check for key words  ");// #类似的信息
         strategyType keyword_strategy = get_valid_strategy("keyword", owner, direction);
         *final_strategy=combine_strategy(*final_strategy, keyword_strategy);
     }
 
     if(keywordclass_result==CONFIRMED)
     {
-        strcat(notify_info,"check for key words class\t");// #类似的信息
+        strcat(notify_info,"check for key words class  ");// #类似的信息
         strategyType keywordclass_strategy = get_valid_strategy("keywordClass", owner, direction);
         *final_strategy=combine_strategy(*final_strategy, keywordclass_strategy);
     }
 
     if(url_result==CONFIRMED)
     {
-        strcat(notify_info,"check for urls\t");// #类似的信息
+        strcat(notify_info,"check for urls  ");// #类似的信息
         strategyType url_strategy = get_valid_strategy("url", owner, direction);
         *final_strategy=combine_strategy(*final_strategy, url_strategy);
     }
@@ -165,8 +164,10 @@ static char* getSender(char* email)
         char *ptr=NULL;
         sender=(char*)malloc(strlen(mimeCy->mimedata->from)+12);
         memset(sender,0,strlen(mimeCy->mimedata->from)+12);
-        if((ptr=strchr(mimeCy->mimedata->from,'<'))!=NULL)
+        if((ptr=strchr(mimeCy->mimedata->from,'<'))!=NULL)/*<如果找到<截取，否则复制>*/
             strcat(sender,++ptr);
+        else
+        	strcat(sender,mimeCy->mimedata->from);
         if((ptr=strchr(sender,'>'))!=NULL)
             *ptr=0;
     }
@@ -393,6 +394,20 @@ static int AllFree(void)
     	free(mimeCy->receiver);
     	mimeCy->receiver=NULL;
     }
+    if(mimeCy->mimedata)
+    {
+    	if(mimeCy->mimedata->subjects)
+    		free(mimeCy->mimedata->subjects);
+    	if(mimeCy->mimedata->from)
+    		free(mimeCy->mimedata->from);
+    	if(mimeCy->mimedata->to)
+    		free(mimeCy->mimedata->to);
+    	if(mimeCy->mimedata->replayto)
+    		free(mimeCy->mimedata->replayto);
+    	if(mimeCy->mimedata->messageID)
+    		free(mimeCy->mimedata->messageID);
+    	free(mimeCy->mimedata);
+    }
     return 0;
 }
 static int AllRelease(void)
@@ -443,7 +458,7 @@ exit:/*退出，结束*/
 int main(int argc, char* argv[])
 {
 
-    int rte = 1;
+    int rte = 2;
     AllInits();
     while(rte--)
     {
@@ -474,7 +489,7 @@ exits:
 			AllFree();
             sprintf(command,"rm -rf %s",runningFiles);
             usleep(1);
-#ifdef __FORKS
+#ifdef __FORKS22
             	if(fork()==0)
             		execlp("rm","rm","-rf",runningFiles,NULL);
             wait(NULL);
