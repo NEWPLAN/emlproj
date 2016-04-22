@@ -10,6 +10,7 @@
 #include <sys/stat.h>
 #include <netdb.h>
 #include <fcntl.h>
+#include <arpa/inet.h>
 
 #include <linux/netfilter_ipv4.h>
 #include <unistd.h>
@@ -76,6 +77,7 @@ typedef struct ProxyContext
     int                  processed_mail_count;
 
     char                * account_username;
+    char                *protocol;
 
 
     struct paramlist    * params;

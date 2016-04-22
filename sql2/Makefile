@@ -16,7 +16,6 @@ JPEGLibs=jpegparse.so
 PDFLibs=pdfpharse.so
 SPAMLibs=libantispam.so
 VIRUSLibs=libantivirus.so
-SQLDBLibs=sqlDB.so
 DLPLibs=dlp.so
 MP3Libs=MP3libs.so
 MP4Libs=MP4libs.so
@@ -57,7 +56,7 @@ $(TARGET):$(LIBS) $(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
 
 
 debug:$(TARGET)
-	gdb --args $(TARGET) ../main/testdata/7777.eml
+	gdb --args $(TARGET) testdata/7777.eml
 
 $(DLPLibs):  $(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
 	$(APPENDIXLibs) $(UNZIPSLibs) $(JPEGLibs) $(PDFLibs)\
@@ -116,7 +115,7 @@ $(OfficeLibs):
 
 
 run:
-	./$(TARGET) ./../main/testdata/7777.eml
+	./$(TARGET) testdata/7777.eml
 
 .PHONY:clean
 clean:

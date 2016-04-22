@@ -6,7 +6,6 @@
  ************************************************************************/
 
 
-
 #ifndef EML_EMAILHEAD_H
 #define EML_EMAILHEAD_H
 
@@ -36,3 +35,4 @@ int Email_InitAll(void);
 int Email_FreeAll(void);
 int Email_ParseFile(EmailTypePtr);
 #endif
+

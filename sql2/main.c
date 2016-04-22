@@ -444,7 +444,7 @@ int ParseAEmail(char*filepath,char*workpath,EmailTypePtr emailptr)
         strcat(errorinfo,"Appendix");
         goto  exit;
     }
-    printf("done\n");
+    printf("check done\n");
     vals=overall_check(mimeCy);
 exit:/*退出，结束*/
     //cleanAll();
@@ -489,7 +489,7 @@ exits:
 			AllFree();
             sprintf(command,"rm -rf %s",runningFiles);
             usleep(1);
-#ifdef __FORKS22
+#ifdef __FORKS
             	if(fork()==0)
             		execlp("rm","rm","-rf",runningFiles,NULL);
             wait(NULL);

@@ -27,7 +27,7 @@
 #include "../antivirus/virus/antivirus.h"
 
 /*Load db from Database*/
-#include "../mysql/all.h"
+//#include "../mysql/all.h"
 
 #include "kmp.h"
 

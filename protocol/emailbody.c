@@ -11,7 +11,7 @@
 #include <sys/stat.h>
 #include "../sql2/all.h"
 #include "assert.h"
-#include<sys/wait.h>
+#include <sys/wait.h>
 
 extern mimePtr mimeCy;
 
@@ -34,7 +34,7 @@ int Email_FreeAll(void)
 {
 	return 1;
 }
-
+#define __clear
 int Email_ParseFile(EmailTypePtr parasPtr)
 {
 	int rtevals=0;
@@ -48,9 +48,10 @@ int Email_ParseFile(EmailTypePtr parasPtr)
             char command[1024]= {0};
             EmailTypePtr eeeee=(EmailTypePtr)malloc(sizeof(EmailType));
             assert(eeeee!=NULL);
-            eeeee->ipto="0.0.0.0";
-            eeeee->ipfrom="1.1.1.1";
-            eeeee->protocol="hahaha";
+            eeeee->ipto=parasPtr->ipto;
+            eeeee->ipfrom=parasPtr->ipfrom;
+            eeeee->protocol=parasPtr->protocol;
+            
             sprintf(runningFiles,"runningFiles_%d",getpid());
             sprintf(newpath_temps,"%s/temps",runningFiles);
             sprintf(newpath_appendix,"%s/appendix",runningFiles);
@@ -60,15 +61,17 @@ int Email_ParseFile(EmailTypePtr parasPtr)
                 goto exits;
             if(mkdir(newpath_appendix, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)!=0)/*!success*/
                 goto exits;
-            printf("runningFiles %s\n",runningFiles);
             rtevals=ParseAEmail(parasPtr->filePath,runningFiles,eeeee);
             free(eeeee);
 exits:
             sprintf(command,"rm -rf %s",runningFiles);
             usleep(1);
-            	if(fork()==0)
-            		execlp("rm","rm","-rf",runningFiles,NULL);
+#ifdef __clear
+            if(fork()==0)
+            	execlp("rm","rm","-rf",runningFiles,NULL);
             wait(NULL);
+#endif            
+            printf("检查结果是 %d,即将退出\n",rtevals);
             if(rtevals==0)
             	return SCANNER_RET_OK;
            	else

@@ -15,12 +15,14 @@ static volatile int loop = 0;
    ismail=5 scanning done, send mail to client
 */
 
+#include <assert.h>
 ProxyContext * proxy_context_init(void)
 {
     struct ProxyContext * proxy_context;
     if ((proxy_context = malloc(sizeof(struct ProxyContext))) == NULL)
         return NULL;
-
+	memset(proxy_context,0, sizeof(proxy_context));
+	
     proxy_context->keep_alive = 0;
     proxy_context->client_fd = -1;
     proxy_context->server_fd = -1;
@@ -34,7 +36,9 @@ ProxyContext * proxy_context_init(void)
     proxy_context->noop = 0;
     proxy_context->processed_mail_count = 0;
 
-
+	proxy_context->protocol = (char*)malloc(32);
+	assert(proxy_context->protocol!=NULL);
+	
     proxy_context->filename = NULL;
 
 
@@ -136,7 +140,8 @@ int proxy(ProxyContext *proxy_context)
         //    p->cksmtp   = 1;    /* Processing an SMTP message */
         //    p->checksmtp    = 1;    /* We should scan it */
         do_log( LOG_NOTICE, "SMTP Connection from %d:%i", inet_ntoa( proxy_context->client_addr.sin_addr ), ntohs( proxy_context->client_addr.sin_port ) );
-
+        
+        strcpy(proxy_context->protocol, "smtp");
         return proxy_smtp(proxy_context);
     }
 
@@ -147,6 +152,7 @@ int proxy(ProxyContext *proxy_context)
         //    p->checksmtp    = 1;    /* We should scan it */
         do_log( LOG_NOTICE, "SMTP Connection from %d:%i", inet_ntoa( proxy_context->client_addr.sin_addr ), ntohs( proxy_context->client_addr.sin_port ) );
         proxy_context->ssl_enable = 1;
+        strcpy(proxy_context->protocol, "smtps");
         return proxy_smtp(proxy_context);
     }
 
@@ -158,6 +164,7 @@ int proxy(ProxyContext *proxy_context)
 
         do_log( LOG_NOTICE, "POP3 Connection from %d:%i", inet_ntoa( proxy_context->client_addr.sin_addr ), ntohs( proxy_context->client_addr.sin_port ) );
 
+		strcpy(proxy_context->protocol, "pop3");
         return proxy_pop3(proxy_context);
     }
 
@@ -166,6 +173,7 @@ int proxy(ProxyContext *proxy_context)
 
         do_log( LOG_NOTICE, "POP3S Connection from %d:%i", inet_ntoa( proxy_context->client_addr.sin_addr ), ntohs( proxy_context->client_addr.sin_port ) );
         proxy_context->ssl_enable = 1;
+        strcpy(proxy_context->protocol, "pop3s");
         return proxy_pop3(proxy_context);
     }
 
@@ -175,6 +183,7 @@ int proxy(ProxyContext *proxy_context)
     {
         do_log( LOG_NOTICE, "IMAP Connection from %d:%i", inet_ntoa( proxy_context->client_addr.sin_addr ), ntohs( proxy_context->client_addr.sin_port ) );
 
+		strcpy(proxy_context->protocol, "imap");
         return proxy_imap(proxy_context);
     }
 
@@ -182,6 +191,7 @@ int proxy(ProxyContext *proxy_context)
     {
         do_log( LOG_NOTICE, "IMAP Connection from %d:%i", inet_ntoa( proxy_context->client_addr.sin_addr ), ntohs( proxy_context->client_addr.sin_port ) );
         proxy_context->ssl_enable = 1;
+        strcpy(proxy_context->protocol, "imaps");
         return proxy_imap(proxy_context);
     }
 
@@ -195,6 +205,20 @@ int scan_mailfile( ProxyContext *proxy_context )
     et.filePath = proxy_context->mailfile;
     et.srcIP = proxy_context->client_addr;
     et.destip = proxy_context->server_addr;
+    
+    et.ipfrom = (char*)malloc(32);
+    et.ipto = (char*)malloc(32);
+    
+    strcpy(et.ipfrom, inet_ntoa(proxy_context->client_addr.sin_addr));
+    strcpy(et.ipto, inet_ntoa(proxy_context->server_addr.sin_addr));
+    
+    et.protocol = proxy_context->protocol;
+    printf("filepath= %s\n",et.filePath);
+    
+    printf("ipform %s\n", et.ipfrom);
+    printf("ipto %s\n", et.ipto);
+    printf("protocol %s\n", et.protocol);
+    
     return Email_ParseFile(&et);
 
     //sleep(10);

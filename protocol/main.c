@@ -4,6 +4,7 @@
 	> Mail:
 	> Created Time: 2016年03月30日 星期三 14时20分11秒
  ************************************************************************/
+/*
 #include "emailhead.h"
 #include <stdio.h>
 
@@ -27,3 +28,4 @@ int main(int argc, char* argv[])
     printf("done\n");
     return 0;
 }
+*/
