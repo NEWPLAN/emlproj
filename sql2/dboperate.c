@@ -34,6 +34,7 @@ static int mysql_opt(const char *sql)
     }
 
     conn_ptr = mysql_real_connect(conn_ptr, defaultAddr, "root", defaultPassWord, defaultDB, 0, NULL, 0);
+    mysql_set_character_set(conn_ptr, "utf8");
 
     if (conn_ptr)
     {
@@ -154,6 +155,7 @@ static void* mysql_get(const char *sql)
     }
 
     conn_ptr = mysql_real_connect(conn_ptr, defaultAddr, "root", "root", defaultDB, 0, NULL, 0);
+    mysql_set_character_set(conn_ptr, "utf8");
     if (conn_ptr)
     {
         res = mysql_query(conn_ptr, sql); //查询语句
@@ -329,10 +331,12 @@ int database_connect(const char *IPAddr,const char *password)
     if (strcmp(IPAddr, "localhost") == 0 || strcmp(IPAddr, "127.0.0.1") == 0)
     {
         conn_ptr = mysql_real_connect(conn_ptr, "localhost", "root",password, defaultDB, 0, NULL, 0);
+        mysql_set_character_set(conn_ptr, "utf8");
     }
     else
     {
         conn_ptr = mysql_real_connect(conn_ptr, IPAddr, "root",password, defaultDB, 0, NULL, 0);
+        mysql_set_character_set(conn_ptr, "utf8");
         strcpy(defaultAddr,IPAddr);
     }
 

@@ -120,35 +120,35 @@ static void overall_check_single_side(mimePtr email,char* owner,int direction, s
 
     if(spam_result==CONFIRMED)
     {
-        strcat(notify_info,"check for spam  ");// #类似的信息
+        strcat(notify_info,"疑似垃圾邮件 ");// #类似的信息
         strategyType spam_strategy = get_valid_strategy("spam", owner, direction);
         *final_strategy=combine_strategy(*final_strategy, spam_strategy);
     }
 
     if(virus_result==CONFIRMED)
     {
-        strcat(notify_info,"check for virus  ");// #类似的信息
+        strcat(notify_info,"疑似病毒 ");// #类似的信息
         strategyType virus_strategy = get_valid_strategy("virus", owner, direction);
         *final_strategy=combine_strategy(*final_strategy, virus_strategy);
     }
 
     if(keyword_result==CONFIRMED)
     {
-        strcat(notify_info,"check for key words  ");// #类似的信息
+        strcat(notify_info,"疑似邮件包含关键字 ");// #类似的信息
         strategyType keyword_strategy = get_valid_strategy("keyword", owner, direction);
         *final_strategy=combine_strategy(*final_strategy, keyword_strategy);
     }
 
     if(keywordclass_result==CONFIRMED)
     {
-        strcat(notify_info,"check for key words class  ");// #类似的信息
+        strcat(notify_info,"疑似邮件包含关键字类 ");// #类似的信息
         strategyType keywordclass_strategy = get_valid_strategy("keywordClass", owner, direction);
         *final_strategy=combine_strategy(*final_strategy, keywordclass_strategy);
     }
 
     if(url_result==CONFIRMED)
     {
-        strcat(notify_info,"check for urls  ");// #类似的信息
+        strcat(notify_info,"疑似邮件包含恶意URL ");// #类似的信息
         strategyType url_strategy = get_valid_strategy("url", owner, direction);
         *final_strategy=combine_strategy(*final_strategy, url_strategy);
     }
@@ -216,7 +216,7 @@ static int overall_check(mimePtr email)
 	{/**争议的地方**/
 		if(sender_final_strategy ==BLOCK)
         {
-        	sprintf(commands,"now(),'%s', 'BLOCK', 'sender matters', '%s', '%s', '%s', '%s', '%s'",
+        	sprintf(commands,"now(),'%s', 'BLOCK', '发送者命中', '%s', '%s', '%s', '%s', '%s'",
         	mimeCy->protocol,notify_info,mimeCy->srcIP,mimeCy->destIP,sender,receiver);
         	insertLogs(commands);
         	printf("堵截\n");
@@ -224,7 +224,7 @@ static int overall_check(mimePtr email)
         }
         else if (sender_final_strategy == TRASH)
         {
-        	sprintf(commands,"now(),'%s', 'TRASH', 'sender matters', '%s', '%s', '%s', '%s', '%s'",
+        	sprintf(commands,"now(),'%s', 'TRASH', '发送者命中', '%s', '%s', '%s', '%s', '%s'",
         	mimeCy->protocol,notify_info,mimeCy->srcIP,mimeCy->destIP,sender,receiver);
         	insertLogs(commands);
         	printf("发送到垃圾箱\n");
@@ -242,7 +242,7 @@ static int overall_check(mimePtr email)
 
         if(receiver_final_strategy ==BLOCK)
         {
-        	sprintf(commands,"now(),'%s', 'BLOCK', 'receiver matters', '%s', '%s', '%s', '%s', '%s'",
+        	sprintf(commands,"now(),'%s', 'BLOCK', '接受者命中', '%s', '%s', '%s', '%s', '%s'",
         	mimeCy->protocol,notify_info,mimeCy->srcIP,mimeCy->destIP,sender,receiver);
         	insertLogs(commands);
         	printf("堵截\n");
@@ -251,7 +251,7 @@ static int overall_check(mimePtr email)
         else if (receiver_final_strategy == TRASH)
         {
         	printf("发送到垃圾箱\n");
-        	sprintf(commands,"now(),'%s', 'TRASH', 'receiver matters', '%s', '%s', '%s', '%s', '%s'",
+        	sprintf(commands,"now(),'%s', 'TRASH', '接受者命中', '%s', '%s', '%s', '%s', '%s'",
         	mimeCy->protocol,notify_info,mimeCy->srcIP,mimeCy->destIP,sender,receiver);
         	insertLogs(commands);
             return 2;//#发送到垃圾箱
@@ -264,7 +264,7 @@ static int overall_check(mimePtr email)
     }
     printf("不在网关中，可以直接发送\n");
 SENDNOW:
-    sprintf(commands,"now(),'%s', 'IGNORE', 'check ok', 'email is ok!', '%s', '%s', '%s', '%s'",
+    sprintf(commands,"now(),'%s', 'IGNORE', '没问题', '邮件通过检测', '%s', '%s', '%s', '%s'",
         	mimeCy->protocol,mimeCy->srcIP,mimeCy->destIP,sender,receiver);
     insertLogs(commands);
     return 0;/*not in mailgateway*/
