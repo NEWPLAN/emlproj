@@ -2,7 +2,7 @@ TARGET=appendix.so
 
 JPEGLibs=jpegparse.so
 PDFLibs=pdfpharse.so
-UNZIPSLibs=unzips.so
+#UNZIPSLibs=unzips.so
 MP3Libs=MP3libs.so
 MP4Libs=MP4libs.so
 OfficeLibs=OfficeLibs.so
@@ -21,8 +21,8 @@ all:$(TARGET)
 run:
 	./$(TARGET) 1234.ppt.jpeg.rmvb.mp4
 
-$(TARGET):$(OBJS) $(JPEGLibs) $(PDFLibs) $(UNZIPSLibs) $(MP3Libs) $(MP4Libs) $(OfficeLibs)
-	$(CC) -shared $(OBJS) -o $(TARGET) ./$(JPEGLibs) ./$(PDFLibs) ./$(UNZIPSLibs) ./$(OfficeLibs) ./$(MP3Libs) ./$(MP4Libs)
+$(TARGET):$(OBJS) $(JPEGLibs) $(PDFLibs)  $(MP3Libs) $(MP4Libs) $(OfficeLibs)
+	$(CC) -shared $(OBJS) -o $(TARGET) ./$(JPEGLibs) ./$(PDFLibs)  ./$(OfficeLibs) ./$(MP3Libs) ./$(MP4Libs)
  
 %.o:%.c $(HEAD)
 	$(CC) -fPIC $(WARNING) $(DEBUG) -c $< -o $@
@@ -35,10 +35,6 @@ $(JPEGLibs):
 $(PDFLibs):
 	cd pdf; make;
 	cp pdf/$(PDFLibs) ./
-
-$(UNZIPSLibs):
-	cd zips; make;
-	cp zips/$(UNZIPSLibs) ./
 
 $(MP3Libs):
 	cd media; make $(MP3Libs);
@@ -56,6 +52,6 @@ $(OfficeLibs):
 
 clean:
 	-rm $(OBJS) $(TARGET);
-	-rm $(PDFLibs) $(JPEGLibs) $(UNZIPSLibs) $(MP3Libs) $(MP4Libs) $(OfficeLibs);
+	-rm $(PDFLibs) $(JPEGLibs) $(MP3Libs) $(MP4Libs) $(OfficeLibs);
 	@echo 'clean done!';
 	clear

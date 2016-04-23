@@ -11,7 +11,6 @@ NLPIRLibs=libNLPIR.so
 REGEXLibs=libregex.so
 SPLITERLibs=spliter.so
 APPENDIXLibs=appendix.so
-UNZIPSLibs=unzips.so
 JPEGLibs=jpegparse.so
 PDFLibs=pdfpharse.so
 SPAMLibs=libantispam.so
@@ -41,11 +40,11 @@ all:$(TARGET)
 	@echo 'make done';
 	
 $(TARGET):$(LIBS) $(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
-	$(APPENDIXLibs) $(UNZIPSLibs) $(JPEGLibs) $(PDFLibs)\
+	$(APPENDIXLibs) $(JPEGLibs) $(PDFLibs)\
 	$(SPAMLibs) $(VIRUSLibs)  $(ALLLIBS) $(MP3Libs) $(MP4Libs) $(OfficeLibs)
 	$(CC) $(LIBS) -o $(TARGET) ./$(GMIMELibs)\
 		./$(NLPIRLibs) ./$(REGEXLibs) ./$(SPLITERLibs)\
-		./$(APPENDIXLibs) ./$(UNZIPSLibs) ./$(JPEGLibs)\
+		./$(APPENDIXLibs)  ./$(JPEGLibs)\
 		./$(PDFLibs) ./$(SPAMLibs) ./$(VIRUSLibs) ./$(OfficeLibs) ./$(MP3Libs) ./$(MP4Libs) \
 		 $(LINKS) -ldl
 
@@ -59,11 +58,11 @@ debug:$(TARGET)
 	gdb --args $(TARGET) testdata/7777.eml
 
 $(DLPLibs):  $(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
-	$(APPENDIXLibs) $(UNZIPSLibs) $(JPEGLibs) $(PDFLibs)\
+	$(APPENDIXLibs)  $(JPEGLibs) $(PDFLibs)\
 	$(SPAMLibs) $(VIRUSLibs)  $(ALLLIBS) $(LIBS) $(MP3Libs) $(MP4Libs) $(OfficeLibs)
 	gcc -shared $(LIBS) -o $(DLPLibs) $(LINKS) -ldl  ./$(GMIMELibs)\
 		./$(NLPIRLibs) ./$(REGEXLibs) ./$(SPLITERLibs)\
-		./$(APPENDIXLibs) ./$(UNZIPSLibs) ./$(JPEGLibs) ./$(OfficeLibs) ./$(MP3Libs) ./$(MP4Libs) \
+		./$(APPENDIXLibs)  ./$(JPEGLibs) ./$(OfficeLibs) ./$(MP3Libs) ./$(MP4Libs) \
 		./$(PDFLibs) ./$(SPAMLibs) ./$(VIRUSLibs)
 
 $(GMIMELibs):
@@ -83,9 +82,6 @@ $(SPLITERLibs):
 $(APPENDIXLibs):
 	cd ../appendix; 	make;
 	cp ../appendix/$(APPENDIXLibs) 		./
-$(UNZIPSLibs):
-	cd ../appendix/zips; 	make;
-	cp ../appendix/zips/$(UNZIPSLibs) 	./
 $(JPEGLibs):
 	cd ../appendix/jpeg; 	make;
 	cp ../appendix/jpeg/$(JPEGLibs) 	./
@@ -125,14 +121,13 @@ clean:
 	-rm $(ADDATIONFILE);
 	-rm -rf $(ADDATIONFOLDE);
 	-rm $(GMIMELibs) $(REGEXLibs) $(SPLITERLibs)\
-		$(APPENDIXLibs) $(UNZIPSLibs) $(JPEGLibs)\
+		$(APPENDIXLibs)  $(JPEGLibs)\
 		$(PDFLibs) $(SPAMLibs) $(VIRUSLibs) \
 		$(MP3Libs) $(MP4Libs) $(OfficeLibs);
 	cd ../gmime; 		make clean;
 	cd ../regex; 		make clean;
 	cd ../spliter;	 	make clean;
 	cd ../appendix;	 	make clean;
-	cd ../appendix/zips; 	make clean;
 	cd ../appendix/pdf;  	make clean;
 	cd ../appendix/jpeg; 	make clean;
 	cd ../antivirus/spam; 	make clean;

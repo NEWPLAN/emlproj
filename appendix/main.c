@@ -1,7 +1,6 @@
 #include "all.h"
 #include "jpeg/all.h"
 #include "pdf/all.h"
-#include "zips/all.h"
 #include "getsubstr.h"
 #include <stdio.h>
 #include <string.h>

@@ -5,7 +5,6 @@ NLPIRLibs=libNLPIR.so
 REGEXLibs=libregex.so
 SPLITERLibs=spliter.so
 APPENDIXLibs=appendix.so
-UNZIPSLibs=unzips.so
 JPEGLibs=jpegparse.so
 PDFLibs=pdfpharse.so
 SPAMLibs=libantispam.so
@@ -52,10 +51,10 @@ all:$(TARGET)
 
 	
 $(TARGET): $(ALLLIBS) $(DLPLibs)  $(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
-	$(APPENDIXLibs) $(UNZIPSLibs) $(JPEGLibs) $(PDFLibs)\
+	$(APPENDIXLibs)  $(JPEGLibs) $(PDFLibs)\
 	$(SPAMLibs) $(VIRUSLibs) 
 	gcc $(ALLLIBS) -o $(TARGET) ./$(DLPLibs)  ./$(GMIMELibs) ./$(NLPIRLibs) \
-	./$(REGEXLibs) ./$(SPLITERLibs)	./$(APPENDIXLibs) ./$(UNZIPSLibs) \
+	./$(REGEXLibs) ./$(SPLITERLibs)	./$(APPENDIXLibs) \
 	./$(JPEGLibs) ./$(PDFLibs) ./$(SPAMLibs) ./$(VIRUSLibs)  $(LINKS)
 
 
@@ -68,7 +67,7 @@ debug:$(TARGET)
 	gdb --args $(TARGET) ../main/testdata/6666.eml
 
 $(DLPLibs):  $(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
-	$(APPENDIXLibs) $(UNZIPSLibs) $(JPEGLibs) $(PDFLibs)\
+	$(APPENDIXLibs) $(JPEGLibs) $(PDFLibs)\
 	$(SPAMLibs) $(VIRUSLibs)  $(ALLLIBS) $(LIBS)
 	cd ../sql2; make $(DLPLibs);
 	cp ../sql2/$(DLPLibs) ./
@@ -90,9 +89,7 @@ $(SPLITERLibs):
 $(APPENDIXLibs):
 	cd ../appendix; 	make;
 	cp ../appendix/$(APPENDIXLibs) 		./
-$(UNZIPSLibs):
-	cd ../appendix/zips; 	make;
-	cp ../appendix/zips/$(UNZIPSLibs) 	./
+
 $(JPEGLibs):
 	cd ../appendix/jpeg; 	make;
 	cp ../appendix/jpeg/$(JPEGLibs) 	./
@@ -121,13 +118,12 @@ clean:
 	-rm $(ADDATIONFILE);
 	-rm -rf $(ADDATIONFOLDE);
 	-rm $(GMIMELibs) $(REGEXLibs) $(SPLITERLibs)\
-		$(APPENDIXLibs) $(UNZIPSLibs) $(JPEGLibs)\
+		$(APPENDIXLibs) $(JPEGLibs)\
 		$(PDFLibs) $(SPAMLibs) $(VIRUSLibs) ;
 	cd ../gmime; 		make clean;
 	cd ../regex; 		make clean;
 	cd ../spliter;	 	make clean;
 	cd ../appendix;	 	make clean;
-	cd ../appendix/zips; 	make clean;
 	cd ../appendix/pdf;  	make clean;
 	cd ../appendix/jpeg; 	make clean;
 	cd ../antivirus/spam; 	make clean;

@@ -82,8 +82,10 @@ char* testImportUserDict(int flags, int *NumPtr, char* filename)
     if(LoadTxtPage(tempth)<0)
     {
         printf("error in load test file\n");
+        remove(tempth);
         return NULL;
     }
+    remove(tempth);
 #ifdef __DEBUG
     printf("分词结果:\n%s\n",txtstr);
 #endif
