@@ -335,7 +335,7 @@ int ParseURL(char* filename)
     return 1;
 }
 
-
+#define __DEBUG
 int ParseAppendix(char* filedirname)
 {
     char * ins[2]= {mimeCy->workspace,filedirname};
@@ -350,7 +350,10 @@ int ParseAppendix(char* filedirname)
 #endif
     handle=dlopen("./appendix.so",RTLD_LAZY);
     if (!handle)
+    {
+    	 printf("error in open app libs %s\n",dlerror());
         return 1;
+    }
 #ifdef __DEBUG
     printf("in open libs\n");
 #endif
@@ -364,7 +367,7 @@ int ParseAppendix(char* filedirname)
     
     return 1;
 }
-
+#undef __DEBUG
 
 static int AllInits(void)
 {
@@ -458,7 +461,7 @@ exit:/*退出，结束*/
 int main(int argc, char* argv[])
 {
 
-    int rte = 2;
+    int rte = 3;
     AllInits();
     while(rte--)
     {

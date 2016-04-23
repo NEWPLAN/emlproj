@@ -111,8 +111,8 @@ CheckType spamCheck(mimePtr email,char* owner,int direction)
     //#3.网关级处理
     memset(command_b,0,sizeof(command_b));
     memset(command_w,0,sizeof(command_w));
-    sprintf(command_b," SELECT * FROM strategy_spamlist WHERE owner = '%s' AND level = 2 AND type = 0 AND direction = %d",domain,direction);
-    sprintf(command_w," SELECT * FROM strategy_spamlist WHERE owner = '%s' AND level = 2 AND type = 1 AND direction = %d",domain,direction);
+    sprintf(command_b," SELECT * FROM strategy_spamlist WHERE owner = '%s' AND level = 2 AND type = 0 AND direction = %d","GLOBAL",direction);
+    sprintf(command_w," SELECT * FROM strategy_spamlist WHERE owner = '%s' AND level = 2 AND type = 1 AND direction = %d","GLOBAL",direction);
     FetchRtePtr global_blist=sql_query(command_b);
     FetchRtePtr global_wlist=sql_query(command_w);
 

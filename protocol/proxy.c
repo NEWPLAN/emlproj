@@ -202,6 +202,7 @@ int scan_mailfile( ProxyContext *proxy_context )
 {
 
     EmailType et;
+    int ret;
     et.filePath = proxy_context->mailfile;
     et.srcIP = proxy_context->client_addr;
     et.destip = proxy_context->server_addr;
@@ -213,13 +214,19 @@ int scan_mailfile( ProxyContext *proxy_context )
     strcpy(et.ipto, inet_ntoa(proxy_context->server_addr.sin_addr));
     
     et.protocol = proxy_context->protocol;
+    /*
     printf("filepath= %s\n",et.filePath);
     
     printf("ipform %s\n", et.ipfrom);
     printf("ipto %s\n", et.ipto);
     printf("protocol %s\n", et.protocol);
+    */
+    ret = Email_ParseFile(&et);
+    free(et.ipfrom);
+    free(et.ipto);
+    free(et.protocol);
     
-    return Email_ParseFile(&et);
+    return ret;
 
     //sleep(10);
     //return SCANNER_RET_OK;

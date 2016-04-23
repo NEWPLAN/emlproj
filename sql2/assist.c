@@ -19,7 +19,7 @@ int checkInGateway(char* owner)
     if(domain==NULL)
         return 0;
     //char command[1024]={0};
-    FetchRtePtr rteval=database_query("strategy_netgatedomain");
+    FetchRtePtr rteval=database_query("UserManage_netgatedomain");
     if(rteval==NULL)
         return 0;
     for(index=0; index<rteval->row; index++)

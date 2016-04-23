@@ -19,7 +19,7 @@ static void DealFile(char* filename,char* tpaths);
 static int uncompress(char *compressedFile,char* srcpath,char* paths);
 
 static char * worksp=NULL;
-
+//#define __DEBUG 
 int AppendixMain(int argc, char* argv[])
 {
     static int flags=0;
@@ -29,19 +29,19 @@ int AppendixMain(int argc, char* argv[])
     struct dirent *file;
     worksp=argv[0];
     char ptptptp[1024]="appendix";
-    
     if(!(d=opendir(argv[1])))
     {
         printf("error in open dir : %s\n",argv[1]);
         return -1;
     }
-    
+    printf("add is %s\n",argv[1]);
 #ifdef __DEBUG    
     printf("oldpath %s\n",oldpath);
 #endif
 
     while((file=readdir(d))!=NULL)
     {
+    	printf("file->d_name is %s\n",file->d_name);
         if(strncmp(file->d_name,".",1)==0)
             continue;
         {
@@ -66,7 +66,7 @@ extern int PdfMain(int argc, char * argv[]);
 extern int JpegMain(int argc, char * argv[]);
 extern int ZipsMain(int argc, char * argv[]);
 
-#define __DEBUG
+//#define __DEBUG
 static void DealFile(char* filename,char* tpaths)
 {
     char *supports[]= {"doc","docx","ppt","pptx","xls","pdf","jpeg","jpg","mp3","mp4"};
@@ -195,7 +195,9 @@ static int uncompress(char *compressedFile,char* srcpath,char* paths)//需要传
     char *commandPool[] = {"rar e -y -inul ","unzip -j -q ","tar -xzf ","tar -xf ","tar -xjf "};
     char *secondcommand[]={" "," -d "," -C "," -C "," -C "};
     char command[1024] = {0};
+    printf("compressedFile=%s\tsrcpath=%s\tpaths=%s\t\n",compressedFile,srcpath,paths);
     int flag = whichKindOfCompressedFile(compressedFile);/*获取文件的压缩格式*/
+    printf("%s file type is %s\n",compressedFile,commandPool[flag]);
     if (flag == 0)//源文件不是压缩文件
     {
     	DealFile(compressedFile,"appendix");

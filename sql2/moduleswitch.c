@@ -32,9 +32,9 @@ int loadmodule(void)
     					rts|=KEYCLASS_SWITCH;
     				else if(strcmp((sqlval->dataPtr)[index][1],"url")==0)
     					rts|=URL_SWITCH;
-    				else if(strcmp((sqlval->dataPtr)[index][1],"spam")==0)
+    				else if(strcmp((sqlval->dataPtr)[index][1],"anti_spam")==0)
     					rts|=SPAM_SWITCH;
-    				else if(strcmp((sqlval->dataPtr)[index][1],"virus")==0)
+    				else if(strcmp((sqlval->dataPtr)[index][1],"anti_virus")==0)
     					rts|=VIRUS_SWITCH;
     			}
     			

@@ -12,6 +12,10 @@ VIRUSLibs=libantivirus.so
 SQLDBLibs=sqlDB.so
 DLPLibs=dlp.so
 
+MP3Libs=MP3libs.so
+MP4Libs=MP4libs.so
+OfficeLibs=OfficeLibs.so
+
 #WARINING=-Wall
 WARINING=-Werror
 
@@ -51,11 +55,11 @@ all:$(TARGET)
 
 	
 $(TARGET): $(ALLLIBS) $(DLPLibs)  $(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
-	$(APPENDIXLibs)  $(JPEGLibs) $(PDFLibs)\
+	$(APPENDIXLibs)  $(JPEGLibs) $(PDFLibs) $(MP3Libs) $(MP4Libs) $(OfficeLibs) \
 	$(SPAMLibs) $(VIRUSLibs) 
 	gcc $(ALLLIBS) -o $(TARGET) ./$(DLPLibs)  ./$(GMIMELibs) ./$(NLPIRLibs) \
 	./$(REGEXLibs) ./$(SPLITERLibs)	./$(APPENDIXLibs) \
-	./$(JPEGLibs) ./$(PDFLibs) ./$(SPAMLibs) ./$(VIRUSLibs)  $(LINKS)
+	./$(JPEGLibs) ./$(PDFLibs) ./$(SPAMLibs) ./$(VIRUSLibs) ./$(MP3Libs) ./$(MP4Libs) ./$(OfficeLibs)  $(LINKS)
 
 
 
@@ -105,6 +109,17 @@ $(VIRUSLibs):
 	cd ../antivirus/virus; 	make $(VIRUSLibs);
 	cp ../antivirus/virus/$(VIRUSLibs) 	./
 
+$(MP3Libs):
+	cd ../appendix/media; make $(MP3Libs);
+	cp ../appendix/media/$(MP3Libs) ./
+	
+$(MP4Libs):
+	cd ../appendix/media; make $(MP4Libs);
+	cp ../appendix/media/$(MP4Libs) ./
+	
+$(OfficeLibs):
+	cd ../appendix/office; make $(OfficeLibs);
+	cp ../appendix/office/$(OfficeLibs) ./
 
 run:
 	./$(TARGET)
@@ -118,7 +133,7 @@ clean:
 	-rm $(ADDATIONFILE);
 	-rm -rf $(ADDATIONFOLDE);
 	-rm $(GMIMELibs) $(REGEXLibs) $(SPLITERLibs)\
-		$(APPENDIXLibs) $(JPEGLibs)\
+		$(APPENDIXLibs) $(JPEGLibs) $(MP3Libs) $(MP4Libs) $(OfficeLibs) \
 		$(PDFLibs) $(SPAMLibs) $(VIRUSLibs) ;
 	cd ../gmime; 		make clean;
 	cd ../regex; 		make clean;
@@ -128,6 +143,8 @@ clean:
 	cd ../appendix/jpeg; 	make clean;
 	cd ../antivirus/spam; 	make clean;
 	cd ../antivirus/virus; 	make clean;
+	cd ../appendix/media;  	make clean;
+	cd ../appendix/office; 	make clean;
 	cd ../sql2;		make clean;
 	clear;
 	@echo 'all clean done!'

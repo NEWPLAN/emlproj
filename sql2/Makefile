@@ -55,7 +55,7 @@ $(TARGET):$(LIBS) $(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
 
 
 debug:$(TARGET)
-	gdb --args $(TARGET) testdata/7777.eml
+	gdb --args $(TARGET) testdata/6677.eml
 
 $(DLPLibs):  $(GMIMELibs) $(NLPIRLibs) $(REGEXLibs) $(SPLITERLibs)\
 	$(APPENDIXLibs)  $(JPEGLibs) $(PDFLibs)\
@@ -111,7 +111,7 @@ $(OfficeLibs):
 
 
 run:
-	./$(TARGET) testdata/7777.eml
+	./$(TARGET) testdata/6677.eml
 
 .PHONY:clean
 clean:

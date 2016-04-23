@@ -31,13 +31,12 @@ extern "C"
 		if(argc>=4)
 		    dicpath=argv[3];
 
-		SpiPtr pp=ImportDic();
-		if(pp)
+		SpiPtr dicptr=ImportDic();
+		if(dicptr)
 		{
 		    char filepath[1024];
 		    DIR* d;
 		    struct dirent *file;
-
 		    if(!(d=opendir(argv[1])))
 		    {
 		        printf("error in open dir : %s\n",argv[1]);
@@ -49,7 +48,7 @@ extern "C"
 		            continue;
 		        {
 		            /*判断是文件夹处理下一个*/
-		            struct stat info;
+		            struct  stat info;
 		            stat(file->d_name,&info);
 		            if(S_ISDIR(info.st_mode))
 		                continue;
@@ -66,15 +65,16 @@ extern "C"
 	#ifdef __DEBUG
 		        printf("\n------using brute match methods---------\n");
 	#endif
-		        index=HashMach(q,pp,NumPatt);
-		        free(pp);
+		        index=HashMach(q,dicptr,NumPatt);
 		        RelasePage();
 		        if(index)
 		        {
+		        	free(dicptr);
 		        	closedir(d);
 		        	return index;
 		        }
 		    }
+		    free(dicptr);
 		    closedir(d);
 		    return index;
 		}

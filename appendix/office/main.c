@@ -14,9 +14,9 @@ int main(int argc, char * argv[])
 	while(ii--)
 	{
 	if(fork()==0){
-    docmain("test.docx","/home/host1/git/emlproj/appendix","office");
-    pptmain("test.pptx","/home/host1/git/emlproj/appendix","office");
-    xlsmain("test.xlsx","/home/host1/git/emlproj/appendix","office");
+    docmain("test.docx","/home/gw/newplan/emlproj/appendix","office");
+    pptmain("test.pptx","/home/gw/newplan/emlproj/appendix","office");
+    xlsmain("test.xlsx","/home/gw/newplan/emlproj/appendix","office");
     return 0;
     }}
     return 0;

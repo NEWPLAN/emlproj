@@ -1,0 +1,59 @@
+#include "metadata.h"
+#include "stdio.h"
+#include "plain_text_extractor.h"
+
+#include <unistd.h>
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sys/stat.h>
+#include <sys/types.h>
+using namespace doctotext;
+int main()
+{
+	int lll = 1000;
+	std::string dir_name = "/home/xty/Desktop/processtest";
+	std::string file_name = "/home/xty/Desktop/六级考场安排.docx";
+	pid_t ret=0;
+	
+	while(lll--)
+	{
+		if((ret=fork()) == 0)
+		{
+			pid_t num = getpid();
+			char s[64];
+			sprintf(s, "%d",num);
+			std::string newdirname = dir_name + "/" + s;
+			if(mkdir(newdirname.c_str(), S_IRWXU|S_IRGRP|S_IXGRP|S_IROTH) < 0)
+			{
+				std::cout << "mkdir failed" << std::endl;
+				return 0;
+			}
+			std::string resname = newdirname + "/res.txt";
+			std::ofstream fout(resname.c_str());
+			if(!fout)
+			{
+				std::cout << "can't open result file" << std::endl;
+				return 0;
+			}
+			std::cout << "starting a new thread" << std::endl;
+			PlainTextExtractor extractor;
+			extractor.setVerboseLogging(false);
+	
+			std::string text;
+			if (!extractor.processFile(file_name, text))
+				return 1;
+			fout << text << std::endl;
+			std::cout << "	finish processing" << std::endl;
+			fout.close();
+			return 0;
+		}
+		else if(ret==-1)
+		{
+			std::cout << "ret = -1" << std::endl;
+			return 0;
+		}
+	}
+	
+	return 0;
+}

@@ -49,7 +49,7 @@
 
 #define POK                      "+OK"
 
-#define SMTPRSET                 "Virus detected! Rejected message!"
+#define SMTPRSET                 "This email may contain some problems.Rejected message!"
 
 
 #define STARTWITH 1

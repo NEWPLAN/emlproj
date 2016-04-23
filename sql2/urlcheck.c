@@ -53,6 +53,7 @@ static int compareUrl(char* workspace,char*** src, int num)
 			temps=hhh;
 			while(temps)
 			{
+				printf("db:%s[%d]\ntxt:%s[%d]\n",temps->data,(int)strlen(temps->data),src[index][0],(int)strlen(src[index][0]));/*has match for this url*/
 				if(strcmp(temps->data,src[index][0])==0)
 					return 1;
 				printf("%s\n%s\n",temps->data,src[index][0]);/*has match for this url*/
@@ -79,7 +80,7 @@ int matchUrl(mimePtr email,FetchRtePtr* vals)
 	rteval=compareUrl(email->workspace,urlitems->dataPtr,urlitems->row);
 	if(!rteval)
 	{
-		printf("不要拦我，马上联网查你了！！！\n");
+		printf("不要害怕，马上联网查你了！！！\n");
 	}
 	free_memory(urlitems);
 	free_memory(sqlval);
