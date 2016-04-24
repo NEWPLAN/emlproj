@@ -36,14 +36,14 @@ int AppendixMain(int argc, char* argv[])
         printf("error in open dir : %s\n",argv[1]);
         return -1;
     }
-    printf("add is %s\n",argv[1]);
+    //printf("add is %s\n",argv[1]);
 #ifdef __DEBUG    
     printf("oldpath %s\n",oldpath);
 #endif
 
     while((file=readdir(d))!=NULL)
     {
-    	printf("file->d_name is %s\n",file->d_name);
+    	//printf("file->d_name is %s\n",file->d_name);
         if(strncmp(file->d_name,".",1)==0)
             continue;
         {
@@ -221,7 +221,7 @@ static int uncompress(char *compressedFile,char* srcpath,char* paths)//需要传
 	
 	sprintf(exes,"%s %s/%s/%s %s %s/%s",commandPool[flag-1],worksp,srcpath,compressedFile,secondcommand[flag-1],worksp,paths);
 	
-	printf("%s\n",exes);
+	//printf("%s\n",exes);
 	system(exes);
 	struct dirent *file;
     DIR *d;
@@ -247,9 +247,7 @@ static int uncompress(char *compressedFile,char* srcpath,char* paths)//需要传
         }
         else
         {
-        	//char papapa[1024]={0};
-        	//getcwd(papapa,sizeof(papapa));
-            printf("decode this file with name :%s/%s\n",paths,file->d_name);
+            //printf("decode this file with name :%s/%s\n",paths,file->d_name);
             DealFile(file->d_name,paths);
         }
     }

@@ -335,7 +335,7 @@ int ParseURL(char* filename)
     return 1;
 }
 
-#define __DEBUG
+//#define __DEBUG
 int ParseAppendix(char* filedirname)
 {
     char * ins[2]= {mimeCy->workspace,filedirname};
@@ -367,7 +367,7 @@ int ParseAppendix(char* filedirname)
     
     return 1;
 }
-#undef __DEBUG
+//#undef __DEBUG
 
 static int AllInits(void)
 {
