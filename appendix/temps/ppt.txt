@@ -1,0 +1,1134 @@
+Author: Baixy
+Creation date: ??? Aug 20 06:27:58 2014
+
+Last modified by: Baixy
+Last modification date: ??? Oct 10 13:04:27 2014
+
+Page count: 56
+Word count: 2296
+Agile with Scrum
+Xiaoying Bai
+
+Department of Computer Science and Technology
+Tsinghua University, Beijing, China
+
+October 11, 2014
+Outline
+2
+
+
+Agile
+
+
+
+
+
+
+Scrum
+
+
+
+
+
+
+JIRA Agile
+
+
+
+
+
+
+Scrum Case Study
+
+
+
+
+
+
+Summary
+
+
+
+
+
+
+Doing Engineering…. 
+3
+Creating a trade-off solution 
+in the face of 
+conflicting demands. 
+Alistair Cockburn
+Software Development is ……
+4
+Resource-limited 
+cooperative game of 
+invention and communication
+Alistair Cockburn
+Agile Alliance
+“We are uncovering better ways of developing software by doing it and helping others do it. Through this work we have come to value:
+
+	Individual and interactions over processes and tools 
+	Working software over comprehensive documentation
+	Customer collaboration over contract negotiation
+	Responding to change over following a plan
+
+That is, while there is value in the items on the right, we value the items on the left more. ”
+
+“Manifesto for Agile Software Development”, 
+K. Beck, et al., 2001.
+5
+6
+“The New Methodology” 
+by Martin Fowler
+Adaptive rather than predictive
+Heavy methods tend to try to plan out a large part of the software process in great detail for a long span of time, this works well until things change. So their nature is to resist change. 
+The light methods, however, welcome change. They try to be processes that adapt and thrive on change, even to the point of changing themselves. 
+People-oriented rather than process-oriented
+They explicitly make a point of trying to work with peoples' nature rather than against them and to emphasize that software development should be an enjoyable activity. 
+7
+Agile Principles
+Our highest priority is to satisfy the customer through early and continuous delivery of valuable software.
+
+Welcome changing requirements, even late in development. Agile processes harness change for the customer’s competitive advantage.
+
+Deliver working software frequently, from a couple of weeks to a couple of months, with a preference to the shorter timescale. 
+8
+Agile Principles
+Business people and developers must work together daily throughout the project. 
+
+Build projects around motivated individuals. Give them the environment and support they need, and trust them to get the job done. 
+
+The most efficient and effective method of conveying information to and within a development team is face-to-face conversation. 
+9
+Agile Principles
+Working software is the primary measure of progress.
+
+Agile processes promote sustainable development. The sponsors, developers, and users should be able to maintain a constant pace indefinitely. 
+
+Continuous attention to technical excellence and good design enhances agility. 
+10
+Agile Principles
+Simplicity – the art of maximizing the amount of work not done – is essential. 
+
+The best architectures, requirements, and design emerge from self-organizing teams. 
+
+At regular intervals, the team reflects on how to become more effective, then tunes and adjusts its behavior accordingly. 
+11
+Agile Methods
+Agile methods:
+Scrum
+Extreme Programming
+Adaptive Software Development (ASD)
+Dynamic System Development Method (DSDM)
+…
+Agile Alliance
+A non-profit organization promotes agile development
+Scrum - an agile process
+SCRUM is an agile, lightweight process for managing and controlling software and product development in rapidly changing environments.
+
+Iterative, incremental process
+Team-based approach
+developing systems/ products with rapidly changing requirements
+Controls the chaos of conflicting interest and needs
+Improve communication and maximize cooperation
+Protecting the team form disruptions and impediments
+A way to maximize productivity
+12
+13
+History of Scrum
+1995: 
+analysis of common software development processes  not suitable for empirical, unpredictable and non-repeatable processes 
+Design of a new method: Scrum by Jeff Sutherland & Ken Schwaber
+Enhancement of Scrum by Mike Beedle & combination of Scrum with Extreme Programming
+
+1996:
+introduction of Scrum at OOPSLA conference workshop 
+
+2001:
+publication “Agile Software Development with Scrum” by
+Ken Schwaber & Mike Beedle
+
+Successful appliance of Scrum in over 50 companies
+	Founders are members in the Agile Alliance
+Scrum Framework
+14
+
+
+
+
+Roles
+
+
+
+
+Process
+
+
+
+
+Artifacts
+Product Manager
+ScrumMaster
+Team
+Sprint planning
+Sprint review
+Sprint retrospective
+Daily scrum meeting
+Product backlog
+Sprint backlog
+Burndown charts
+The Roles
+Product Owner who represents the stakeholders
+Ensure that the Scrum Team works with the right things from a business perspective
+Scrum Master who maintains the processes and works similar to a project manager
+Scrum Team which includes the developers
+Self-organized and the members have joint responsibility for the results
+
+15
+Scrum Overview
+16
+
+
+
+
+
+Product 
+Backlog
+
+Sprint
+Backlog
+
+
+Sprint
+
+Working increment
+Of the software
+Creating a 
+backlog
+The Sprint Phase
+
+Daily
+Scrum
+
+A 
+Sprint
+17
+Product 
+Owner
+Scrum Master
+Scrum 
+Team
+
+Maintain 
+Product 
+Blacklog
+Transfer the highest prioritized goals to a Sprint Backlog
+Daily Scrum
+Demo and Evaluation
+Sprint Retrospective
+Burn-down chart
+
+Other 
+Sprints
+Transfer the highest prioritized goals to a Sprint Backlog
+Product Backlog
+The requirements
+A list of all desired work on the project
+Ideally expressed such that each item has value to the users or customers of the product
+Prioritized by the product owner
+Reprioritized at the start of each sprint
+18
+The functionality and prioritization may change over time
+Product Backlog Example
+19
+{21E4AEA4-8DFA-4A89-87EB-49C32662AFE0}Backlog Item
+Estimate
+Allow a guest to make a reservation
+3
+As a guest, I want to cancel a reservation
+5
+As a guest, I want to change the dates of a reservation.
+3
+As a hotel employee, I can run RevPAR reports (vevenue-per-available-room)
+8
+Improve exception handling
+8
+…..
+….
+A Scrum Sprint
+Sprint Planning
+Commit to certain functionality & estimate
+Produces Sprint Backlog
+
+Daily Scrum
+15 minutes @ start of day
+What have you done since last Scrum?
+What will do before next Scrum?
+What obstacles?
+A Scrum Sprint
+Sprint
+Team does the work!
+
+Sprint Review
+Show off completed functionality
+
+Sprint Retrospective
+What went well during the Sprint?
+What could be improved for the next?
+Sprint Goal
+22
+
+Sprint 7
+Implement basic shopping cart functionality including add, remove, and update
+
+Sprint 8
+The checkout process – pay for an order, pick shipping, order gift wrapping, etc. 
+A Short statement of what the work will be focused on during the sprint.
+Sprint Backlog
+Individuals sign up for work of their own choosing
+Estimated work remaining is updated daily 
+Any team member can add, delete or change the sprint backlog
+Work for the sprint emerges
+If work is unclear, define a sprint backlog item with a larger amount of time and break it down later
+Update work remaining as more becomes unkown
+23
+Sprint Backlog Example
+24
+{21E4AEA4-8DFA-4A89-87EB-49C32662AFE0}Tasks
+Mon
+Tue
+Wed
+Thur
+Fri
+Code the user interface
+8
+4
+8
+
+
+Code the middle tier
+16
+12
+10
+4
+
+Test the middle tier
+8
+16
+16
+11
+8
+Write online help
+12
+
+
+
+
+Write the foo class
+8
+8
+8
+8
+8
+Add error logging
+
+
+8
+4
+
+Sprint Burndown Chart
+25
+A burn-down chart is used to mark day-by-day how much work that is left
+Demo and Evaluation 
+The Sprint ends with a demonstration during which functioning software is run before a larger group
+
+This is the basis for a Evaluation Meeting that in tern is the starting block for the next Sprint 
+26
+Where does the word Scrum come from?
+27
+Scrum is a rugy term for  the close-knit shoulder-to-shoulder formation a rugby team forms to jointly move the ball forward. 
+Outline
+28
+
+
+Agile
+
+
+
+
+
+
+Scrum
+
+
+
+
+
+
+JIRA Agile
+
+
+
+
+
+
+Scrum Case Study
+
+
+
+
+
+
+Summary
+
+
+
+
+
+
+JIRA Agile – A process support tool
+Do not put the Product Backlog into JIRA
+The product owner keep it personally 
+Using a Project in JIRA, add the Sprint Backlog as prioritized tasks
+29
+
+Board
+
+
+Issues
+
+
+Issues
+
+
+Issues
+Sprint
+Epic
+Version
+
+
+
+30
+System 
+Admin
+Create Project
+Assign Project Lead
+And Team members
+Project 
+Lead
+3. Planning
+4. Start Sprint
+Team
+Member
+5. Deal with issues
+5. Deal with issues
+6. Reporting
+6. Reporting
+Plan
+Mode
+Work
+Mode
+Report
+Mode
+Basic Concepts
+Board
+A board displays issues from one or more projects, giving a flexible way of viewing, managing and reporting on work in progress. 
+Issue
+An issue typically represents a user story. 
+An issue could be: New Feature, Task, Improvement, Bug, Epic, Story
+Sprint
+A Sprint – also known as an iteration – is a short period in which the development team implements and delivers a working milestone version. 
+Go to the Plan Mode to prioritize the issues in the backlog and allocate them to the sprints. 
+31
+32
+Basic Concepts
+Epic
+An epic captures a large body of work.
+It is essentially a large user story that can be broken down into a number of smaller stories. 
+It may take several sprints to complete an epic. 
+33
+34
+Basic Concepts
+Version
+A version is a set of features and fixes released together as a single update to your product. 
+Assigning issues to versions help you plan the order in which new features (stories) for your product will be released to your customers. 
+A version may span multiple sprints. 
+35
+36
+Plan Mode
+Prioritize the Backlog
+Estimate stories
+Create Sub-Tasks
+Create new issues
+Organize via Epics
+Identify the workload for specialists
+Plan versions
+Start the sprint
+37
+Work Mode
+Transition the issues through a series of statuses. 
+38
+Report Mode – Burndown Chart
+39
+The amount of work remaining
+Report Mode – Velocity Chart
+40
+velocity = (37 + 47 + 50 +57) / 4 = 48
+Connect to Stash
+41
+System 
+Admin
+Project
+Lead
+Team Member
+Create 
+Agile Project
+2. Create 
+Stash Project
+3. Link Agile Project 
+To Stash Project
+3. Link Issues to 
+Development branches
+3. Link Issues to 
+Development 
+branches
+Scrum Case Study: 
+NCSU Libraries
+
+NCSU Toolbox
+Product & Sprint backlog: JIRA
+Requirements: Confluence + JIRA
+Sprint planning: Google docs + JIRA
+Daily Scrum
+Sprint demo: Product Team meetings
+Sprint retrospective
+
+Iteration done simply
+6 week iteration
+1 week planning
+4 weeks development
+Re-align as necessary
+1 week testing / release
+Sprint Planning
+Use 1 week to plan across multiple projects
+Day 1
+High level overview of upcoming projects out 3 – 6 months
+Prioritize projects for the next iteration based on IT staff input
+
+
+Sprint Planning
+Days 2 – 5
+Meet with product owners for each prioritized project
+All team members who will be participating
+Outline work
+Prioritize work
+Collaboratively estimate work
+
+
+Sprint Planning
+Day 6
+Re-prioritize based on estimates & time available
+Scope down at project or work level
+Development
+Get it done
+Daily scrum 10 – 15 minutes
+Identify obstacles and priorities
+Emphasize collaboration
+Weekly review
+How does progress look for cycle?
+Requires estimation and work logging
+Subversion -> JIRA integration
+
+
+References
+Mike Cohn, Getting Agile with Scrum. 
+Emily Lynema, Iterative Development: Done Simple, NCSU Libraries. 
+Agile tutorials, http:// www.mountaingoatsoftware.com. 
+Atlanssian manual, https://confluence.atlassian.com/display/AGILE/
+
+54
+More Reading
+Schwaber, Ken. Agile project management with Scrum. Vol. 7. Redmond: Microsoft press, 2004.
+Highsmith, Jim, and Alistair Cockburn. "Agile software development: The business of innovation." Computer 34.9 (2001): 120-127. 
+Schwaber, Ken. "Scrum development process." Business Object Design and Implementation. Springer London, 1997. 117-134. 
+Fowler, Martin, and Jim Highsmith. "The agile manifesto." Software Development 9.8 (2001): 28-35.
+Agile Software Development, CrossTalk, October 2002. 
+
+55
+Thank you!
+Xiaoying Bai
+
+Ph.D, Associate Professor
+Dept. DS&T, INLIST
+Tsinghua University
+Beijing, China, 100084
+Phone: 86-10-62794935
+Email: baixy@tsinghua.edu.cn  
+
+Author: Baixy
+Creation date: ??? Aug 20 06:27:58 2014
+
+Last modified by: Baixy
+Last modification date: ??? Oct 10 13:04:27 2014
+
+Page count: 56
+Word count: 2296
+Agile with Scrum
+Xiaoying Bai
+
+Department of Computer Science and Technology
+Tsinghua University, Beijing, China
+
+October 11, 2014
+Outline
+2
+
+
+Agile
+
+
+
+
+
+
+Scrum
+
+
+
+
+
+
+JIRA Agile
+
+
+
+
+
+
+Scrum Case Study
+
+
+
+
+
+
+Summary
+
+
+
+
+
+
+Doing Engineering…. 
+3
+Creating a trade-off solution 
+in the face of 
+conflicting demands. 
+Alistair Cockburn
+Software Development is ……
+4
+Resource-limited 
+cooperative game of 
+invention and communication
+Alistair Cockburn
+Agile Alliance
+“We are uncovering better ways of developing software by doing it and helping others do it. Through this work we have come to value:
+
+	Individual and interactions over processes and tools 
+	Working software over comprehensive documentation
+	Customer collaboration over contract negotiation
+	Responding to change over following a plan
+
+That is, while there is value in the items on the right, we value the items on the left more. ”
+
+“Manifesto for Agile Software Development”, 
+K. Beck, et al., 2001.
+5
+6
+“The New Methodology” 
+by Martin Fowler
+Adaptive rather than predictive
+Heavy methods tend to try to plan out a large part of the software process in great detail for a long span of time, this works well until things change. So their nature is to resist change. 
+The light methods, however, welcome change. They try to be processes that adapt and thrive on change, even to the point of changing themselves. 
+People-oriented rather than process-oriented
+They explicitly make a point of trying to work with peoples' nature rather than against them and to emphasize that software development should be an enjoyable activity. 
+7
+Agile Principles
+Our highest priority is to satisfy the customer through early and continuous delivery of valuable software.
+
+Welcome changing requirements, even late in development. Agile processes harness change for the customer’s competitive advantage.
+
+Deliver working software frequently, from a couple of weeks to a couple of months, with a preference to the shorter timescale. 
+8
+Agile Principles
+Business people and developers must work together daily throughout the project. 
+
+Build projects around motivated individuals. Give them the environment and support they need, and trust them to get the job done. 
+
+The most efficient and effective method of conveying information to and within a development team is face-to-face conversation. 
+9
+Agile Principles
+Working software is the primary measure of progress.
+
+Agile processes promote sustainable development. The sponsors, developers, and users should be able to maintain a constant pace indefinitely. 
+
+Continuous attention to technical excellence and good design enhances agility. 
+10
+Agile Principles
+Simplicity – the art of maximizing the amount of work not done – is essential. 
+
+The best architectures, requirements, and design emerge from self-organizing teams. 
+
+At regular intervals, the team reflects on how to become more effective, then tunes and adjusts its behavior accordingly. 
+11
+Agile Methods
+Agile methods:
+Scrum
+Extreme Programming
+Adaptive Software Development (ASD)
+Dynamic System Development Method (DSDM)
+…
+Agile Alliance
+A non-profit organization promotes agile development
+Scrum - an agile process
+SCRUM is an agile, lightweight process for managing and controlling software and product development in rapidly changing environments.
+
+Iterative, incremental process
+Team-based approach
+developing systems/ products with rapidly changing requirements
+Controls the chaos of conflicting interest and needs
+Improve communication and maximize cooperation
+Protecting the team form disruptions and impediments
+A way to maximize productivity
+12
+13
+History of Scrum
+1995: 
+analysis of common software development processes  not suitable for empirical, unpredictable and non-repeatable processes 
+Design of a new method: Scrum by Jeff Sutherland & Ken Schwaber
+Enhancement of Scrum by Mike Beedle & combination of Scrum with Extreme Programming
+
+1996:
+introduction of Scrum at OOPSLA conference workshop 
+
+2001:
+publication “Agile Software Development with Scrum” by
+Ken Schwaber & Mike Beedle
+
+Successful appliance of Scrum in over 50 companies
+	Founders are members in the Agile Alliance
+Scrum Framework
+14
+
+
+
+
+Roles
+
+
+
+
+Process
+
+
+
+
+Artifacts
+Product Manager
+ScrumMaster
+Team
+Sprint planning
+Sprint review
+Sprint retrospective
+Daily scrum meeting
+Product backlog
+Sprint backlog
+Burndown charts
+The Roles
+Product Owner who represents the stakeholders
+Ensure that the Scrum Team works with the right things from a business perspective
+Scrum Master who maintains the processes and works similar to a project manager
+Scrum Team which includes the developers
+Self-organized and the members have joint responsibility for the results
+
+15
+Scrum Overview
+16
+
+
+
+
+
+Product 
+Backlog
+
+Sprint
+Backlog
+
+
+Sprint
+
+Working increment
+Of the software
+Creating a 
+backlog
+The Sprint Phase
+
+Daily
+Scrum
+
+A 
+Sprint
+17
+Product 
+Owner
+Scrum Master
+Scrum 
+Team
+
+Maintain 
+Product 
+Blacklog
+Transfer the highest prioritized goals to a Sprint Backlog
+Daily Scrum
+Demo and Evaluation
+Sprint Retrospective
+Burn-down chart
+
+Other 
+Sprints
+Transfer the highest prioritized goals to a Sprint Backlog
+Product Backlog
+The requirements
+A list of all desired work on the project
+Ideally expressed such that each item has value to the users or customers of the product
+Prioritized by the product owner
+Reprioritized at the start of each sprint
+18
+The functionality and prioritization may change over time
+Product Backlog Example
+19
+{21E4AEA4-8DFA-4A89-87EB-49C32662AFE0}Backlog Item
+Estimate
+Allow a guest to make a reservation
+3
+As a guest, I want to cancel a reservation
+5
+As a guest, I want to change the dates of a reservation.
+3
+As a hotel employee, I can run RevPAR reports (vevenue-per-available-room)
+8
+Improve exception handling
+8
+…..
+….
+A Scrum Sprint
+Sprint Planning
+Commit to certain functionality & estimate
+Produces Sprint Backlog
+
+Daily Scrum
+15 minutes @ start of day
+What have you done since last Scrum?
+What will do before next Scrum?
+What obstacles?
+A Scrum Sprint
+Sprint
+Team does the work!
+
+Sprint Review
+Show off completed functionality
+
+Sprint Retrospective
+What went well during the Sprint?
+What could be improved for the next?
+Sprint Goal
+22
+
+Sprint 7
+Implement basic shopping cart functionality including add, remove, and update
+
+Sprint 8
+The checkout process – pay for an order, pick shipping, order gift wrapping, etc. 
+A Short statement of what the work will be focused on during the sprint.
+Sprint Backlog
+Individuals sign up for work of their own choosing
+Estimated work remaining is updated daily 
+Any team member can add, delete or change the sprint backlog
+Work for the sprint emerges
+If work is unclear, define a sprint backlog item with a larger amount of time and break it down later
+Update work remaining as more becomes unkown
+23
+Sprint Backlog Example
+24
+{21E4AEA4-8DFA-4A89-87EB-49C32662AFE0}Tasks
+Mon
+Tue
+Wed
+Thur
+Fri
+Code the user interface
+8
+4
+8
+
+
+Code the middle tier
+16
+12
+10
+4
+
+Test the middle tier
+8
+16
+16
+11
+8
+Write online help
+12
+
+
+
+
+Write the foo class
+8
+8
+8
+8
+8
+Add error logging
+
+
+8
+4
+
+Sprint Burndown Chart
+25
+A burn-down chart is used to mark day-by-day how much work that is left
+Demo and Evaluation 
+The Sprint ends with a demonstration during which functioning software is run before a larger group
+
+This is the basis for a Evaluation Meeting that in tern is the starting block for the next Sprint 
+26
+Where does the word Scrum come from?
+27
+Scrum is a rugy term for  the close-knit shoulder-to-shoulder formation a rugby team forms to jointly move the ball forward. 
+Outline
+28
+
+
+Agile
+
+
+
+
+
+
+Scrum
+
+
+
+
+
+
+JIRA Agile
+
+
+
+
+
+
+Scrum Case Study
+
+
+
+
+
+
+Summary
+
+
+
+
+
+
+JIRA Agile – A process support tool
+Do not put the Product Backlog into JIRA
+The product owner keep it personally 
+Using a Project in JIRA, add the Sprint Backlog as prioritized tasks
+29
+
+Board
+
+
+Issues
+
+
+Issues
+
+
+Issues
+Sprint
+Epic
+Version
+
+
+
+30
+System 
+Admin
+Create Project
+Assign Project Lead
+And Team members
+Project 
+Lead
+3. Planning
+4. Start Sprint
+Team
+Member
+5. Deal with issues
+5. Deal with issues
+6. Reporting
+6. Reporting
+Plan
+Mode
+Work
+Mode
+Report
+Mode
+Basic Concepts
+Board
+A board displays issues from one or more projects, giving a flexible way of viewing, managing and reporting on work in progress. 
+Issue
+An issue typically represents a user story. 
+An issue could be: New Feature, Task, Improvement, Bug, Epic, Story
+Sprint
+A Sprint – also known as an iteration – is a short period in which the development team implements and delivers a working milestone version. 
+Go to the Plan Mode to prioritize the issues in the backlog and allocate them to the sprints. 
+31
+32
+Basic Concepts
+Epic
+An epic captures a large body of work.
+It is essentially a large user story that can be broken down into a number of smaller stories. 
+It may take several sprints to complete an epic. 
+33
+34
+Basic Concepts
+Version
+A version is a set of features and fixes released together as a single update to your product. 
+Assigning issues to versions help you plan the order in which new features (stories) for your product will be released to your customers. 
+A version may span multiple sprints. 
+35
+36
+Plan Mode
+Prioritize the Backlog
+Estimate stories
+Create Sub-Tasks
+Create new issues
+Organize via Epics
+Identify the workload for specialists
+Plan versions
+Start the sprint
+37
+Work Mode
+Transition the issues through a series of statuses. 
+38
+Report Mode – Burndown Chart
+39
+The amount of work remaining
+Report Mode – Velocity Chart
+40
+velocity = (37 + 47 + 50 +57) / 4 = 48
+Connect to Stash
+41
+System 
+Admin
+Project
+Lead
+Team Member
+Create 
+Agile Project
+2. Create 
+Stash Project
+3. Link Agile Project 
+To Stash Project
+3. Link Issues to 
+Development branches
+3. Link Issues to 
+Development 
+branches
+Scrum Case Study: 
+NCSU Libraries
+
+NCSU Toolbox
+Product & Sprint backlog: JIRA
+Requirements: Confluence + JIRA
+Sprint planning: Google docs + JIRA
+Daily Scrum
+Sprint demo: Product Team meetings
+Sprint retrospective
+
+Iteration done simply
+6 week iteration
+1 week planning
+4 weeks development
+Re-align as necessary
+1 week testing / release
+Sprint Planning
+Use 1 week to plan across multiple projects
+Day 1
+High level overview of upcoming projects out 3 – 6 months
+Prioritize projects for the next iteration based on IT staff input
+
+
+Sprint Planning
+Days 2 – 5
+Meet with product owners for each prioritized project
+All team members who will be participating
+Outline work
+Prioritize work
+Collaboratively estimate work
+
+
+Sprint Planning
+Day 6
+Re-prioritize based on estimates & time available
+Scope down at project or work level
+Development
+Get it done
+Daily scrum 10 – 15 minutes
+Identify obstacles and priorities
+Emphasize collaboration
+Weekly review
+How does progress look for cycle?
+Requires estimation and work logging
+Subversion -> JIRA integration
+
+
+References
+Mike Cohn, Getting Agile with Scrum. 
+Emily Lynema, Iterative Development: Done Simple, NCSU Libraries. 
+Agile tutorials, http:// www.mountaingoatsoftware.com. 
+Atlanssian manual, https://confluence.atlassian.com/display/AGILE/
+
+54
+More Reading
+Schwaber, Ken. Agile project management with Scrum. Vol. 7. Redmond: Microsoft press, 2004.
+Highsmith, Jim, and Alistair Cockburn. "Agile software development: The business of innovation." Computer 34.9 (2001): 120-127. 
+Schwaber, Ken. "Scrum development process." Business Object Design and Implementation. Springer London, 1997. 117-134. 
+Fowler, Martin, and Jim Highsmith. "The agile manifesto." Software Development 9.8 (2001): 28-35.
+Agile Software Development, CrossTalk, October 2002. 
+
+55
+Thank you!
+Xiaoying Bai
+
+Ph.D, Associate Professor
+Dept. DS&T, INLIST
+Tsinghua University
+Beijing, China, 100084
+Phone: 86-10-62794935
+Email: baixy@tsinghua.edu.cn  
+

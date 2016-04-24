@@ -1,23 +1,18 @@
-/*************************************************************************
-	> File Name: main.c
-	> Author: 
-	> Mail: 
-	> Created Time: 2016年04月20日 星期三 16时51分51秒
- ************************************************************************/
-
-#include<stdio.h>
-#include "office_extract.h"
+#include "officeparser.h"
 #include <unistd.h>
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
-	int ii=10;
-	while(ii--)
+	int ret=1;
+	while(ret--)
 	{
-	if(fork()==0){
-    docmain("test.docx","/home/gw/newplan/emlproj/appendix","office");
-    pptmain("test.pptx","/home/gw/newplan/emlproj/appendix","office");
-    xlsmain("test.xlsx","/home/gw/newplan/emlproj/appendix","office");
-    return 0;
-    }}
-    return 0;
+		if(fork()==0)
+		{
+			officeparser("test.docx","/home/host1/git/emlproj/appendix","office", "doc.txt");
+			officeparser("05-Agile.pptx","/home/host1/git/emlproj/appendix","office", "ppt.txt");
+			officeparser("test.xlsx","/home/host1/git/emlproj/appendix","office", "xls.txt");
+			officeparser("test.pdf","/home/host1/git/emlproj/appendix","office", "pdf.txt");
+			return 0;
+		}
+	}
+	return 0;
 }

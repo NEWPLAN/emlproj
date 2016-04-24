@@ -12,7 +12,7 @@
 #include<sys/time.h>
 #include "media/mp3parse.h"
 #include "media/mp4parse.h"
-#include "office/office_extract.h"
+#include "office/officeparser.h"
 
 
 static void DealFile(char* filename,char* tpaths);
@@ -24,11 +24,13 @@ int AppendixMain(int argc, char* argv[])
 {
     static int flags=0;
     char oldpath[1024]= {0};
+    int iiiii=0;
     DIR* d;
     getcwd(oldpath,sizeof(oldpath));
     struct dirent *file;
     worksp=argv[0];
     char ptptptp[1024]="appendix";
+    char zippppp[100]={0};
     if(!(d=opendir(argv[1])))
     {
         printf("error in open dir : %s\n",argv[1]);
@@ -56,8 +58,8 @@ int AppendixMain(int argc, char* argv[])
                 continue;
             }
         } 
- //       DealFile(file->d_name,ptptptp); 
-        uncompress(file->d_name,ptptptp,"ziptemps");       
+        sprintf(zippppp,"ziptemps%d",iiiii++);
+        uncompress(file->d_name,ptptptp,zippppp);       
     }
     closedir(d);
     return 0;
@@ -69,8 +71,8 @@ extern int ZipsMain(int argc, char * argv[]);
 //#define __DEBUG
 static void DealFile(char* filename,char* tpaths)
 {
-    char *supports[]= {"doc","docx","ppt","pptx","xls","pdf","jpeg","jpg","mp3","mp4"};
-    enum supportType {DOC,DOCX,PPT,PPTX,XLS,PDF,JPEG,JPG,MP3,MP4,OTHERS} FileType;
+    char *supports[]= {"doc","docx","ppt","pptx","xls","xlsx","pdf","jpeg","jpg","mp3","mp4"};
+    enum supportType {DOC,DOCX,PPT,PPTX,XLS,XLSX,PDF,JPEG,JPG,MP3,MP4,OTHERS} FileType;
     int index, NType;
     char *suffix=NULL;
     char *inputs[5]= {0};
@@ -103,8 +105,8 @@ static void DealFile(char* filename,char* tpaths)
     case DOCX:
 #ifdef __DEBUG    
         printf("deal with docx file\n");
-#endif   
-//		docmain(filename,abspath,tpaths);  
+#endif    
+		officeparser(filename, abspath,tpaths,"doc.txt");
         break;
     case PPT:
 #ifdef __DEBUG    
@@ -115,14 +117,19 @@ static void DealFile(char* filename,char* tpaths)
 #ifdef __DEBUG    
         printf("deal with pptx file\n");
 #endif  
-		pptmain(filename,abspath,tpaths);       
+		officeparser(filename, abspath,tpaths,"ppt.txt");     
         break;
     case XLS:
 #ifdef __DEBUG    
         printf("deal with xls file\n");
 #endif  
-//		xlsmain(filename,abspath,tpaths);        
+    case XLSX:
+#ifdef __DEBUG    
+        printf("deal with xlsx file\n");
+#endif  
+		officeparser(filename, abspath,tpaths,"xls.txt");     
         break;
+        
     case PDF:
 #ifdef __DEBUG
         printf("deal with pdf file\n");
@@ -195,9 +202,7 @@ static int uncompress(char *compressedFile,char* srcpath,char* paths)//需要传
     char *commandPool[] = {"rar e -y -inul ","unzip -j -q ","tar -xzf ","tar -xf ","tar -xjf "};
     char *secondcommand[]={" "," -d "," -C "," -C "," -C "};
     char command[1024] = {0};
-    printf("compressedFile=%s\tsrcpath=%s\tpaths=%s\t\n",compressedFile,srcpath,paths);
     int flag = whichKindOfCompressedFile(compressedFile);/*获取文件的压缩格式*/
-    printf("%s file type is %s\n",compressedFile,commandPool[flag]);
     if (flag == 0)//源文件不是压缩文件
     {
     	DealFile(compressedFile,"appendix");

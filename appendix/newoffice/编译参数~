@@ -1,1 +1,0 @@
-g++ -fPIC -shared office_extractor.cpp -I./doctext/ -L./doctext/ -o office_extractor.so -ldoctotext

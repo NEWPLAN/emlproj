@@ -153,3 +153,89 @@ test
 能不能
 读出xlsx
 电子表格
+Author: ZhangTianyang
+Creation date: ??? Oct 24 02:12:21 2014
+
+Last modified by: Microsoft Office 用户
+Last modification date: ??? Jan  4 03:01:45 2016
+
+Page count: 1
+Word count: 31
+2012011267	张天成	北京	harry_xtc@163.com	114B2
+2012011268	田新韬	北京	mortalT@foxmail.com	114A2
+2012011269	成昆	山西	853178967@qq.com	113A1
+2012011270	滕爽	辽宁	tshqianqian@163.com	304A1
+2012011271	宋佳铭	黑龙江	jiaming.tsong@gmail.com	114B1
+SUM(A1:A5)10060056345						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+test
+测试ce'shi	电子表格dian'zi'biao'ge
+能不能neng'bu'neng
+读出xlsxdu'chu
+
+Author: ZhangTianyang
+Creation date: ??? Oct 24 02:12:21 2014
+
+Last modified by: Microsoft Office 用户
+Last modification date: ??? Jan  4 03:01:45 2016
+
+Page count: 1
+Word count: 31
+2012011267	张天成	北京	harry_xtc@163.com	114B2
+2012011268	田新韬	北京	mortalT@foxmail.com	114A2
+2012011269	成昆	山西	853178967@qq.com	113A1
+2012011270	滕爽	辽宁	tshqianqian@163.com	304A1
+2012011271	宋佳铭	黑龙江	jiaming.tsong@gmail.com	114B1
+SUM(A1:A5)10060056345						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+test
+测试ce'shi	电子表格dian'zi'biao'ge
+能不能neng'bu'neng
+读出xlsxdu'chu
+
