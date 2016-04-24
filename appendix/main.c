@@ -17,6 +17,7 @@
 
 static void DealFile(char* filename,char* tpaths);
 static int uncompress(char *compressedFile,char* srcpath,char* paths);
+static int txtparser(char *srcfile, char* workspace, char *destpath);
 
 static char * worksp=NULL;
 //#define __DEBUG 
@@ -71,8 +72,8 @@ extern int ZipsMain(int argc, char * argv[]);
 //#define __DEBUG
 static void DealFile(char* filename,char* tpaths)
 {
-    char *supports[]= {"doc","docx","ppt","pptx","xls","xlsx","pdf","jpeg","jpg","mp3","mp4"};
-    enum supportType {DOC,DOCX,PPT,PPTX,XLS,XLSX,PDF,JPEG,JPG,MP3,MP4,OTHERS} FileType;
+    char *supports[]= {"doc","docx","ppt","pptx","xls","xlsx","pdf","jpeg","jpg","mp3","mp4","txt"};
+    enum supportType {DOC,DOCX,PPT,PPTX,XLS,XLSX,PDF,JPEG,JPG,MP3,MP4,TXT,OTHERS} FileType;
     int index, NType;
     char *suffix=NULL;
     char *inputs[5]= {0};
@@ -134,7 +135,8 @@ static void DealFile(char* filename,char* tpaths)
 #ifdef __DEBUG
         printf("deal with pdf file\n");
 #endif  	
-		PdfParse(filename,worksp,tpaths);        
+		//PdfParse(filename,worksp,tpaths);   
+		officeparser(filename, abspath,tpaths,"pdf.txt");      
         break;
     case JPEG:
 #ifdef __DEBUG    
@@ -158,11 +160,16 @@ static void DealFile(char* filename,char* tpaths)
 #endif        
         videoparser(filename,worksp,tpaths);       
         break;
+    case TXT:
+#ifdef __DEBUG    
+        printf("deal with TXT file\n");
+#endif        
+        txtparser(filename,worksp,tpaths);       
+        break;
     case OTHERS:
     default:
 #ifdef __DEBUG
-		printf("file name %s\n",filename);
-        printf("unknow file type, make sure it valid\n");
+        printf("unknow file type (.%s), make sure it valid\n",filename);
 #endif        
         break;
     }
@@ -253,5 +260,49 @@ static int uncompress(char *compressedFile,char* srcpath,char* paths)//需要传
     }
     closedir(d);
     return EXIT_SUCCESS;
+}
+
+static int txtparser(char *srcfile, char* workspace, char *destpath) 
+{
+	char srcpath[1024]={0};
+	char respath[1024]={0};
+	
+	sprintf(respath,"%s/temps/txt.txt",workspace);
+	sprintf(srcpath,"%s/%s/%s",workspace,destpath,srcfile);
+	printf("********************%s********************\n",srcpath);
+	FILE *from=NULL, *to=NULL;
+	if((from=fopen(srcpath,"rb"))!=NULL)
+	{
+		char* txt_ptr=NULL;
+		if((to=fopen(respath,"ab"))==NULL)
+		{
+			printf("can't open file for decode attachment file , will give up this file\n");
+			fclose(from);
+			return -1;
+		}
+		{
+			int NByte=0;
+			fseek(from,0,SEEK_END);
+			NByte=ftell(from);
+			txt_ptr=(char*)malloc(NByte+20);
+			if(txt_ptr)
+			{
+				memset(txt_ptr,0,20+NByte);
+			}else
+			{
+				printf("can't malloc such huge page for loading txt\n");
+				fclose(from);
+				return -1;
+			}
+			fseek(from,0,SEEK_SET);
+			fread(txt_ptr,1,NByte+20-1,from);
+			fwrite(txt_ptr,1,strlen(txt_ptr),to);
+			free(txt_ptr);
+			txt_ptr=NULL;
+		}
+		fclose(to);
+		fclose(from);
+	}
+	return 0;
 }
 

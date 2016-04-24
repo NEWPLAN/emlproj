@@ -1,0 +1,248 @@
+Author : Erica Baron Creation date : ? ? ? Jan 13 15 : 49 : 57 2016 
+Last modified by : Erica Baron Last modification date : ? ? ? Jan 13 15 : 49 : 57 2016 
+Page count : 3 Word count : 85 要求 屏幕 上 或者 程序 上 有 “ LIUYING ” 目录 设置 为 “ LIUYING ” 
+
+一 
+
+分别 编 一个 客户 端 程序 和 服务器 程序 ， 首先 建立   客户 程序 与 服务器 之间 正确 的 
+socket   连结 ， 然后 利用   send   和   recv   函数 ， 客户 程序 将 一个 较 长 的 文本文件 
+（ 如 > 2k   字节 ）   ( 目的 是 为了 在 一 次 连接 测试 多次 的 收 / 发 ） 中 的 数据 发 送给 服务 
+器 。 要求 服务器 全部 正确 地 接收 到 所有 的 数据 （   一个 也 不 能 多 、 不 能 少 ） ， 并 将 
+其 存入 一个 文件 。 
+
+可 先 传 文件 的 大小 （ 简单 的 方法 是 服务器 知道 文   件 名 和 文件 的 大小 ） 。 要 修改 书 
+上 的 程序 ， 服务器 方 生成 子 进程 后 要 循环 地 接受   数据 ， 直至 文件 数据 全部 收到 。 
+
+TCP   和   UDP   套 接 字 可以 任选 。 
+
+
+
+二 
+
+编写 一个 递 归 的   shell   程序 ( 不 是 习题集 中 的 递 归 函数 ） findit ， 该 程序 搜索 参数   2   指 
+定 的 目录 树 ， 查找 所有 的 以   . c   和   . h   结尾 的 文件 ， 如 文件 行 中 含有 参数   1   指定 的 字符串 ， 
+显示 文件 所 处 的 目录 名 、 该行 和 相应 的 文件 名 。   如 目录 参数   2   缺 省 ， 则 从 当前 目录 中 搜 
+索 。 如 ： 
+findit searchstring / home / student / wang 
+搜索 以   / home/student/wang   为 根 的 目录 树 中 的   c   程序 和 头 文件 ， 查找 含有 
+searchstring   字符串 的 行 ， 显示 文件名 。 
+findit searchstring 
+从 当前 目录 开始 搜索 。 请 用 含有   shell   特殊 字符 的 字符串 模式 进一步 调试 该   shell   程 
+序 。 
+
+
+
+为了 在 递 归 程序 中 便于 查找 执行 文件       findit ， 例如   findit   位于 登录 主 目录 下 的 
+wang   目录 中 ， 可以 在 当前   Shell   中 执行 : 
+PATH = . : $ HOME / wang : $ PATH 
+也 可以 在 递 归 程序 中 用 绝对 路径名 执行   findit , 如 ： 
+
+/ home / student / wang / findit 
+■     请 在 主 目录 下 创建   1 ~ n   个 子目录 和 待查 的 文件 
+
+
+
+
+
+
+
+
+
+三： 
+
+写 一 段 程序 实现 下面 的 任意 一个 内容 。 
+
+例如 : 
+
+【 存储 管理 】 、 或者   【 进程 调度 】   、 或者 【 死 锁 】 、 或者 【 设备 管理 】 、 或者 文 
+件 系统 等 仿真 实现 和   shell   程序 设计 等 。 
+
+
+
+
+Author : Erica Baron Creation date : Sun Jan 13 15 : 49 : 57 2016 
+Last modified by : Erica Baron Last modification date : Sun Jan 13 15 : 49 : 57 2016 
+Page count : 3 Word count : 85 要求 屏幕 上 或者 程序 上 有 “ LIUYING ” 目录 设置 为 “ LIUYING ” 
+
+一 
+
+分别 编 一个 客户 端 程序 和 服务器 程序 ， 首先 建立   客户 程序 与 服务器 之间 正确 的 
+socket   连结 ， 然后 利用   send   和   recv   函数 ， 客户 程序 将 一个 较 长 的 文本文件 
+（ 如 > 2k   字节 ）   ( 目的 是 为了 在 一 次 连接 测试 多次 的 收 / 发 ） 中 的 数据 发 送给 服务 
+器 。 要求 服务器 全部 正确 地 接收 到 所有 的 数据 （   一个 也 不 能 多 、 不 能 少 ） ， 并 将 
+其 存入 一个 文件 。 
+
+可 先 传 文件 的 大小 （ 简单 的 方法 是 服务器 知道 文   件 名 和 文件 的 大小 ） 。 要 修改 书 
+上 的 程序 ， 服务器 方 生成 子 进程 后 要 循环 地 接受   数据 ， 直至 文件 数据 全部 收到 。 
+
+TCP   和   UDP   套 接 字 可以 任选 。 
+
+
+
+二 
+
+编写 一个 递 归 的   shell   程序 ( 不 是 习题集 中 的 递 归 函数 ） findit ， 该 程序 搜索 参数   2   指 
+定 的 目录 树 ， 查找 所有 的 以   . c   和   . h   结尾 的 文件 ， 如 文件 行 中 含有 参数   1   指定 的 字符串 ， 
+显示 文件 所 处 的 目录 名 、 该行 和 相应 的 文件 名 。   如 目录 参数   2   缺 省 ， 则 从 当前 目录 中 搜 
+索 。 如 ： 
+findit searchstring / home / student / wang 
+搜索 以   / home/student/wang   为 根 的 目录 树 中 的   c   程序 和 头 文件 ， 查找 含有 
+searchstring   字符串 的 行 ， 显示 文件名 。 
+findit searchstring 
+从 当前 目录 开始 搜索 。 请 用 含有   shell   特殊 字符 的 字符串 模式 进一步 调试 该   shell   程 
+序 。 
+
+
+
+为了 在 递 归 程序 中 便于 查找 执行 文件       findit ， 例如   findit   位于 登录 主 目录 下 的 
+wang   目录 中 ， 可以 在 当前   Shell   中 执行 : 
+PATH = . : $ HOME / wang : $ PATH 
+也 可以 在 递 归 程序 中 用 绝对 路径名 执行   findit , 如 ： 
+
+/ home / student / wang / findit 
+■     请 在 主 目录 下 创建   1 ~ n   个 子目录 和 待查 的 文件 
+
+
+
+
+
+
+
+
+
+三： 
+
+写 一 段 程序 实现 下面 的 任意 一个 内容 。 
+
+例如 : 
+
+【 存储 管理 】 、 或者   【 进程 调度 】   、 或者 【 死 锁 】 、 或者 【 设备 管理 】 、 或者 文 
+件 系统 等 仿真 实现 和   shell   程序 设计 等 。 
+
+
+
+
+Author : Erica Baron Creation date : Sun Jan 13 15 : 49 : 57 2016 
+Last modified by : Erica Baron Last modification date : Sun Jan 13 15 : 49 : 57 2016 
+Page count : 3 Word count : 85 要求 屏幕 上 或者 程序 上 有 “ LIUYING ” 目录 设置 为 “ LIUYING ” 
+
+一 
+
+分别 编 一个 客户 端 程序 和 服务器 程序 ， 首先 建立   客户 程序 与 服务器 之间 正确 的 
+socket   连结 ， 然后 利用   send   和   recv   函数 ， 客户 程序 将 一个 较 长 的 文本文件 
+（ 如 > 2k   字节 ）   ( 目的 是 为了 在 一 次 连接 测试 多次 的 收 / 发 ） 中 的 数据 发 送给 服务 
+器 。 要求 服务器 全部 正确 地 接收 到 所有 的 数据 （   一个 也 不 能 多 、 不 能 少 ） ， 并 将 
+其 存入 一个 文件 。 
+
+可 先 传 文件 的 大小 （ 简单 的 方法 是 服务器 知道 文   件 名 和 文件 的 大小 ） 。 要 修改 书 
+上 的 程序 ， 服务器 方 生成 子 进程 后 要 循环 地 接受   数据 ， 直至 文件 数据 全部 收到 。 
+
+TCP   和   UDP   套 接 字 可以 任选 。 
+
+
+
+二 
+
+编写 一个 递 归 的   shell   程序 ( 不 是 习题集 中 的 递 归 函数 ） findit ， 该 程序 搜索 参数   2   指 
+定 的 目录 树 ， 查找 所有 的 以   . c   和   . h   结尾 的 文件 ， 如 文件 行 中 含有 参数   1   指定 的 字符串 ， 
+显示 文件 所 处 的 目录 名 、 该行 和 相应 的 文件 名 。   如 目录 参数   2   缺 省 ， 则 从 当前 目录 中 搜 
+索 。 如 ： 
+findit searchstring / home / student / wang 
+搜索 以   / home/student/wang   为 根 的 目录 树 中 的   c   程序 和 头 文件 ， 查找 含有 
+searchstring   字符串 的 行 ， 显示 文件名 。 
+findit searchstring 
+从 当前 目录 开始 搜索 。 请 用 含有   shell   特殊 字符 的 字符串 模式 进一步 调试 该   shell   程 
+序 。 
+
+
+
+为了 在 递 归 程序 中 便于 查找 执行 文件       findit ， 例如   findit   位于 登录 主 目录 下 的 
+wang   目录 中 ， 可以 在 当前   Shell   中 执行 : 
+PATH = . : $ HOME / wang : $ PATH 
+也 可以 在 递 归 程序 中 用 绝对 路径名 执行   findit , 如 ： 
+
+/ home / student / wang / findit 
+■     请 在 主 目录 下 创建   1 ~ n   个 子目录 和 待查 的 文件 
+
+
+
+
+
+
+
+
+
+三： 
+
+写 一 段 程序 实现 下面 的 任意 一个 内容 。 
+
+例如 : 
+
+【 存储 管理 】 、 或者   【 进程 调度 】   、 或者 【 死 锁 】 、 或者 【 设备 管理 】 、 或者 文 
+件 系统 等 仿真 实现 和   shell   程序 设计 等 。 
+
+
+
+
+Author : Erica Baron Creation date : Sun Jan 13 15 : 49 : 57 2016 
+Last modified by : Erica Baron Last modification date : Sun Jan 13 15 : 49 : 57 2016 
+Page count : 3 Word count : 85 要求 屏幕 上 或者 程序 上 有 “ LIUYING ” 目录 设置 为 “ LIUYING ” 
+
+一 
+
+分别 编 一个 客户 端 程序 和 服务器 程序 ， 首先 建立   客户 程序 与 服务器 之间 正确 的 
+socket   连结 ， 然后 利用   send   和   recv   函数 ， 客户 程序 将 一个 较 长 的 文本文件 
+（ 如 > 2k   字节 ）   ( 目的 是 为了 在 一 次 连接 测试 多次 的 收 / 发 ） 中 的 数据 发 送给 服务 
+器 。 要求 服务器 全部 正确 地 接收 到 所有 的 数据 （   一个 也 不 能 多 、 不 能 少 ） ， 并 将 
+其 存入 一个 文件 。 
+
+可 先 传 文件 的 大小 （ 简单 的 方法 是 服务器 知道 文   件 名 和 文件 的 大小 ） 。 要 修改 书 
+上 的 程序 ， 服务器 方 生成 子 进程 后 要 循环 地 接受   数据 ， 直至 文件 数据 全部 收到 。 
+
+TCP   和   UDP   套 接 字 可以 任选 。 
+
+
+
+二 
+
+编写 一个 递 归 的   shell   程序 ( 不 是 习题集 中 的 递 归 函数 ） findit ， 该 程序 搜索 参数   2   指 
+定 的 目录 树 ， 查找 所有 的 以   . c   和   . h   结尾 的 文件 ， 如 文件 行 中 含有 参数   1   指定 的 字符串 ， 
+显示 文件 所 处 的 目录 名 、 该行 和 相应 的 文件 名 。   如 目录 参数   2   缺 省 ， 则 从 当前 目录 中 搜 
+索 。 如 ： 
+findit searchstring / home / student / wang 
+搜索 以   / home/student/wang   为 根 的 目录 树 中 的   c   程序 和 头 文件 ， 查找 含有 
+searchstring   字符串 的 行 ， 显示 文件名 。 
+findit searchstring 
+从 当前 目录 开始 搜索 。 请 用 含有   shell   特殊 字符 的 字符串 模式 进一步 调试 该   shell   程 
+序 。 
+
+
+
+为了 在 递 归 程序 中 便于 查找 执行 文件       findit ， 例如   findit   位于 登录 主 目录 下 的 
+wang   目录 中 ， 可以 在 当前   Shell   中 执行 : 
+PATH = . : $ HOME / wang : $ PATH 
+也 可以 在 递 归 程序 中 用 绝对 路径名 执行   findit , 如 ： 
+
+/ home / student / wang / findit 
+■     请 在 主 目录 下 创建   1 ~ n   个 子目录 和 待查 的 文件 
+
+
+
+
+
+
+
+
+
+三： 
+
+写 一 段 程序 实现 下面 的 任意 一个 内容 。 
+
+例如 : 
+
+【 存储 管理 】 、 或者   【 进程 调度 】   、 或者 【 死 锁 】 、 或者 【 设备 管理 】 、 或者 文 
+件 系统 等 仿真 实现 和   shell   程序 设计 等 。 
+
+
+
+

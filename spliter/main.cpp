@@ -59,25 +59,36 @@ extern "C"
 		        strcat(filepath,argv[1]);
 		        filepath[strlen(filepath)]='/';
 		        strcat(filepath,file->d_name);
-
-
+	#ifdef __DEBUG__8899
+				printf("before testImportUserDict\n");
+	#endif
 		        q=testImportUserDict(1,&NumPatt,filepath);
+	#ifdef __DEBUG__8899
+		        printf("after testImportUserDict\n");
+	#endif		        
 	#ifdef __DEBUG
 		        printf("\n------using brute match methods---------\n");
 	#endif
 		        index=HashMach(q,dicptr,NumPatt);
+		        //printf("RelasePage before\n");
 		        RelasePage();
+		        //printf("RelasePage after\n");
 		        if(index)
 		        {
+		        	//printf("free before\n");
 		        	free(dicptr);
+		        	//printf("free after\n");
 		        	closedir(d);
 		        	return index;
 		        }
 		    }
+		    //printf("exit free before\n");
 		    free(dicptr);
+		    //printf("exit free after\n");
 		    closedir(d);
 		    return index;
 		}
+		//printf("return 0\n");
 		return 0;
 	}
 }	

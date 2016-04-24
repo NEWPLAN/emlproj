@@ -76,9 +76,17 @@ char* testImportUserDict(int flags, int *NumPtr, char* filename)
     strncpy(pt,sRst1,NumPt);
 */
 	char tempth[1024]={0};
-
+#ifdef __DEBUG__8899	
+	static int index=1;
+#endif	
 	sprintf(tempth,"%s/%s",workspace,"qqqqqqqqqq");
+#ifdef __DEBUG__8899	
+	printf("before %d spliter\n",index);
+#endif	
     NLPIR_FileProcess(filename,tempth,0);
+#ifdef __DEBUG__8899    
+    printf("after %d spliter\n",index++);
+#endif    
     if(LoadTxtPage(tempth)<0)
     {
         printf("error in load test file\n");

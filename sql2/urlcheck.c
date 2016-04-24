@@ -53,10 +53,10 @@ static int compareUrl(char* workspace,char*** src, int num)
 			temps=hhh;
 			while(temps)
 			{
-				printf("db:%s[%d]\ntxt:%s[%d]\n",temps->data,(int)strlen(temps->data),src[index][0],(int)strlen(src[index][0]));/*has match for this url*/
+//				printf("db:%s[%d]\ntxt:%s[%d]\n",temps->data,(int)strlen(temps->data),src[index][0],(int)strlen(src[index][0]));/*has match for this url*/
 				if(strcmp(temps->data,src[index][0])==0)
 					return 1;
-				printf("%s\n%s\n",temps->data,src[index][0]);/*has match for this url*/
+//				printf("%s\n%s\n",temps->data,src[index][0]);/*has match for this url*/
 				temps=temps->next;
 			}
 		}              
