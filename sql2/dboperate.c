@@ -34,13 +34,16 @@ static int mysql_opt(const char *sql)
     }
 
     conn_ptr = mysql_real_connect(conn_ptr, defaultAddr, "root", defaultPassWord, defaultDB, 0, NULL, 0);
+    mysql_set_character_set(conn_ptr, "utf8");
 
     if (conn_ptr)
     {
         res = mysql_query(conn_ptr, sql);/*查询语句，返回0表示成功*/
         if (!res)       //输出受影响的行数
         {
+#ifdef __DEBUG
             printf("Inserted %lu rows\n",(unsigned long)mysql_affected_rows(conn_ptr));
+#endif            
         }
         else            //打印出错误代码及详细信息
         {
@@ -65,7 +68,9 @@ static int mysql_insert (const char *sql)
 {
     if(mysql_opt(sql) == 0)
     {
+#ifdef __DEBUG
         printf("insert success\n");
+#endif        
         return 0;
     }
     else
@@ -86,7 +91,9 @@ static int mysql_delete(const char *sql)
 {
     if(mysql_opt(sql) == 0)
     {
+#ifdef __DEBUG
         printf("delete success\n");
+#endif        
         return 0;
     }
     else
@@ -106,13 +113,13 @@ static int mysql_update(const char *sql)
 {
     if(mysql_opt(sql) == 0)
     {
+#ifdef __DEBUG    
         printf("update success\n");
+#endif        
         return 0;
     }
     else
-    {
         return 1;
-    }
 }
 /**************************************
 *获取数据库的数据信息
@@ -148,6 +155,7 @@ static void* mysql_get(const char *sql)
     }
 
     conn_ptr = mysql_real_connect(conn_ptr, defaultAddr, "root", "root", defaultDB, 0, NULL, 0);
+    mysql_set_character_set(conn_ptr, "utf8");
     if (conn_ptr)
     {
         res = mysql_query(conn_ptr, sql); //查询语句
@@ -211,9 +219,8 @@ static void* mysql_get(const char *sql)
         }
     }
     else
-    {
-        printf("Connection failed\n");
-    }
+        printf("SQL Connection failed\n");
+
     mysql_close(conn_ptr);
     {
 
@@ -234,6 +241,17 @@ int database_insert(const char *tableName,char *parameter)
 {
     char sql[MAX_BUF] = {0};
     sprintf(sql, "insert into %s values(%s)",tableName,parameter);
+    return mysql_insert(sql);
+}
+/***************************************************************
+* 插入数据信息
+* 插入格式：insert into TABLENAME(items) values(VAL1,VAL2,...,VALN)
+* tableName const char* : 数据表名称
+****************************************************************/
+int database_insert_withcond(const char *tableName,char* items,char *parameter)
+{
+    char sql[MAX_BUF] = {0};
+    sprintf(sql, "insert into %s (%s) values(%s)",tableName,items,parameter);
     return mysql_insert(sql);
 }
 /****************************************************************
@@ -313,10 +331,12 @@ int database_connect(const char *IPAddr,const char *password)
     if (strcmp(IPAddr, "localhost") == 0 || strcmp(IPAddr, "127.0.0.1") == 0)
     {
         conn_ptr = mysql_real_connect(conn_ptr, "localhost", "root",password, defaultDB, 0, NULL, 0);
+        mysql_set_character_set(conn_ptr, "utf8");
     }
     else
     {
         conn_ptr = mysql_real_connect(conn_ptr, IPAddr, "root",password, defaultDB, 0, NULL, 0);
+        mysql_set_character_set(conn_ptr, "utf8");
         strcpy(defaultAddr,IPAddr);
     }
 
@@ -326,7 +346,9 @@ int database_connect(const char *IPAddr,const char *password)
     }
     if (conn_ptr)
     {
+#ifdef __DEBUG    
         printf("Connection success\n");
+#endif        
     }
     else
     {
@@ -347,17 +369,22 @@ int database_connect_local(const char *password)
 void free_memory(FetchRtePtr memptr)
 {
     int rowindex,colindex;
+    if(!memptr)
+    	return ;
     for(rowindex=0; rowindex<memptr->row; rowindex++)
     {
         for(colindex=0; colindex<memptr->col; colindex++)
         {
-            free(memptr->dataPtr[rowindex][colindex]);
+        	if(memptr->dataPtr[rowindex][colindex])
+            	free(memptr->dataPtr[rowindex][colindex]);
             memptr->dataPtr[rowindex][colindex]=NULL;
         }
-        free(memptr->dataPtr[rowindex]);
+        if(memptr->dataPtr[rowindex])
+        	free(memptr->dataPtr[rowindex]);
         memptr->dataPtr[rowindex]=NULL;
     }
-    free(memptr->dataPtr);
-    memptr->dataPtr=NULL;
+    if(memptr->dataPtr)
+    	free(memptr->dataPtr);
+    memptr->dataPtr=NULL;    
     free(memptr);
 }

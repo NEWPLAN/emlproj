@@ -17,13 +17,13 @@ GMimeMessage* AllInits(int argc, char **argv)
         return 0;
     }
 
-#if ENABLE_INITS_LOG
+#if __DEBUG
     printf("[log]:\thello, gmime! please\n");
 #endif
     FILE* fp = fopen(argv[1],"rb");
     /*create a new stream...*/
     GMimeStream* pStream = g_mime_stream_file_new(fp);
-#if ENABLE_INITS_LOG
+#if __DEBUG
     printf("[log]:\t[main] g_mime_stream_file_new success!\n");
 #endif
     /*set the filter
@@ -31,13 +31,13 @@ GMimeMessage* AllInits(int argc, char **argv)
     */
     GMimeFilter* pCrlfFilter = g_mime_filter_crlf_new (FALSE,TRUE);
 
-#if ENABLE_INITS_LOG
+#if __DEBUG
     printf("[log]:\t[main] new crlf filter success!\n");
 #endif
 
     /*根据初始文件流和过滤器创建一个具备过滤功能的流对象*/
     GMimeStream* pFilterStream = g_mime_stream_filter_new (pStream);
-#if ENABLE_INITS_LOG
+#if __DEBUG
     printf("[log]:\t[main] create filter stream with file stream success!\n");
     printf("[log]:\tunref the stream object.\n");
 #endif
@@ -46,7 +46,7 @@ GMimeMessage* AllInits(int argc, char **argv)
     g_mime_stream_filter_add (GMIME_STREAM_FILTER (pFilterStream), pCrlfFilter);
     g_object_unref (pCrlfFilter);
 
-#if ENABLE_INITS_LOG
+#if __DEBUG
     printf("[log]:\t[main] add crlf filter to decode success!\n");
 #endif
     /*
@@ -58,7 +58,7 @@ GMimeMessage* AllInits(int argc, char **argv)
     {
         printf("[log]:\terror new parser.\n");
     }
-#if ENABLE_INITS_LOG
+#if __DEBUG
     printf("[log]:\tnew parser success!\n");
 #endif
     /*
@@ -75,13 +75,13 @@ GMimeMessage* AllInits(int argc, char **argv)
         printf("[log]:\terror construct the message!\n");
         return 0;
     }
-#if ENABLE_INITS_LOG
+#if __DEBUG
     printf("[log]:\tconstruct message with filter stream success!\n");
     printf("[log]:\tunref the filter stream.\n");
 #endif
     //g_mime_stream_unref(pFilterStream);
     g_object_unref (pFilterStream);
-#if ENABLE_INITS_LOG
+#if __DEBUG
     printf("[log]:\tunref the parser object.\n");
 #endif
     g_object_unref(pParser);
@@ -91,9 +91,12 @@ GMimeMessage* AllInits(int argc, char **argv)
 
 void AllFree(GMimeMessage *pMessage)
 {
+#if __DEBUG	
     printf("[log]:\tunref the pMessage object.\n");
+#endif    
     g_object_unref(GMIME_OBJECT(pMessage));
-
+#if __DEBUG
     printf("[log]:\tshutdown for gmime\n");
+#endif    
     g_mime_shutdown();
 }

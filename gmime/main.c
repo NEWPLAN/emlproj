@@ -37,12 +37,14 @@
     count_parts_in_message(pMessage);
     //GetBody( pMessage);
     //Analyze(pMessage);
-
+#if __DEBUG
     printf("[log]:\tunref the pMessage object.\n");
+#endif    
     g_object_unref(GMIME_OBJECT(pMessage));
-
+#if __DEBUG
     printf("[log]:\tshutdown for gmime\n");
     printf("local charset %s\n", g_mime_charset_locale_name());
+#endif    
     g_mime_shutdown();
 	return A;
     return 0;

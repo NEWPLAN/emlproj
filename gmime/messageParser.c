@@ -17,20 +17,28 @@ void AnalyseMessageParse(GMimePart * mime_part)
     GMimeContentEncoding ReEncoding = g_mime_part_get_content_encoding(mime_part);
 
     char* szCharset = (char*)g_mime_object_get_content_type_parameter((GMimeObject*)mime_part,"charset");
+#if __DEBUG
     printf("charset %s\n",szCharset);/*编码字体*/
+#endif
 
     {
         char* szCharset = (char*)g_mime_object_get_content_type_parameter((GMimeObject*)mime_part,"name");
+#if __DEBUG
         printf("name %s\n",szCharset);
+#endif
         GMimeContentType* pContentType = g_mime_object_get_content_type((GMimeObject*)mime_part) ;
+#if __DEBUG
         printf("The content type is: (%s/%s)\n",pContentType->type,pContentType->subtype);
+#endif
         const char *  ppp= g_mime_object_get_disposition((GMimeObject*)mime_part);
         if(!ppp)
         {
             goto exits;
         }
         const char * qqq=g_mime_object_get_content_disposition_parameter((GMimeObject*)mime_part,"filename");
+#if __DEBUG
         printf("get disposition\t%s\n%s\n",ppp,qqq);
+#endif
         if(qqq)
         {
             char filepath[1024]={0};
@@ -45,12 +53,16 @@ void AnalyseMessageParse(GMimePart * mime_part)
                 printf("error in writing file \n");
                 return;
             }
+#if __DEBUG
             printf("\n=======write to file================\n" );
+#endif
             GMimeStream *stream = g_mime_stream_file_new (ps);
             GMimeDataWrapper * content=g_mime_part_get_content_object(mime_part);
             g_mime_data_wrapper_write_to_stream(content,stream);
             fclose(ps);
+#if __DEBUG
             printf("finish writing\n");
+#endif
            // getchar();
             return ;
         }
@@ -79,7 +91,7 @@ exits:{}
     FILE* fileptr=fopen(emailpath,"ab");
     if(fileptr==NULL)
     {
-        printf("can't open files\n");
+        printf("can't open files %s\n",emailpath);
         return ;
     }
     GMimeStream *stream;
@@ -106,12 +118,13 @@ exits:{}
     g_object_unref (pFilterStream);
     //g_object_unref (gmime_stream);
     //g_object_unref (stream);
-
+#if __DEBUG
     //if(NULL==szCharset)
     {
         printf("\n====>>>>====>>>>====>>>>Finish decoding this part<<<<====<<<<====<<<<====\n");
         //getchar();   /*for test */
         //return ;
     }
+#endif
     return ;
 }

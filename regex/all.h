@@ -1,8 +1,8 @@
 /*************************************************************************
 	> File Name: all.h
-	> Author: 
-	> Mail: 
-	> Created Time: 2016Äê02ÔÂ22ÈÕ ÐÇÆÚÒ» 16Ê±33·Ö28Ãë
+	> Author:
+	> Mail:
+	> Created Time: 2016ï¿½ï¿½02ï¿½ï¿½22ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ò» 16Ê±33ï¿½ï¿½28ï¿½ï¿½
  ************************************************************************/
 
 #ifndef REGEX_ALL_H
@@ -17,6 +17,7 @@
 
 #ifdef EML__SYSTEMS__
     int RegexMain(int argc, char* argv[]);
+    int checkInclass(char * file, char* pattern);
 #endif
 
 #endif

@@ -2,25 +2,30 @@ TARGET=appendix.so
 
 JPEGLibs=jpegparse.so
 PDFLibs=pdfpharse.so
-UNZIPSLibs=unzips.so
-ANTIVIRUSLibs=libantivirus.so
+#UNZIPSLibs=unzips.so
+MP3Libs=MP3libs.so
+MP4Libs=MP4libs.so
+OfficeLibs=OfficeLibs.so
+
 #LinkLibs=./jpegparse.so ./pdfpharse.so ./unzips.so
 INPUTFILE=main.c getsubstr.c
 HEAD=all.h getsubstr.h
 OBJS=main.o getsubstr.o
 CC=gcc
 DEBUG=-g
+WARNING= -Werror
+#WARNING= -Wall
 
 all:$(TARGET)
 	@echo 'test for this makefile'
 run:
 	./$(TARGET) 1234.ppt.jpeg.rmvb.mp4
 
-$(TARGET):$(OBJS) $(JPEGLibs) $(PDFLibs) $(UNZIPSLibs) $(ANTIVIRUSLibs) 
-	$(CC) -shared $(OBJS) -o $(TARGET) ./$(JPEGLibs) ./$(PDFLibs) ./$(UNZIPSLibs) ./$(ANTIVIRUSLibs)
+$(TARGET):$(OBJS) $(JPEGLibs) $(PDFLibs)  $(MP3Libs) $(MP4Libs) $(OfficeLibs)
+	$(CC) -shared $(OBJS) -o $(TARGET) ./$(JPEGLibs) ./$(PDFLibs)  ./$(OfficeLibs) ./$(MP3Libs) ./$(MP4Libs)
  
 %.o:%.c $(HEAD)
-	$(CC) -fPIC -Wall $(DEBUG) -c $< -o $@
+	$(CC) -fPIC $(WARNING) $(DEBUG) -c $< -o $@
 
 $(JPEGLibs):
 	cd jpeg; make;
@@ -31,18 +36,22 @@ $(PDFLibs):
 	cd pdf; make;
 	cp pdf/$(PDFLibs) ./
 
-$(UNZIPSLibs):
-	cd zips; make;
-	cp zips/$(UNZIPSLibs) ./
-
-$(ANTIVIRUSLibs):
-	cd ../antivirus/virus; make;
-	cp ../antivirus/virus/$(ANTIVIRUSLibs) ./
-
+$(MP3Libs):
+	cd media; make $(MP3Libs);
+	cp media/$(MP3Libs) ./
+	
+$(MP4Libs):
+	cd media; make $(MP4Libs);
+	cp media/$(MP4Libs) ./
+	
+$(OfficeLibs):
+	cd office; make $(OfficeLibs);
+	cp office/$(OfficeLibs) ./
+	
 .PHONY:clean
 
 clean:
 	-rm $(OBJS) $(TARGET);
-	-rm $(PDFLibs) $(JPEGLibs) $(UNZIPSLibs) $(ANTIVIRUSLibs);
+	-rm $(PDFLibs) $(JPEGLibs) $(MP3Libs) $(MP4Libs) $(OfficeLibs);
 	@echo 'clean done!';
 	clear

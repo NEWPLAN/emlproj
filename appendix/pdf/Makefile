@@ -1,5 +1,8 @@
 target=pdfpharse.so
 
+#WARNING= -Wall
+WARNING= -Werror
+
 DEBUG=-g
 Links=-lpthread
 CC=gcc
@@ -11,7 +14,7 @@ $(target):$(OBJS)
 	$(CC) -shared $(OBJS) -o $(target) $(Links)
 
 %.o:%.c
-	$(CC) $(DEBUG) -fPIC -c $< -o $@
+	$(CC) $(DEBUG)  $(WARNING) -fPIC -c $< -o $@
 
 run:
 	./$(target) linux.pdf -

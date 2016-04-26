@@ -1,0 +1,4 @@
+g++ -fPIC -shared office_extractor.cpp -I./doctext/ -L./doctext/ -o office_extractor.so -ldoctotext
+
+需要将doctotext文件夹的路径加入到LD_LIBRARY_PATH中
+-I、-L后的路径为doctotext文件夹的路径

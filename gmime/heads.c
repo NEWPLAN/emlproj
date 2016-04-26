@@ -11,7 +11,7 @@ void GetHeader(GMimeMessage* pMessage)
     if(!g_mime_header_list_get_iter(list,&iter))
         printf("[log]:\tfailed to get header list iter!\n");
 
-#if ENABLE_HEADERS_LOG
+#if __DEBUG
     printf("\n[log]\t Output Headers =====>>>>>\n\n");
 #endif
 
@@ -19,7 +19,9 @@ void GetHeader(GMimeMessage* pMessage)
     {
         name=g_mime_header_iter_get_name(&iter);
         value=g_mime_header_iter_get_value(&iter);
+#if __DEBUG        
         printf("%s:\t %s\n", name, value);
+#endif        
         if (!g_mime_header_iter_next(&iter))
         {
             break;/* code */

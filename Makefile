@@ -7,7 +7,7 @@ PART6=UNZIP
 
 
 all:
-	cd main/; make;
+	cd sql2/; make;
 	@echo 'make done!'
 $(PART1):
 	cd appendix/jpeg; make
@@ -29,13 +29,13 @@ $(PART6):
 
 run:
 	@echo 'test for heres'
-	cd main/; make test;
+	cd sql2/; make run;
 
 
 
 .PHONY:clean
 clean:
-	cd main/; make clean;
+	cd sql2/; make clean;
 	clear ;
 	@echo "clean done"
 

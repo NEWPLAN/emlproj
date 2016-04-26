@@ -31,8 +31,8 @@ void getDescription(char *buf,char *result)//buf指向buf中的des第一个位�
 
 struct mes detectSpam(const char *path)
 {
-    struct mes *ret = (struct mes *)malloc(sizeof(struct mes));
-    memset(ret,0,sizeof(struct mes));
+    struct mes ret;
+    memset(&ret,0,sizeof(struct mes));
     char command[100] = "spamc -R < ";
     strcat(command,path);
     /*double score = 0;*/
@@ -63,14 +63,14 @@ struct mes detectSpam(const char *path)
             double s = atof(pscore);
             if(s < 5.0)
             {
-                ret->isSpam = isSpam;
-                ret->score = s;
-                return *ret;
+                ret.isSpam = isSpam;
+                ret.score = s;
+                return ret;
             }
             else
             {
-                ret->isSpam = 1;
-                ret->score = s;
+                ret.isSpam = 1;
+                ret.score = s;
             }
         }
         if (buf[1] == '-' && buf[2] == '-')
@@ -93,7 +93,7 @@ struct mes detectSpam(const char *path)
             }
             double onescore = atof(s);
             if (onescore < 0.5) continue;
-            struct content *pcon = &ret->contents[line];
+            struct content *pcon = &ret.contents[line];
             pcon->score = onescore;
             getrule(&buf[5], &pcon->ruleName[0]);
             getDescription(&buf[28], &pcon->des[0]);
@@ -108,9 +108,9 @@ struct mes detectSpam(const char *path)
     }
     else
     {
-        ret->line = line;
+        ret.line = line;
         pclose(f);
-        return *ret;
+        return ret;
     }
 }
 

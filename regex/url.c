@@ -211,15 +211,21 @@ char * FILEURL="file://(((((([0-9a-zA-Z])|([0-9a-zA-Z])(([0-9a-zA-Z])|-)*([0-9a-
 char * ProsperuURL="prospero://(((((([0-9a-zA-Z])|([0-9a-zA-Z])(([0-9a-zA-Z])|-)*([0-9a-zA-Z]))\\.)*(([a-z]|[A-Z])|([a-z]|[A-Z])(([0-9a-zA-Z])|-)*([0-9a-zA-Z])))|([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+))(:([0-9]+)){0,1})/((((([0-9a-zA-Z]|(\\$|-|_|\\.|\\+)|(!|\\*|'|\\(|\\)|,))|(%([0-9a-fA-F])([0-9a-fA-F])))|\\?|:|@|&|=)*)(/(((([0-9a-zA-Z]|(\\$|-|_|\\.|\\+)|(!|\\*|'|\\(|\\)|,))|(%([0-9a-fA-F])([0-9a-fA-F])))|\\?|:|@|&|=)*))*)((;((([0-9a-zA-Z]|(\\$|-|_|\\.|\\+)|(!|\\*|'|\\(|\\)|,))|(%([0-9a-fA-F])([0-9a-fA-F])))|\\?|:|@|&)=((([0-9a-zA-Z]|(\\$|-|_|\\.|\\+)|(!|\\*|'|\\(|\\)|,))|(%([0-9a-fA-F])([0-9a-fA-F])))|\\?|:|@|&)))*";
 
 char * OtherURL="(([a-z]|[0-9]|\\+|-|\\.)+):(((([0-9a-zA-Z]|(\\$|-|_|\\.|\\+)|(!|\\*|'|\\(|\\)|,))|(;|/|\\?|:|@|&|=)|(%([0-9a-fA-F])([0-9a-fA-F]))))*|(//(((((([0-9a-zA-Z]|(\\$|-|_|\\.|\\+)|(!|\\*|'|\\(|\\)|,))|(%([0-9a-fA-F])([0-9a-fA-F])))|;|\\?|&|=)*)(:(((([0-9a-zA-Z]|(\\$|-|_|\\.|\\+)|(!|\\*|'|\\(|\\)|,))|(%([0-9a-fA-F])([0-9a-fA-F])))|;|\\?|&|=)*)){0,1}@){0,1}(((((([0-9a-zA-Z])|([0-9a-zA-Z])(([0-9a-zA-Z])|-)*([0-9a-zA-Z]))\\.)*(([a-z]|[A-Z])|([a-z]|[A-Z])(([0-9a-zA-Z])|-)*([0-9a-zA-Z])))|([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+))(:([0-9]+)){0,1}))(/(((([0-9a-zA-Z]|(\\$|-|_|\\.|\\+)|(!|\\*|'|\\(|\\)|,))|(;|/|\\?|:|@|&|=)|(%([0-9a-fA-F])([0-9a-fA-F]))))*)){0,1}))";
-
-
+#include <stdio.h>
 
 int UrlMatch(void)
 {
     /*匹配的目标串*/
-	char src[]="foo.bar hello 欢迎访问我的地址：www.baidu.com and another url like http://www.uestc.edu.cn besides www.tsinghua.edu.cn is also available, www.stanford.edu";
+	char src[]="foo.bar hello 欢迎访问我的地址：http://www.baidu.com and another url like http://www.uestc.edu.cn besides www.tsinghua.edu.cn is also available, http://www.stanford.edu";
     /*规则*/
     char * regWeb2="(^|\\b)(((https|http|ftp|rtsp|mms)?\\:\\/\\/)[^\\s]+)($|\\b)";
 	/*char* regWeb="(^|\\b)(((([hH][tT]{2}[pP][sS]?)|([fF][tT][pP]))\\:\\/\\/){0,1}([wW]{3}\\.){0,1}[\\w-]+(\\.\\w{2,4})+(\\/.*)?)($|\\b)";*/
-    return compliemain(regWeb2,flags?txtstr:src);
+	urlptr urlllll= rteStr(regWeb2 , "url.c");
+	urlptr brrrrrr=urlllll->next;
+	
+	for(brrrrrr;brrrrrr!=NULL;brrrrrr=brrrrrr->next)
+	{
+		printf("%s\n",brrrrrr->data);
+	}
+    return 0;
 }

@@ -3,7 +3,14 @@
 #include "ACmachine.h"
 #include "cDemoOK.h"
 #include "hashs.h"
+
+#define __DEBUG
+#ifdef  __DEBUG
+#undef  __DEBUG
+#endif
+
 #define EML__SYSTEMS__
+
 #ifdef EML__SYSTEMS__
 #ifdef __cplusplus
 extern "C"

@@ -26,7 +26,9 @@ count_foreach_callback (GMimeObject *parent, GMimeObject *part, gpointer user_da
                    child message parts, so if we want to count any
                    subparts of this child message, we'll have to call
                    g_mime_message_foreach() again here. */
+#if __DEBUG                   
         printf("\n===============descend into subparts=================\n");
+#endif        
         message = g_mime_message_part_get_message ((GMimeMessagePart *) part);
         g_mime_message_foreach (message, count_foreach_callback, count);
     }
@@ -40,7 +42,9 @@ count_foreach_callback (GMimeObject *parent, GMimeObject *part, gpointer user_da
                    could save some info about it so that we could
                    piece this back together again once we get all the
                    parts? */
+#if __DEBUG                   
         printf("\n===============partial=================\n");
+#endif        
     }
     else if (GMIME_IS_MULTIPART (part))
     {
@@ -50,14 +54,18 @@ count_foreach_callback (GMimeObject *parent, GMimeObject *part, gpointer user_da
 
         /* we'll get to finding out if this is a
          * signed/encrypted multipart later... */
+#if __DEBUG
         printf("\n===============multipart=================\n");
+#endif
     }
     else if (GMIME_IS_PART (part))
     {
         /* a normal leaf part, could be text/plain or
          * image/jpeg etc */
+#if __DEBUG    	
         printf("\n===============normal leaf part=================\n");
         printf("====>>>>====>>>>====>>>>Decode start here<<<<====<<<<====<<<<====\n");
+#endif        
         {
 #if 0
             printf("\ndecode this normal leaf part================\n" );
@@ -70,7 +78,9 @@ count_foreach_callback (GMimeObject *parent, GMimeObject *part, gpointer user_da
     }
     else
     {
+#if __DEBUG    	
         printf("\n===============descend not reached=================\n");
+#endif        
         g_assert_not_reached ();
     }
 }
@@ -82,5 +92,7 @@ void count_parts_in_message (GMimeMessage *message)
     /* count the number of parts (recursively) in the message
      * including the container multiparts */
     g_mime_message_foreach (message, count_foreach_callback, &count);
+#if __DEBUG    
     printf ("There are %d parts in the message\n", count);
+#endif    
 }

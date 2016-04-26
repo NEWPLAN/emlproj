@@ -13,97 +13,87 @@
 #define EML__SYSTEMS__
 #include <assert.h>
 char* workspace=NULL;
+char* dicpath=NULL;
 
 typedef char (*SpiPtr)[255];
 extern int  RelasePage(void);
-static SpiPtr ImportDic(void);
-#ifndef EML__SYSTEMS__
-int main(int argc, char *argv[])
-#else
+static SpiPtr ImportDic();
+
 extern "C"
 {
     int SpliterMain(int argc, char* argv[])
-#endif
-{
-#if 0
-    printf("shortpath here sorry\n");
-    return 0;
-#else
-    int flags=0;
-    if(argc==3)
-        flags=1;
-    char *q=NULL;
-    clock_t A=clock();
-    int NumPatt=0;
-    SpiPtr pp=ImportDic();
-    {
-        char filepath[1024];
-        DIR* d;
-        struct dirent *file;
-        struct stat info;
-        stat(argv[1],&info);
-        if(!S_ISDIR(info.st_mode))/*传递的如果是一个文件，单独处理,否则按照文件夹处理*/
-            goto last_para;
+	{
+		int index=0;
+		char *q=NULL;
+		clock_t A=clock();
+		int NumPatt=0;
 
-        if(!(d=opendir(argv[1])))
-        {
-            printf("error in open dir : %s\n",argv[1]);
-            return -1;
-        }
-        while((file=readdir(d))!=NULL)
-        {
-            if(strncmp(file->d_name,".",1)==0)
-                continue;
-            {
-                /*判断是文件夹处理下一个*/
-                struct stat info;
-                stat(file->d_name,&info);
-                if(S_ISDIR(info.st_mode))
-                {
-                    printf("This is a directory\n");
-                    continue;
-                }
-            }
-            workspace=argv[1];
-            assert(workspace!=NULL);
-            memset(filepath,0,sizeof(filepath));
-            strcat(filepath,argv[1]);
-            filepath[strlen(filepath)]='/';
-            strcat(filepath,file->d_name);
-            
-            
-            q=testImportUserDict(flags,&NumPatt,filepath);
-            printf("\n------using brute match methods---------\n");
-            if(HashMach(q,pp,NumPatt))/*匹配到结果，可以返回垃圾*/
-                *argv[2]|=1<<4;
+		if(argc>=4)
+		    dicpath=argv[3];
 
-            RelasePage();
-            //free(q);
-            flags=0;
-        }
-        closedir(d);
-        return 0;
-    }
-    /*
-    printf("\n-------using ACmachine methods----------\n");
-    ACStart(q,pp,NumPatt);
-    */
-last_para:
-    q=testImportUserDict(flags,&NumPatt,argv[1]);
-    printf("\n------using brute match methods---------\n");
-    //HashMach(q,pp,NumPatt);
-    if(HashMach(q,pp,NumPatt))/*匹配到结果，可以返回垃圾*/
-        *argv[2]|=1<<4;
-    free(q);
-    clock_t B=clock();
-    printf("System Executing Time :%f(Second)\n",((double)B-A)/CLOCKS_PER_SEC);
-    return 0;
-#endif
-}
-#ifdef  EML__SYSTEMS__
-}
-#endif
-
+		SpiPtr dicptr=ImportDic();
+		if(dicptr)
+		{
+		    char filepath[1024];
+		    DIR* d;
+		    struct dirent *file;
+		    if(!(d=opendir(argv[1])))
+		    {
+		        printf("error in open dir : %s\n",argv[1]);
+		        return 0;
+		    }
+		    while((file=readdir(d))!=NULL)
+		    {
+		        if(strncmp(file->d_name,".",1)==0)
+		            continue;
+		        {
+		            /*判断是文件夹处理下一个*/
+		            struct  stat info;
+		            stat(file->d_name,&info);
+		            if(S_ISDIR(info.st_mode))
+		                continue;
+		        }
+		        workspace=argv[1];
+		        assert(workspace!=NULL);
+		        memset(filepath,0,sizeof(filepath));
+		        strcat(filepath,argv[1]);
+		        filepath[strlen(filepath)]='/';
+		        strcat(filepath,file->d_name);
+	#ifdef __DEBUG__8899
+				printf("before testImportUserDict\n");
+	#endif
+		        q=testImportUserDict(1,&NumPatt,filepath);
+	#ifdef __DEBUG__8899
+		        printf("after testImportUserDict\n");
+	#endif		        
+	#ifdef __DEBUG
+		        printf("\n------using brute match methods---------\n");
+	#endif
+		        index=HashMach(q,dicptr,NumPatt);
+		        //printf("RelasePage before\n");
+		        RelasePage();
+		        //printf("RelasePage after\n");
+		        if(index)
+		        {
+		        	//printf("free before\n");
+		        	free(dicptr);
+		        	//printf("free after\n");
+		        	closedir(d);
+		        	return index;
+		        }
+		    }
+		    //printf("exit free before\n");
+		    free(dicptr);
+		    //printf("exit free after\n");
+		    closedir(d);
+		    return index;
+		}
+		//printf("return 0\n");
+		return 0;
+	}
+}	
+	
+	
 extern "C"
 {
     int SpliterInit(void)
@@ -128,13 +118,20 @@ extern "C"
 }
 
 
-static SpiPtr ImportDic(void)
+static SpiPtr ImportDic()
 {
     int i=0;
+    FILE *filPtr=NULL;
     SpiPtr p=(SpiPtr)malloc(300*255);
     if(!p)
+    {
+    	printf("fatal error!, can't malloc memory for dictionary, will return NULL\n");
         return NULL;
-    FILE *filPtr=fopen("userdict.txt","rb");
+    }   
+    if(!dicpath)
+        filPtr=fopen("userdict.txt","rb");
+    else
+        filPtr=fopen(dicpath,"rb");
     if(!filPtr)
     {
         free(p);
@@ -143,11 +140,18 @@ static SpiPtr ImportDic(void)
     while (!feof(filPtr))
     {
         memset(p[i],0,255);
-        int nu=fscanf(filPtr, "%s",p[i++]);
+        int nu=fscanf(filPtr, "%s",p[i]);
         if(nu<0)
             continue;
-//		printf("%s\n",p[i-1]);
+        i++;
+//		printf("the add dict is %s\n",p[i-1]);
     }
     fclose(filPtr);
+    if(i==0)
+    {
+    	printf("dic is empty, will go back directly\n");
+    	free(p);
+    	return NULL;
+    }
     return p;
 }
