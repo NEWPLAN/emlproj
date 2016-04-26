@@ -6,9 +6,10 @@ TARGET2=test
 TARGET3=spliter.so
 
 LinkLibs=./libNLPIR.so
-Comparas=-m64  -O3 -DOS_LINUX
+#Comparas=-m64  -O3 -DOS_LINUX
+Comparas=-m64  -DOS_LINUX
 CPP=g++
-STD=-std=c++11
+#STD=-std=c++11
 DEBUG=-g
 
 objs=main.o ACmachine.o cDemoOK.o hashs.o loadstr.o test.o

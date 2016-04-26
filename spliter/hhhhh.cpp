@@ -29,8 +29,9 @@ int main(int argc , char* argv[])
     {
         printf("------------Init ok!--------------\n\n");
     }
-	NLPIR_FileProcess("temps/pdf.txt","temps/pdf",0);
+	
 	NLPIR_FileProcess("temps/txt.txt","temps/txt",0);
+	NLPIR_FileProcess("temps/pdf.txt","temps/pdf",0);
 	NLPIR_FileProcess("temps/test.email.txt","temps/eml",0);
     NLPIR_Exit();
 

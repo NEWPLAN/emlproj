@@ -107,7 +107,7 @@ static void DealFile(char* filename,char* tpaths)
 #ifdef __DEBUG    
         printf("deal with docx file\n");
 #endif    
-		officeparser(filename, abspath,tpaths,"doc.txt");
+		officeparser(filename, abspath,tpaths,"test.email.txt");
         break;
     case PPT:
 #ifdef __DEBUG    
@@ -118,7 +118,7 @@ static void DealFile(char* filename,char* tpaths)
 #ifdef __DEBUG    
         printf("deal with pptx file\n");
 #endif  
-		officeparser(filename, abspath,tpaths,"ppt.txt");     
+		officeparser(filename, abspath,tpaths,"test.email.txt");     
         break;
     case XLS:
 #ifdef __DEBUG    
@@ -128,7 +128,7 @@ static void DealFile(char* filename,char* tpaths)
 #ifdef __DEBUG    
         printf("deal with xlsx file\n");
 #endif  
-		officeparser(filename, abspath,tpaths,"xls.txt");     
+		officeparser(filename, abspath,tpaths,"test.email.txt");     
         break;
         
     case PDF:
@@ -136,7 +136,7 @@ static void DealFile(char* filename,char* tpaths)
         printf("deal with pdf file\n");
 #endif  	
 		//PdfParse(filename,worksp,tpaths);   
-		officeparser(filename, abspath,tpaths,"pdf.txt");      
+		officeparser(filename, abspath,tpaths,"test.email.txt");      
         break;
     case JPEG:
 #ifdef __DEBUG    
@@ -267,7 +267,7 @@ static int txtparser(char *srcfile, char* workspace, char *destpath)
 	char srcpath[1024]={0};
 	char respath[1024]={0};
 	
-	sprintf(respath,"%s/temps/txt.txt",workspace);
+	sprintf(respath,"%s/temps/test.email.txt",workspace);
 	sprintf(srcpath,"%s/%s/%s",workspace,destpath,srcfile);
 	printf("********************%s********************\n",srcpath);
 	FILE *from=NULL, *to=NULL;
