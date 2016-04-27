@@ -16,6 +16,7 @@
 #include "loadstr.h"
 #include <sys/types.h>
 #include "sys/wait.h"
+#include <stdio.h>
 
 using namespace std;
 

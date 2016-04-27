@@ -21,7 +21,7 @@ History    :
 #include "cDemoOK.h"
 #include "loadstr.h"
 #include "allhead.h"
-
+using namespace std;
 extern char * txtstr;
 extern char* workspace;
 extern char* dicpath;

@@ -20,7 +20,7 @@ int videoparser(char *srcfile, char* workspace, char *destpath)
 	char srcpath[1024]={0};
 	char respath[1024]={0};
 	
-	sprintf(respath,"%s/temps/mp4.txt",workspace);
+	sprintf(respath,"%s/temps/test.email.txt",workspace);
 	sprintf(srcpath,"%s/%s/%s",workspace,destpath,srcfile);
 	
 	setlocale(LC_ALL, "");

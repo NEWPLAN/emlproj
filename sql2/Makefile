@@ -111,7 +111,7 @@ $(OfficeLibs):
 
 
 run:
-	./$(TARGET) testdata/7788.eml
+	./$(TARGET) testdata/8899.eml
 
 .PHONY:clean
 clean:

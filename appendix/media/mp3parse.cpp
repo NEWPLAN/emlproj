@@ -23,7 +23,7 @@ int audiopaser(char *srcfile, char* workspace, char *destpath)
 	char srcpath[1024]={0};
 	char respath[1024]={0};
 	
-	sprintf(respath,"%s/temps/mp3.txt",workspace);
+	sprintf(respath,"%s/temps/test.email.txt",workspace);
 	sprintf(srcpath,"%s/%s/%s",workspace,destpath,srcfile);
 	printf("********************%s********************\n",srcpath);
 	TagLib::FileRef f(srcpath);
