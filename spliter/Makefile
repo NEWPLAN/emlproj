@@ -1,8 +1,8 @@
 ADDFile=Test_result.txt
 TARGET1=ACmachine
 Cfile1=ACmachine.cpp
+TARGET=hhhhh.exe
 TARGET2=test
-
 TARGET3=spliter.so
 
 LinkLibs=./libNLPIR.so
@@ -29,12 +29,12 @@ $(TARGET2):$(objs)
 $(TARGET3):$(objs)
 	$(CPP) -shared $(objs) -o $(TARGET3) $(LinkLibs) -lpthread
 
-run:
-	./$(TARGET3)
+run: 
+	g++ $(Comparas) hhhhh.cpp -o $(TARGET) $(LinkLibs)
 
 %.o:%.cpp $(heads)
 	$(CPP) $(WARNING) -fPIC $(DEBUG) $(Comparas) $(STD)  -c $< -o $@
 
 .PHONY:clean
 clean:
-	rm $(TARGET3) $(TARGET2) $(TARGET1) $(objs) ; clear
+	rm $(TARGET3) $(TARGET2) $(TARGET1) $(TARGET) $(objs) ; clear
