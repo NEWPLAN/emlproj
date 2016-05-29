@@ -80,7 +80,7 @@ void startClamd()
     system("/usr/local/clamav/sbin/clamd");
 }
 
-void updateDB()
+void updateDB(void)
 {
    // chdir(DEFAULTCOMMANDPATH);
     system("/usr/local/clamav/bin/freshclam");
