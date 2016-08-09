@@ -291,7 +291,7 @@ int write_line_ssl(SSL * ssl, int leading, char * c)
     return res; /* bytes / GETLINE_ERR / GETLINE_PIPE */
 }
 
-int writeline_format_ssl(SSL * ssl, int leading , char * fmt, ...)
+int writeline_format_ssl(SSL * ssl, int leading, char * fmt, ...)
 {
     char out[4096];
     int len, res;
