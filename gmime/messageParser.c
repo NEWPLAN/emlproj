@@ -1,3 +1,4 @@
+/*邮件分析的主体部分*/
 #include "messageParser.h"
 #include <string.h>
 #include <stdlib.h>
